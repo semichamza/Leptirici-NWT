@@ -8,6 +8,6 @@ Svaki korisnik ima određeni nivo privilegija, na osnovu čeka vidi svoj raspore
 
 Menadžeri projekata prilikom dodjele zadataka vide trenutno opterećenje po resursima na osnovu čega donose odluke.
 
-...
+Više detalja nakon dogovora sa asistentnom ...
 
 
