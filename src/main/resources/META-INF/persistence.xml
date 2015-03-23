@@ -15,7 +15,7 @@
             <property name="javax.persistence.jdbc.password" value="root"/>
 
             <!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
-            <!--<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>-->
+            <property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
             <property name="javax.persistence.schema-generation.scripts.action" value="create"/>
             <property name="javax.persistence.schema-generation.create-source" value="script"/>
             <property name="javax.persistence.schema-generation.create-script-source" value="sql/create.sql"/>
