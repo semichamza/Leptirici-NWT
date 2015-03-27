@@ -8,12 +8,13 @@ import java.util.Date;
  * Created by glasshark on 20-Mar-15.
  */
 @Entity
+@Table (name = "comments")
 public class Comment implements Serializable
 {
     private Integer id;
     private String text;
-    private Task task;
-    private User user;
+    //    private Task task;
+//    private User user;
     private Date timePosted;
 
     @Id
@@ -28,7 +29,7 @@ public class Comment implements Serializable
         this.id = id;
     }
 
-    @Column (nullable = false, columnDefinition = "TEXT")//MySQL ili length 2000
+    @Column (nullable = false, columnDefinition = "TEXT")//samo za MySQL (ili length 2000)
     public String getText()
     {
         return text;
@@ -40,6 +41,7 @@ public class Comment implements Serializable
     }
 
     @Temporal (TemporalType.TIMESTAMP)
+    @Column (nullable = false)
     public Date getTimePosted()
     {
         return timePosted;
@@ -49,4 +51,26 @@ public class Comment implements Serializable
     {
         this.timePosted = timePosted;
     }
+//
+//    @OneToOne
+//    public Task getTask()
+//    {
+//        return task;
+//    }
+//
+//    public void setTask(Task task)
+//    {
+//        this.task = task;
+//    }
+//
+//    @OneToOne
+//    public User getUser()
+//    {
+//        return user;
+//    }
+//
+//    public void setUser(User user)
+//    {
+//        this.user = user;
+//    }
 }

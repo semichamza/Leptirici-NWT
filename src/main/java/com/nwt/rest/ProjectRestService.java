@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by glasshark on 23-Mar-15.
  */
-@Path ("/projects")
+@Path ("projects")
 @Produces ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Consumes ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Stateless
@@ -32,9 +32,10 @@ public class ProjectRestService
     @GET
     public Response getProjects()
     {
-        TypedQuery<Project> query = em.createNamedQuery(Project.FIND_ALL, Project.class);
-        List<Project> projectList = new ArrayList(query.getResultList());
-        return Response.ok(projectList).build();
+//        TypedQuery<Project> query = em.createNamedQuery(Project.FIND_ALL, Project.class);
+//        List<Project> projectList = new ArrayList(query.getResultList());
+//        return Response.ok(projectList).build();
+        return null;
     }
 
     @GET

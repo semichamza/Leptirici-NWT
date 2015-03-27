@@ -1,17 +1,16 @@
 package com.nwt.entities;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by glasshark on 18-Mar-15.
  */
 @Entity
-@Table (name = "Users")
-@NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM Users u")
+@Table (name = "users")
+@NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u")
 public class User implements Serializable
 {
     public static final String FIND_ALL = "User.findAll";
@@ -23,9 +22,6 @@ public class User implements Serializable
     private String passwordHash;
     private Boolean active;
     private UserType userType;
-    private List<Comment> comments;
-    private List<Project> projects;
-    private List<Task> tasks;
 
     public User()
     {
@@ -50,9 +46,9 @@ public class User implements Serializable
         this.id = id;
     }
 
+    //    @NotNull
+//    @Size (max = 30)
     @Column (nullable = false, unique = true, length = 30)
-    @NotNull
-    @Size (max = 30)
     public String getUsername()
     {
         return username;
@@ -74,7 +70,7 @@ public class User implements Serializable
         setPasswordHash(password);
     }
 
-    @Column (nullable = false)
+    @Column (nullable = false, length = 32)
     public String getPasswordHash()
     {
         return passwordHash;
@@ -82,8 +78,7 @@ public class User implements Serializable
 
     public void setPasswordHash(String password)
     {
-//        @TODO generisati hash
-        this.passwordHash = password;
+        this.passwordHash = DigestUtils.md5Hex(password);
     }
 
     @Column (nullable = false)
@@ -98,6 +93,7 @@ public class User implements Serializable
     }
 
     @Enumerated (EnumType.STRING)
+//    @Column (nullable = false)
     public UserType getUserType()
     {
         return userType;
@@ -106,43 +102,5 @@ public class User implements Serializable
     public void setUserType(UserType userType)
     {
         this.userType = userType;
-    }
-
-    @OneToMany (fetch = FetchType.EAGER)
-    @JoinColumn (name = "user_id")
-    public List<Comment> getComments()
-    {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments)
-    {
-        this.comments = comments;
-    }
-
-    @OneToMany (fetch = FetchType.EAGER)
-    @JoinTable (name = "User_Project",
-            joinColumns = @JoinColumn (name = "user_id"),
-            inverseJoinColumns = @JoinColumn (name = "project_id"))
-    public List<Project> getProjects()
-    {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects)
-    {
-        this.projects = projects;
-    }
-
-    @OneToMany (fetch = FetchType.EAGER)
-    @JoinColumn (name = "user_id")
-    public List<Task> getTasks()
-    {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks)
-    {
-        this.tasks = tasks;
     }
 }

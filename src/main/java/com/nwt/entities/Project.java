@@ -8,8 +8,8 @@ import java.util.List;
  * Created by glasshark on 20-Mar-15.
  */
 @Entity
-@Table (name = "Projects")
-@NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Projects p")
+@Table (name = "projects")
+@NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Project p")
 public class Project implements Serializable
 {
     public static final String FIND_ALL = "Project.findAll";
@@ -17,12 +17,18 @@ public class Project implements Serializable
     private Integer id;
     private String name;
     private String description;
-    //    private User owner;
-//    private List<User> members;
-    private List<Task> tasks;
+    private User owner;
+    private List<User> members;
 
     public Project()
     {
+    }
+
+    public Project(String name, String description, User owner)
+    {
+        this.name = name;
+        this.description = description;
+        this.owner = owner;
     }
 
     @Id
@@ -37,7 +43,7 @@ public class Project implements Serializable
         this.id = id;
     }
 
-    @Column (nullable = false, length = 50)
+    @Column (nullable = false, length = 100)
     public String getName()
     {
         return name;
@@ -48,6 +54,7 @@ public class Project implements Serializable
         this.name = name;
     }
 
+    @Column (length = 1000)
     public String getDescription()
     {
         return description;
@@ -58,38 +65,29 @@ public class Project implements Serializable
         this.description = description;
     }
 
-//    public User getOwner()
-//    {
-//        return owner;
-//    }
-//
-//    public void setOwner(User owner)
-//    {
-//        this.owner = owner;
-//    }
-
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "USER_PROJECT",
-//            joinColumns= @JoinColumn(name = "PROJECT_ID"),
-//            inverseJoinColumns= @JoinColumn(name = "USER_ID") )
-//    public List<User> getMembers()
-//    {
-//        return members;
-//    }
-//
-//    public void setMembers(List<User> members)
-//    {
-//        this.members = members;
-//    }
-
-    @OneToMany
-    public List<Task> getTasks()
+    @OneToOne
+    @JoinColumn (name = "owner_id")
+    public User getOwner()
     {
-        return tasks;
+        return owner;
     }
 
-    public void setTasks(List<Task> tasks)
+    public void setOwner(User owner)
     {
-        this.tasks = tasks;
+        this.owner = owner;
+    }
+
+    @OneToMany (fetch = FetchType.EAGER)
+    @JoinTable (name = "users_projects",
+            joinColumns = @JoinColumn (name = "project_id"),
+            inverseJoinColumns = @JoinColumn (name = "user_id"))
+    public List<User> getMembers()
+    {
+        return members;
+    }
+
+    public void setMembers(List<User> members)
+    {
+        this.members = members;
     }
 }

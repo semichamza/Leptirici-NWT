@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by glasshark on 23-Mar-15.
  */
-@Path ("/tasks")
+@Path ("tasks")
 @Produces ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Consumes ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Stateless
@@ -32,9 +32,10 @@ public class TaskRestService
     @GET
     public Response getTasks()
     {
-        TypedQuery<Task> query = em.createNamedQuery(Task.FIND_ALL, Task.class);
-        List<Task> taskList = new ArrayList(query.getResultList());
-        return Response.ok(taskList).build();
+//        TypedQuery<Task> query = em.createNamedQuery(Task.FIND_ALL, Task.class);
+//        List<Task> taskList = new ArrayList(query.getResultList());
+//        return Response.ok(taskList).build();
+        return null;
     }
 
     @GET

@@ -3,6 +3,7 @@ package com.nwt.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +11,8 @@ import java.util.List;
  * Created by glasshark on 20-Mar-15.
  */
 @Entity
-@Table (name = "Tasks")
-@NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Tasks t")
+@Table (name = "tasks")
+@NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t")
 public class Task implements Serializable
 {
     public static final String FIND_ALL = "Task.findAll";
@@ -20,12 +21,23 @@ public class Task implements Serializable
     private Date timeCreated;
     private String name;
     private String description;
-    private User user;
+    //    private User user;
     private Project project;
-    private Time estimation;
+    private Calendar estimation;
     private Priority priority;
-    private List<Log> logs;
-    private List<Comment> comments;
+//    private List<Log> logs;
+//    private List<Comment> comments;
+
+
+    public Task()
+    {
+    }
+
+    public Task(Date timeCreated, String name)
+    {
+        this.timeCreated = timeCreated;
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue
@@ -39,6 +51,7 @@ public class Task implements Serializable
         this.id = id;
     }
 
+    @Column (name = "time_created")
     @Temporal (TemporalType.TIMESTAMP)
     public Date getTimeCreated()
     {
@@ -50,7 +63,7 @@ public class Task implements Serializable
         this.timeCreated = timeCreated;
     }
 
-    @Column (nullable = false)
+    @Column (nullable = false, length = 100)
     public String getName()
     {
         return name;
@@ -61,6 +74,7 @@ public class Task implements Serializable
         this.name = name;
     }
 
+    @Column (length = 1000)
     public String getDescription()
     {
         return description;
@@ -71,16 +85,16 @@ public class Task implements Serializable
         this.description = description;
     }
 
-    @OneToOne
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
+//    @OneToOne
+//    public User getUser()
+//    {
+//        return user;
+//    }
+//
+//    public void setUser(User user)
+//    {
+//        this.user = user;
+//    }
 
     @OneToOne
     public Project getProject()
@@ -94,12 +108,12 @@ public class Task implements Serializable
     }
 
     //    @Temporal(TemporalType.TIME)
-    public Time getEstimation()
+    public Calendar getEstimation()
     {
         return estimation;
     }
 
-    public void setEstimation(Time estimation)
+    public void setEstimation(Calendar estimation)
     {
         this.estimation = estimation;
     }
@@ -115,26 +129,26 @@ public class Task implements Serializable
         this.priority = priority;
     }
 
-    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    public List<Log> getLogs()
-    {
-        return logs;
-    }
-
-    public void setLogs(List<Log> logs)
-    {
-        this.logs = logs;
-    }
-
-    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @OrderBy ("timePosted DESC")
-    public List<Comment> getComments()
-    {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments)
-    {
-        this.comments = comments;
-    }
+//    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+//    public List<Log> getLogs()
+//    {
+//        return logs;
+//    }
+//
+//    public void setLogs(List<Log> logs)
+//    {
+//        this.logs = logs;
+//    }
+//
+//    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+//    @OrderBy ("timePosted DESC")
+//    public List<Comment> getComments()
+//    {
+//        return comments;
+//    }
+//
+//    public void setComments(List<Comment> comments)
+//    {
+//        this.comments = comments;
+//    }
 }

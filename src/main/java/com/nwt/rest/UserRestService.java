@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by glasshark on 23-Mar-15.
  */
-@Path ("/users")
+@Path ("users")
 @Produces ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Consumes ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Stateless
@@ -33,20 +33,20 @@ public class UserRestService
     public Response getUsers()
     {
         TypedQuery<User> query = em.createNamedQuery(User.FIND_ALL, User.class);
-        List<User> userList = new ArrayList(query.getResultList());
+        List<User> userList = new ArrayList<User>(query.getResultList());
         return Response.ok(userList).build();
     }
 
     @GET
     @Path ("{id}")
-    public Response getUser(@PathParam ("id") Integer id)
+    public User getUser(@PathParam ("id") Integer id)
     {
         User user = em.find(User.class, id);
-
         if (user == null)
             throw new NotFoundException();
 
-        return Response.ok(user).build();
+        return user;
+//        return Response.ok(user).build();
     }
 
     @POST
@@ -55,13 +55,14 @@ public class UserRestService
         if (user == null)
             throw new BadRequestException();
 
-        em.persist(user);
-        URI userUri = uriInfo.getAbsolutePathBuilder().path(user.getId().toString()).build();
+        User newUser = new User(user.getUsername(), user.getPassword(), user.getActive());
+        em.persist(newUser);
+        URI userUri = uriInfo.getAbsolutePathBuilder().path(newUser.getId().toString()).build();
         return Response.created(userUri).build();
     }
 
     @PUT
-    public Response updateBook(User user)
+    public Response updateUser(User user)
     {
         if (user == null)
             throw new BadRequestException();
@@ -72,7 +73,7 @@ public class UserRestService
 
     @DELETE
     @Path ("{id}")
-    public Response deleteBook(@PathParam ("id") Integer id)
+    public Response deleteUser(@PathParam ("id") Integer id)
     {
         User user = em.find(User.class, id);
         if (user == null)
@@ -83,9 +84,12 @@ public class UserRestService
 
     @GET
     @Path ("{username: [a-zA-Z]*}")
-    public Response getUserByUsername(@PathParam ("username") String username)
+    public User getUserByUsername(@PathParam ("username") String username)
     {
-        //TODO
-        return Response.ok().build();
+        User user = em.find(User.class, username);
+        if (user == null)
+            throw new NotFoundException();
+
+        return user;
     }
 }
