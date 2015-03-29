@@ -1,8 +1,10 @@
 package com.nwt.entities;
 
+import com.nwt.util.LifeCycleListener;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
@@ -10,7 +12,9 @@ import java.io.Serializable;
  */
 @Entity
 @Table (name = "users")
+@XmlRootElement
 @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u")
+@EntityListeners (LifeCycleListener.class)
 public class User implements Serializable
 {
     public static final String FIND_ALL = "User.findAll";
@@ -18,10 +22,10 @@ public class User implements Serializable
     private Integer id;
     //TODO: razdvojiti username i password u Credentials @Embeddable entity
     private String username;
-    private String password;
+    //    private String password;
     private String passwordHash;
     private Boolean active;
-    private UserType userType;
+//    private UserType userType;
 
     public User()
     {
@@ -30,7 +34,8 @@ public class User implements Serializable
     public User(String username, String password, Boolean active)
     {
         this.username = username;
-        setPassword(password);
+        this.passwordHash = DigestUtils.md5Hex(password);
+        ;
         this.active = active;
     }
 
@@ -59,16 +64,16 @@ public class User implements Serializable
         this.username = username;
     }
 
-    @Transient
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        setPasswordHash(password);
-    }
+//    @Transient
+//    public String getPassword()
+//    {
+//        return password;
+//    }
+//
+//    public void setPassword(String password)
+//    {
+//        setPasswordHash(password);
+//    }
 
     @Column (nullable = false, length = 32)
     public String getPasswordHash()
@@ -76,9 +81,9 @@ public class User implements Serializable
         return passwordHash;
     }
 
-    public void setPasswordHash(String password)
+    public void setPasswordHash(String passwordHash)
     {
-        this.passwordHash = DigestUtils.md5Hex(password);
+        this.passwordHash = passwordHash;
     }
 
     @Column (nullable = false)
@@ -92,15 +97,37 @@ public class User implements Serializable
         this.active = active;
     }
 
-    @Enumerated (EnumType.STRING)
-//    @Column (nullable = false)
-    public UserType getUserType()
+//    @Enumerated (EnumType.STRING)
+////    @Column (nullable = false)
+//    public UserType getUserType()
+//    {
+//        return userType;
+//    }
+//
+//    public void setUserType(UserType userType)
+//    {
+//        this.userType = userType;
+//    }
+
+    @PostLoad
+    public void log()
     {
-        return userType;
+        System.out.print("pokrenuto");
     }
 
-    public void setUserType(UserType userType)
+    @PrePersist
+    @PreUpdate
+    private void validate()
     {
-        this.userType = userType;
+        if (username == null)
+            throw new IllegalArgumentException("Invalid first name");
+        //TODO ovo se moze uradi odlicno za TIme metodu za logove i estimaciju da se provjeri unesena vrijednsto
+        // i odmah unese u bazu u korektnom formatu ili cak se odvojit u posebnu listener klasu sa anotacijama
+    }
+
+    @Override
+    public String toString()
+    {
+        return "username: " + username;
     }
 }

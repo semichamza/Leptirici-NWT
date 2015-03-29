@@ -52,7 +52,7 @@ public class Log implements Serializable
         this.time = time;
     }
 
-    @OneToOne
+    @OneToOne (fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     public Comment getComment()
     {
         return comment;
@@ -65,7 +65,7 @@ public class Log implements Serializable
         this.comment = comment;
     }
 
-    @OneToOne
+    @OneToOne (fetch = FetchType.LAZY, orphanRemoval = true)
     public Task getTask()
     {
         return task;

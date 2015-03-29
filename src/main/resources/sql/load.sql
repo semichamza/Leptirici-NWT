@@ -1,5 +1,5 @@
-INSERT INTO `pms`.`users` (`id`, `active`, `passwordHash`, `userType`, `username`)
-VALUES ('1', TRUE, '098f6bcd4621d373cade4e832627b4f6', 'ADMIN', 'admin');
+INSERT INTO `pms`.`users` (`active`, `passwordHash`, `username`)
+VALUES (TRUE, '098f6bcd4621d373cade4e832627b4f6', 'admin');
 
 # INSERT INTO `pms`.`projects` (`id`, `name`) VALUES ('1', 'Hello world');
 #

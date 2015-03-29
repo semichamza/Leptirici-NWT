@@ -90,4 +90,10 @@ public class Project implements Serializable
     {
         this.members = members;
     }
+
+    @Override
+    public String toString()
+    {
+        return "project name: " + name;
+    }
 }

@@ -1,8 +1,13 @@
 package com.nwt.rest;
 
 import com.nwt.entities.Project;
+import com.nwt.entities.Projects;
+import com.nwt.facade.EntityFacade;
+import com.nwt.util.Log;
+import org.apache.log4j.Logger;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -26,27 +31,28 @@ public class ProjectRestService
 {
     @Context
     private UriInfo uriInfo;
-    @PersistenceContext (unitName = "NWTPersistenceUnit")
-    private EntityManager em;
+    @Inject
+    private EntityFacade entityFacade;
+    @Inject
+    @Log
+    private Logger logger;
 
     @GET
-    public Response getProjects()
+    public Response getAllProjects()
     {
-//        TypedQuery<Project> query = em.createNamedQuery(Project.FIND_ALL, Project.class);
-//        List<Project> projectList = new ArrayList(query.getResultList());
-//        return Response.ok(projectList).build();
-        return null;
+        Projects projects = entityFacade.getAllProjects();
+        logger.debug("getAllProjects() returned " + projects.size() + " object(s).");
+        return Response.ok(projects).build();
     }
 
     @GET
     @Path ("{id}")
-    public Response getProject(@PathParam ("id") Integer id)
+    public Response getProjectById(@PathParam ("id") Integer id)
     {
-        Project project = em.find(Project.class, id);
-
+        Project project = entityFacade.getProjectById(id);
         if (project == null)
             throw new NotFoundException();
-
+        logger.debug("getProjectById() returned: " + project.toString());
         return Response.ok(project).build();
     }
 
@@ -55,30 +61,32 @@ public class ProjectRestService
     {
         if (project == null)
             throw new BadRequestException();
-
-        em.persist(project);
+        project = entityFacade.createProject(project);
+        logger.debug("Created project - " + project.toString());
         URI projectUri = uriInfo.getAbsolutePathBuilder().path(project.getId().toString()).build();
         return Response.created(projectUri).build();
     }
 
     @PUT
-    public Response updateBook(Project project)
+    public Response updateProject(Project project)
     {
-        if (project == null)
-            throw new BadRequestException();
-
-        em.merge(project);
-        return Response.ok().build();
+        Project updatingProject = entityFacade.getProjectById(project.getId());
+        if (updatingProject == null)
+            throw new BadRequestException();//TODO: Implementirat validatore!
+        entityFacade.updateProject(updatingProject);
+        logger.debug("Updated project  - " + updatingProject.toString());
+        return Response.ok(updatingProject).build();
     }
 
     @DELETE
     @Path ("{id}")
-    public Response deleteBook(@PathParam ("id") Integer id)
+    public Response deleteProject(@PathParam ("id") Integer id)
     {
-        Project project = em.find(Project.class, id);
+        Project project = entityFacade.getProjectById(id);
         if (project == null)
             throw new NotFoundException();
-        em.remove(em.find(Project.class, id));
+        entityFacade.deleteProject(project);
+        logger.debug("Deleted project - " + project.toString());
         return Response.noContent().build();
     }
 
@@ -86,9 +94,6 @@ public class ProjectRestService
     @Path ("search/{text}")
     public Response searchProjects(@PathParam ("text") String text)
     {
-        //TODO
-        return Response.noContent().build();
+        return Response.ok(entityFacade.searchProjects(text)).build();
     }
-
-
 }
