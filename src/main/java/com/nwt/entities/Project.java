@@ -77,9 +77,9 @@ public class Project implements Serializable
         this.owner = owner;
     }
 
+    //TODO: dodat primary key u tabelu
     @OneToMany (fetch = FetchType.EAGER)
-    @JoinTable (name = "users_projects",
-            joinColumns = @JoinColumn (name = "project_id"),
+    @JoinTable(joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn (name = "user_id"))
     public List<User> getMembers()
     {

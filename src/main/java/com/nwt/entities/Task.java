@@ -2,7 +2,6 @@ package com.nwt.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +20,12 @@ public class Task implements Serializable
     private Date timeCreated;
     private String name;
     private String description;
-    //    private User user;
+    private User user;
     private Project project;
     private Calendar estimation;
     private Priority priority;
-//    private List<Log> logs;
-//    private List<Comment> comments;
+    private List<Log> logs;
+    private List<Comment> comments;
 
 
     public Task()
@@ -85,16 +84,14 @@ public class Task implements Serializable
         this.description = description;
     }
 
-//    @OneToOne
-//    public User getUser()
-//    {
-//        return user;
-//    }
-//
-//    public void setUser(User user)
-//    {
-//        this.user = user;
-//    }
+    @OneToOne
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @OneToOne
     public Project getProject()
@@ -129,26 +126,31 @@ public class Task implements Serializable
         this.priority = priority;
     }
 
-//    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-//    public List<Log> getLogs()
-//    {
-//        return logs;
-//    }
-//
-//    public void setLogs(List<Log> logs)
-//    {
-//        this.logs = logs;
-//    }
-//
-//    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-//    @OrderBy ("timePosted DESC")
-//    public List<Comment> getComments()
-//    {
-//        return comments;
-//    }
-//
-//    public void setComments(List<Comment> comments)
-//    {
-//        this.comments = comments;
-//    }
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "log_id"))
+    public List<Log> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(List<Log> logs) {
+        this.logs = logs;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    @OrderBy("timePosted DESC")
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "task: " + name + "(id: " + id + ")";
+    }
 }

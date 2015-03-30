@@ -4,7 +4,6 @@ import com.nwt.util.LifeCycleListener;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
@@ -12,7 +11,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table (name = "users")
-@XmlRootElement
+//@XmlRootElement
 @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u")
 @EntityListeners (LifeCycleListener.class)
 public class User implements Serializable

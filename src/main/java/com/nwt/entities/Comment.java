@@ -41,7 +41,7 @@ public class Comment implements Serializable
     }
 
     @Temporal (TemporalType.TIMESTAMP)
-    @Column (nullable = false)
+    @Column(name = "time_posted", nullable = false)
     public Date getTimePosted()
     {
         return timePosted;

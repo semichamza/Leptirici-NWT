@@ -1,8 +1,5 @@
 package com.nwt.entities;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,8 +7,6 @@ import java.util.List;
 /**
  * Created by glasshark on 29-Mar-15.
  */
-//@XmlRootElement
-//@XmlSeeAlso (Project.class)
 public class Projects extends ArrayList<Project>
 {
     public Projects()
@@ -24,7 +19,6 @@ public class Projects extends ArrayList<Project>
         super(c);
     }
 
-    //    @XmlElement (name = "project")
     public List<Project> getProjects()
     {
         return this;

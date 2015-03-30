@@ -1,9 +1,6 @@
 package com.nwt.facade;
 
-import com.nwt.entities.Project;
-import com.nwt.entities.Projects;
-import com.nwt.entities.User;
-import com.nwt.entities.Users;
+import com.nwt.entities.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Named;
@@ -118,7 +115,47 @@ public class EntityFacadeImpl implements EntityFacade
     }
 
     @Override
-    public Project searchProjects(String text)
+    public Projects searchProjects(String text) {
+        //TODO: Implement!
+        return null;
+    }
+
+    /**
+     * TASKS
+     */
+    @Override
+    public Tasks getAllTasks() {
+        TypedQuery<Task> query = em.createNamedQuery(Task.FIND_ALL, Task.class);
+        return new Tasks(query.getResultList());
+    }
+
+    @Override
+    public Task getTaskById(Integer id) {
+        Task task = em.find(Task.class, id);
+        return task;
+    }
+
+    @Override
+    public Task createTask(Task task) {
+        em.persist(task);
+        assertNotNull(task.getId());
+        return task;
+    }
+
+    @Override
+    public Task updateTask(Task task) {
+        em.merge(task);
+        assertNotNull(task.getId());
+        return task;
+    }
+
+    @Override
+    public void deleteTask(Task task) {
+        em.remove(task);
+    }
+
+    @Override
+    public Tasks searchTasks(String text)
     {
         //TODO: Implement!
         return null;

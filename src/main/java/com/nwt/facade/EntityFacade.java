@@ -1,9 +1,6 @@
 package com.nwt.facade;
 
-import com.nwt.entities.Project;
-import com.nwt.entities.Projects;
-import com.nwt.entities.User;
-import com.nwt.entities.Users;
+import com.nwt.entities.*;
 
 /**
  * Created by glasshark on 29-Mar-15.
@@ -37,6 +34,20 @@ public interface EntityFacade
 
     public void deleteProject(Project project);
 
-    public Project searchProjects(String text);
+    public Projects searchProjects(String text);
+    //endregion
+
+    //region TASKS
+    public Tasks getAllTasks();
+
+    public Task getTaskById(Integer id);
+
+    public Task createTask(Task task);
+
+    public Task updateTask(Task task);
+
+    public void deleteTask(Task task);
+
+    public Tasks searchTasks(String text);
     //endregion
 }
