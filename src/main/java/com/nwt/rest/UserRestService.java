@@ -41,7 +41,7 @@ public class UserRestService
     }
 
     @GET
-    @Path ("{id}")
+    @Path("/{id}")
     public Response getUserById(@PathParam ("id") Integer id)
     {
         User user = entityFacade.getUserById(id);
@@ -52,7 +52,7 @@ public class UserRestService
     }
 
     @GET
-    @Path ("{username: [a-zA-Z]*}")
+    @Path("/{username: [a-zA-Z]*}")
     public Response getUserByUsername(@PathParam ("username") String username)
     {
         User user = entityFacade.getUserByUsername(username);
@@ -85,7 +85,7 @@ public class UserRestService
     }
 
     @DELETE
-    @Path ("{id}")
+    @Path("/{id}")
     public Response deleteUser(@PathParam ("id") Integer id)
     {
         User user = entityFacade.getUserById(id);
@@ -97,7 +97,7 @@ public class UserRestService
     }
 
     @GET
-    @Path ("search/{text}")
+    @Path("/search/{text}")
     public Response searchUsers(@PathParam ("text") String text)
     {
         return Response.ok(entityFacade.searchUsers(text)).build();

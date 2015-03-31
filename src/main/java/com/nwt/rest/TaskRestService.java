@@ -39,7 +39,7 @@ public class TaskRestService {
     }
 
     @GET
-    @Path("{id}")
+    @Path("/{id}")
     public Response getTaskById(@PathParam("id") Integer id) {
         Task task = entityFacade.getTaskById(id);
         if (task == null)
@@ -69,7 +69,7 @@ public class TaskRestService {
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/{id}")
     public Response deleteTask(@PathParam("id") Integer id) {
         Task task = entityFacade.getTaskById(id);
         if (task == null)
@@ -80,7 +80,7 @@ public class TaskRestService {
     }
 
     @GET
-    @Path("search/{text}")
+    @Path("/search/{text}")
     public Response searchTasks(@PathParam("text") String text) {
         return Response.ok(entityFacade.searchTasks(text)).build();
     }

@@ -8,17 +8,12 @@ import org.apache.log4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by glasshark on 23-Mar-15.
@@ -46,7 +41,7 @@ public class ProjectRestService
     }
 
     @GET
-    @Path ("{id}")
+    @Path("/{id}")
     public Response getProjectById(@PathParam ("id") Integer id)
     {
         Project project = entityFacade.getProjectById(id);
@@ -79,7 +74,7 @@ public class ProjectRestService
     }
 
     @DELETE
-    @Path ("{id}")
+    @Path("/{id}")
     public Response deleteProject(@PathParam ("id") Integer id)
     {
         Project project = entityFacade.getProjectById(id);
@@ -91,7 +86,7 @@ public class ProjectRestService
     }
 
     @GET
-    @Path ("search/{text}")
+    @Path("/search/{text}")
     public Response searchProjects(@PathParam ("text") String text)
     {
         return Response.ok(entityFacade.searchProjects(text)).build();
