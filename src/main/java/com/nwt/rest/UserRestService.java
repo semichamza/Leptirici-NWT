@@ -113,8 +113,8 @@ public class UserRestService
     }
 
     @GET
-    @Path ("/{userId}/tasks/{projectId}")
-    public Response getAllUserTasks(@PathParam ("userId") Integer userId, @PathParam ("projectId") Integer projectId)
+    @Path ("/{userId}/tasks/{taskId}")
+    public Response getAllUserTasks(@PathParam ("userId") Integer userId, @PathParam ("taskId") Integer taskId)
     {
         //TODO Implement!
         logger.debug("getAllUserTasks() not implemented yet");
@@ -123,7 +123,7 @@ public class UserRestService
 
     @GET
     @Path ("/{userId}/comments/{commentId}")
-    public Response getAllUserComments(@PathParam ("userId") Integer userId, @PathParam ("commentId") Integer projectId)
+    public Response getAllUserComments(@PathParam ("userId") Integer userId, @PathParam ("commentId") Integer commentId)
     {
         //TODO Implement!
         logger.debug("getAllUserComments() not implemented yet");
