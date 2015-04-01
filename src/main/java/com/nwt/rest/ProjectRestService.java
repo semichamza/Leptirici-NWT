@@ -91,4 +91,10 @@ public class ProjectRestService
     {
         return Response.ok(entityFacade.searchProjects(text)).build();
     }
+
+    @GET
+    @Path("/{id}/tasks/")
+    public Response getProjectTasks(@PathParam("id") Integer id) {
+        return Response.ok(entityFacade.getProjectTasks(id)).build();
+    }
 }

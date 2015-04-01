@@ -50,4 +50,6 @@ public interface EntityFacade
 
     public Tasks searchTasks(String text);
     //endregion
+
+    public Tasks getProjectTasks(Integer id);
 }

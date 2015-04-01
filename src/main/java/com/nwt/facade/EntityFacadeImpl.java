@@ -160,4 +160,10 @@ public class EntityFacadeImpl implements EntityFacade
         //TODO: Implement!
         return null;
     }
+
+    @Override
+    public Tasks getProjectTasks(Integer id) {
+
+        return null;
+    }
 }
