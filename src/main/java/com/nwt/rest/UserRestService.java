@@ -102,4 +102,31 @@ public class UserRestService
     {
         return Response.ok(entityFacade.searchUsers(text)).build();
     }
+
+    @GET
+    @Path ("/{userId}/projects/{projectId}")
+    public Response getAllUserProjects(@PathParam ("userId") Integer userId, @PathParam ("projectId") Integer projectId)
+    {
+        //TODO Implement!
+        logger.debug("getAllUserProjects() not implemented yet");
+        return null;
+    }
+
+    @GET
+    @Path ("/{userId}/tasks/{projectId}")
+    public Response getAllUserTasks(@PathParam ("userId") Integer userId, @PathParam ("projectId") Integer projectId)
+    {
+        //TODO Implement!
+        logger.debug("getAllUserTasks() not implemented yet");
+        return null;
+    }
+
+    @GET
+    @Path ("/{userId}/comments/{commentId}")
+    public Response getAllUserComments(@PathParam ("userId") Integer userId, @PathParam ("commentId") Integer projectId)
+    {
+        //TODO Implement!
+        logger.debug("getAllUserComments() not implemented yet");
+        return null;
+    }
 }

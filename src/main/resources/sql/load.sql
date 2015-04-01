@@ -20,3 +20,5 @@ INSERT INTO `tasks` (`description`, `name`, `project_id`, `user_id`) VALUES ('Na
 INSERT INTO `tasks` (`description`, `name`, `project_id`, `user_id`) VALUES ('Napraviti početni Angular View/Controller', 'Konfiguracija Angular frameworka', '2', '3');
 
 INSERT INTO `comments` (`id`, `text`, `time_posted`) VALUES ('1', 'Hello world', NOW());
+
+INSERT INTO `tasks_comments` (`task_id`, `comment_id`) VALUES ('1', '1');

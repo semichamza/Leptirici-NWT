@@ -1,5 +1,7 @@
 package com.nwt.rest;
 
+import com.nwt.entities.Comments;
+import com.nwt.entities.Logs;
 import com.nwt.entities.Task;
 import com.nwt.entities.Tasks;
 import com.nwt.facade.EntityFacade;
@@ -83,5 +85,47 @@ public class TaskRestService {
     @Path("/search/{text}")
     public Response searchTasks(@PathParam("text") String text) {
         return Response.ok(entityFacade.searchTasks(text)).build();
+    }
+
+    @GET
+    @Path ("/{id}/comments")
+    public Response getAllTaskComments(@PathParam ("id") Integer id)
+    {
+        Task task = entityFacade.getTaskById(id);
+        if (task == null)
+            throw new NotFoundException();
+        Comments comments = new Comments(task.getComments());
+        logger.debug("getAllTaskComments() for taskId: " + id + " returned: " + comments.size() + "results");
+        return Response.ok(comments).build();
+    }
+
+    @GET
+    @Path ("/{taskId}/comments/{commentId}")
+    public Response getTaskCommentById(@PathParam ("taskId") Integer taskId, @PathParam ("commentId") Integer commentId)
+    {
+        //TODO Implement!
+        logger.debug("getTaskCommentById() not implemented yet");
+        return null;
+    }
+
+    @GET
+    @Path ("/{id}/logs")
+    public Response getAllTaskLogs(@PathParam ("id") Integer id)
+    {
+        Task task = entityFacade.getTaskById(id);
+        if (task == null)
+            throw new NotFoundException();
+        Logs logs = new Logs(task.getLogs());
+        logger.debug("getAllTaskLogs() for taskId: " + id + " returned: " + logs.size() + "results");
+        return Response.ok(logs).build();
+    }
+
+    @GET
+    @Path ("/{taskId}/logs/{logId}")
+    public Response getTaskLogById(@PathParam ("taskId") Integer taskId, @PathParam ("logId") Integer logId)
+    {
+        //TODO Implement!
+        logger.debug("getTaskLogById() not implemented yet");
+        return null;
     }
 }
