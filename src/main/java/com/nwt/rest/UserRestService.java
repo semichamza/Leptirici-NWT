@@ -76,12 +76,12 @@ public class UserRestService
     @PUT
     public Response updateUser(User user)
     {
-        User updatingUser = entityFacade.getUserById(user.getId());
-        if (updatingUser == null)
+        User existingUser = entityFacade.getUserById(user.getId());
+        if (existingUser == null)
             throw new BadRequestException();//TODO: Implementirat validatore!
-        entityFacade.updateUser(updatingUser);
-        logger.debug("Updated user  - " + updatingUser.toString());
-        return Response.ok(updatingUser).build();
+        entityFacade.updateUser(user);
+        logger.debug("Updated user  - " + user.toString());
+        return Response.ok(user).build();
     }
 
     @DELETE

@@ -2,7 +2,6 @@ package com.nwt.rest;
 
 import com.nwt.entities.Project;
 import com.nwt.entities.Projects;
-import com.nwt.entities.Tasks;
 import com.nwt.entities.Users;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
@@ -67,12 +66,12 @@ public class ProjectRestService
     @PUT
     public Response updateProject(Project project)
     {
-        Project updatingProject = entityFacade.getProjectById(project.getId());
-        if (updatingProject == null)
+        Project existingProject = entityFacade.getProjectById(project.getId());
+        if (existingProject == null)
             throw new BadRequestException();//TODO: Implementirat validatore!
-        entityFacade.updateProject(updatingProject);
-        logger.debug("Updated project  - " + updatingProject.toString());
-        return Response.ok(updatingProject).build();
+        entityFacade.updateProject(project);
+        logger.debug("Updated project  - " + project.toString());
+        return Response.ok(project).build();
     }
 
     @DELETE

@@ -3,7 +3,6 @@ package com.nwt.facade;
 import com.nwt.entities.*;
 
 import javax.ejb.Stateless;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -13,7 +12,6 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 /**
  * Created by glasshark on 29-Mar-15.
  */
-@Named ("entityFacade")
 @Stateless
 public class EntityFacadeImpl implements EntityFacade
 {
@@ -158,12 +156,6 @@ public class EntityFacadeImpl implements EntityFacade
     public Tasks searchTasks(String text)
     {
         //TODO: Implement!
-        return null;
-    }
-
-    @Override
-    public Tasks getProjectTasks(Integer id) {
-
         return null;
     }
 }

@@ -62,12 +62,12 @@ public class TaskRestService {
 
     @PUT
     public Response updateTask(Task task) {
-        Task updatingTask = entityFacade.getTaskById(task.getId());
-        if (updatingTask == null)
+        Task existingTask = entityFacade.getTaskById(task.getId());
+        if (existingTask == null)
             throw new BadRequestException();//TODO: Implementirat validatore!
-        entityFacade.updateTask(updatingTask);
-        logger.debug("Updated user  - " + updatingTask.toString());
-        return Response.ok(updatingTask).build();
+        entityFacade.updateTask(task);
+        logger.debug("Updated user  - " + task.toString());
+        return Response.ok(task).build();
     }
 
     @DELETE
