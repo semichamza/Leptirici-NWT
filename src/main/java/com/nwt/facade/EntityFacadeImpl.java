@@ -38,9 +38,9 @@ public class EntityFacadeImpl implements EntityFacade
     @Override
     public User getUserByUsername(String username)
     {
-        //TODO - pretraga sa fiksiranim queryjem!
-        User user = em.find(User.class, username);
-        return user;
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_USERNAME, User.class);
+        query.setParameter("username", username);
+        return query.getSingleResult();
     }
 
     @Override

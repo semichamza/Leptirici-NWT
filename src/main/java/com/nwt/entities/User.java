@@ -12,11 +12,15 @@ import java.io.Serializable;
 @Entity
 @Table (name = "users")
 //@XmlRootElement
-@NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u")
+@NamedQueries ({
+        @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u"),
+        @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.username = :username")
+})
 @EntityListeners (LifeCycleListener.class)
 public class User implements Serializable
 {
     public static final String FIND_ALL = "User.findAll";
+    public static final String FIND_BY_USERNAME = "User.findByUsername";
 
     private Integer id;
     //TODO: razdvojiti username i password u Credentials @Embeddable entity
