@@ -3,6 +3,7 @@ INSERT INTO `users` (`active`, `passwordHash`, `username`) VALUES (TRUE, '098f6b
 INSERT INTO `users` (`active`, `passwordHash`, `username`) VALUES (TRUE, '098f6bcd4621d373cade4e832627b4f6', 'jkaldzija');
 INSERT INTO `users` (`active`, `passwordHash`, `username`) VALUES (TRUE, '098f6bcd4621d373cade4e832627b4f6', 'aciva');
 INSERT INTO `users` (`active`, `passwordHash`, `username`) VALUES (TRUE, '098f6bcd4621d373cade4e832627b4f6', 'hsemic');
+INSERT INTO `users` (`active`, `passwordHash`, `username`) VALUES (TRUE, 'd3dde2723247d8d5fc3f76dceb3d4324', 'jasmin');
 
 INSERT INTO `projects` (`description`,`name`,`owner_id`) VALUES ('Testni projekat','Hello world',1);
 INSERT INTO `projects` (`description`,`name`,`owner_id`) VALUES ('Projekat sa predmeta NWT','PMS-NWT',1);
