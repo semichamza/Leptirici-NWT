@@ -1,5 +1,8 @@
 package com.nwt.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 @Entity
 @Table (name = "projects")
 @NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Project p")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Project implements Serializable
 {
     public static final String FIND_ALL = "Project.findAll";
@@ -17,19 +21,7 @@ public class Project implements Serializable
     private Integer id;
     private String name;
     private String description;
-    private User owner;
-    private List<User> members;
-
-    public Project()
-    {
-    }
-
-    public Project(String name, String description, User owner)
-    {
-        this.name = name;
-        this.description = description;
-        this.owner = owner;
-    }
+    private List<ProjectUser> users;
 
     @Id
     @GeneratedValue
@@ -65,30 +57,15 @@ public class Project implements Serializable
         this.description = description;
     }
 
-    @OneToOne
-    @JoinColumn (name = "owner_id")
-    public User getOwner()
+    @OneToMany (mappedBy = "id.project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<ProjectUser> getUsers()
     {
-        return owner;
+        return users;
     }
 
-    public void setOwner(User owner)
+    public void setUsers(List<ProjectUser> users)
     {
-        this.owner = owner;
-    }
-
-    //TODO: dodat primary key u tabelu
-    @OneToMany (fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn (name = "user_id"))
-    public List<User> getMembers()
-    {
-        return members;
-    }
-
-    public void setMembers(List<User> members)
-    {
-        this.members = members;
+        this.users = users;
     }
 
     @Override

@@ -1,46 +1,47 @@
 package com.nwt.entities;
 
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nwt.util.LifeCycleListener;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by glasshark on 18-Mar-15.
  */
 @Entity
 @Table (name = "users")
-//@XmlRootElement
 @NamedQueries ({
         @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u"),
-        @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.username = :username")
+        @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.userPrincipal.username = :username")
 })
 @EntityListeners (LifeCycleListener.class)
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements Serializable
 {
     public static final String FIND_ALL = "User.findAll";
     public static final String FIND_BY_USERNAME = "User.findByUsername";
 
     private Integer id;
-    //TODO: razdvojiti username i password u Credentials @Embeddable entity
-    private String username;
-    //    private String password;
-    private String passwordHash;
+    private UserPrincipal userPrincipal;
+    private String firstName;
+    private String lastName;
     private Boolean active;
-//    private UserType userType;
+    private String email;
+    private List<ProjectUser> projects;
 
-    public User()
-    {
-    }
-
-    public User(String username, String password, Boolean active)
-    {
-        this.username = username;
-        this.passwordHash = DigestUtils.md5Hex(password);
-        ;
-        this.active = active;
-    }
+    //TODO
+//    @XmlJavaTypeAdapter (LinkAdapter.class)
+//    @InjectLink (value = "users/{id}", rel = "self", style = InjectLink.Style.ABSOLUTE)
+//    private Link link;
 
     @Id
     @GeneratedValue
@@ -54,41 +55,59 @@ public class User implements Serializable
         this.id = id;
     }
 
-    //    @NotNull
-//    @Size (max = 30)
-    @Column (nullable = false, unique = true, length = 30)
-    public String getUsername()
+    @Embedded
+    public UserPrincipal getUserPrincipal()
     {
-        return username;
+        return userPrincipal;
     }
 
-    public void setUsername(String username)
+    public void setUserPrincipal(UserPrincipal userPrincipal)
     {
-        this.username = username;
+        this.userPrincipal = userPrincipal;
     }
 
-//    @Transient
-//    public String getPassword()
-//    {
-//        return password;
-//    }
-//
-//    public void setPassword(String password)
-//    {
-//        setPasswordHash(password);
-//    }
-
-    @Column (nullable = false, length = 32)
-    public String getPasswordHash()
+    @NotNull
+    @Size (max = 30)
+    @Column (nullable = false, length = 30)
+    public String getFirstName()
     {
-        return passwordHash;
+        return firstName;
     }
 
-    public void setPasswordHash(String passwordHash)
+    public void setFirstName(String firstName)
     {
-        this.passwordHash = passwordHash;
+        this.firstName = firstName;
     }
 
+    @NotNull
+    @Size (max = 50)
+    @Column (nullable = false, length = 50)
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+
+    @Email
+    @Pattern (regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*"
+            + "@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+    @Size (max = 50)
+    @Column (unique = true, length = 50)
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    @NotNull
     @Column (nullable = false)
     public Boolean getActive()
     {
@@ -100,37 +119,20 @@ public class User implements Serializable
         this.active = active;
     }
 
-//    @Enumerated (EnumType.STRING)
-////    @Column (nullable = false)
-//    public UserType getUserType()
-//    {
-//        return userType;
-//    }
-//
-//    public void setUserType(UserType userType)
-//    {
-//        this.userType = userType;
-//    }
-
-    @PostLoad
-    public void log()
+    @OneToMany (mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<ProjectUser> getProjects()
     {
-        System.out.print("pokrenuto");
+        return projects;
     }
 
-    @PrePersist
-    @PreUpdate
-    private void validate()
+    public void setProjects(List<ProjectUser> projects)
     {
-        if (username == null)
-            throw new IllegalArgumentException("Invalid first name");
-        //TODO ovo se moze uradi odlicno za TIme metodu za logove i estimaciju da se provjeri unesena vrijednsto
-        // i odmah unese u bazu u korektnom formatu ili cak se odvojit u posebnu listener klasu sa anotacijama
+        this.projects = projects;
     }
 
     @Override
     public String toString()
     {
-        return "username: " + username;
+        return "username: " + userPrincipal.getUsername();
     }
 }

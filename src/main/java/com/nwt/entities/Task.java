@@ -1,6 +1,8 @@
 package com.nwt.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,8 +24,9 @@ public class Task implements Serializable
     private String description;
     private User user;
     private Project project;
+    private TaskStatus taskStatus;
+    private TaskPriority taskPriority;
     private Calendar estimation;
-    private Priority priority;
     private List<Log> logs;
     private List<Comment> comments;
 
@@ -50,6 +53,7 @@ public class Task implements Serializable
         this.id = id;
     }
 
+    @Past
     @Column (name = "time_created")
     @Temporal (TemporalType.TIMESTAMP)
     public Date getTimeCreated()
@@ -105,6 +109,7 @@ public class Task implements Serializable
     }
 
     //    @Temporal(TemporalType.TIME)
+    @Future
     public Calendar getEstimation()
     {
         return estimation;
@@ -116,14 +121,14 @@ public class Task implements Serializable
     }
 
     @Enumerated (EnumType.STRING)
-    public Priority getPriority()
+    public TaskPriority getTaskPriority()
     {
-        return priority;
+        return taskPriority;
     }
 
-    public void setPriority(Priority priority)
+    public void setTaskPriority(TaskPriority taskPriority)
     {
-        this.priority = priority;
+        this.taskPriority = taskPriority;
     }
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

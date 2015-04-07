@@ -15,6 +15,7 @@
         <version.plugin.war>2.4</version.plugin.war>
         <version.hibernate>4.3.5.Final</version.hibernate>
         <version.jersey>2.17</version.jersey>
+        <version.jackson>2.5.2</version.jackson>
     </properties>
 
     <dependencies>
@@ -41,15 +42,10 @@
             <version>1.2.17</version>
         </dependency>
         <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>${version.jersey}</version>
+            <groupId>org.glassfish.main.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>4.1</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.owlike</groupId>
-            <artifactId>genson</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
@@ -61,11 +57,45 @@
             <artifactId>jsontoken</artifactId>
             <version>1.0</version>
         </dependency>
+
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.0</version>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-declarative-linking</artifactId>
+            <version>${version.jersey}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.module</groupId>-->
+        <!--<artifactId>jackson-module-jaxb-annotations</artifactId>-->
+        <!--<version>${version.jackson}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.jaxrs</groupId>-->
+        <!--<artifactId>jackson-jaxrs-json-provider</artifactId>-->
+        <!--<version>${version.jackson}</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>javax.el</groupId>-->
+        <!--<artifactId>javax.el-api</artifactId>-->
+        <!--<version>2.2.4</version>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -81,10 +111,17 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.1.2.Final</version>
         </dependency>
+
+        <!--JEDAN JE VISAK!-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.0</version>
         </dependency>
     </dependencies>
 

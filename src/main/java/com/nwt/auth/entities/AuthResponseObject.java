@@ -1,4 +1,4 @@
-package com.nwt.auth_entities;
+package com.nwt.auth.entities;
 
 import java.io.Serializable;
 

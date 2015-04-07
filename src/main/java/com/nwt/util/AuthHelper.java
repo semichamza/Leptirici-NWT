@@ -6,7 +6,7 @@ package com.nwt.util;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
-import com.nwt.auth_entities.Token;
+import com.nwt.auth.entities.Token;
 import net.oauth.jsontoken.JsonToken;
 import net.oauth.jsontoken.JsonTokenParser;
 import net.oauth.jsontoken.crypto.HmacSHA256Signer;

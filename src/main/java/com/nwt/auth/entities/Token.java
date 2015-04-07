@@ -1,6 +1,6 @@
-package com.nwt.auth_entities;
+package com.nwt.auth.entities;
 
-import com.nwt.entities.User;
+import com.nwt.entities.UserPrincipal;
 import org.joda.time.DateTime;
 
 public class Token {
@@ -41,8 +41,9 @@ public class Token {
         this.passwordHash = passwordHash;
     }
 
-    public boolean isValied(User user) {
-        return passwordHash.equals(user.getPasswordHash()) && username.equals(user.getUsername());
+    public boolean isValid(UserPrincipal principal)
+    {
+        return passwordHash.equals(principal.getPasswordHash()) && username.equals(principal.getUsername());
     }
 
 

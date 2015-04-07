@@ -7,8 +7,6 @@ import java.util.List;
 /**
  * Created by glasshark on 28-Mar-15.
  */
-//@XmlRootElement
-//@XmlSeeAlso (User.class)
 public class Users extends ArrayList<User>
 {
     public Users()
@@ -21,7 +19,6 @@ public class Users extends ArrayList<User>
         super(c);
     }
 
-    //    @XmlElement (name = "user")
     public List<User> getUsers()
     {
         return this;

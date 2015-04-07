@@ -19,8 +19,8 @@ import java.net.URI;
  * Created by glasshark on 23-Mar-15.
  */
 @Path ("users")
-@Produces ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Consumes ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces (MediaType.APPLICATION_JSON)
+@Consumes (MediaType.APPLICATION_JSON)
 @Stateless
 public class UserRestService
 {
@@ -40,13 +40,20 @@ public class UserRestService
         return Response.ok(users).build();
     }
 
-    @GET
-    @Path("/{id}")
-    public Response getUserById(@PathParam ("id") Integer id)
+    //TODO bolje rijesiti exception handling
+    private User userById(Integer id)
     {
         User user = entityFacade.getUserById(id);
         if (user == null)
             throw new NotFoundException();
+        return user;
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response getUserById(@PathParam ("id") Integer id)
+    {
+        User user = userById(id);
         logger.debug("getUserById() returned: " + user.toString());
         return Response.ok(user).build();
     }
@@ -76,9 +83,7 @@ public class UserRestService
     @PUT
     public Response updateUser(User user)
     {
-        User existingUser = entityFacade.getUserById(user.getId());
-        if (existingUser == null)
-            throw new BadRequestException();//TODO: Implementirat validatore!
+        userById(user.getId());     //TODO: bolje implementirat validatore!
         entityFacade.updateUser(user);
         logger.debug("Updated user  - " + user.toString());
         return Response.ok(user).build();
@@ -88,14 +93,13 @@ public class UserRestService
     @Path("/{id}")
     public Response deleteUser(@PathParam ("id") Integer id)
     {
-        User user = entityFacade.getUserById(id);
-        if (user == null)
-            throw new NotFoundException();
+        User user = userById(id);
         entityFacade.deleteUser(user);
         logger.debug("Deleted user - " + user.toString());
         return Response.noContent().build();
     }
 
+    //    TODO: Dodat vise parametara pretrage
     @GET
     @Path("/search/{text}")
     public Response searchUsers(@PathParam ("text") String text)
@@ -104,8 +108,17 @@ public class UserRestService
     }
 
     @GET
+    @Path ("/{userId}/projects")
+    public Response getAllUserProjects(@PathParam ("userId") Integer userId)
+    {
+        //TODO popravit
+        User user = userById(userId);
+        return Response.ok(user.getProjects()).build();
+    }
+
+    @GET
     @Path ("/{userId}/projects/{projectId}")
-    public Response getAllUserProjects(@PathParam ("userId") Integer userId, @PathParam ("projectId") Integer projectId)
+    public Response getUserProjectById(@PathParam ("userId") Integer userId, @PathParam ("projectId") Integer projectId)
     {
         //TODO Implement!
         logger.debug("getAllUserProjects() not implemented yet");
@@ -113,8 +126,8 @@ public class UserRestService
     }
 
     @GET
-    @Path ("/{userId}/tasks/{taskId}")
-    public Response getAllUserTasks(@PathParam ("userId") Integer userId, @PathParam ("taskId") Integer taskId)
+    @Path ("/{userId}/tasks")
+    public Response getAllUserTasks(@PathParam ("userId") Integer userId)
     {
         //TODO Implement!
         logger.debug("getAllUserTasks() not implemented yet");
@@ -122,8 +135,26 @@ public class UserRestService
     }
 
     @GET
+    @Path ("/{userId}/tasks/{taskId}")
+    public Response getUserTaskById(@PathParam ("userId") Integer userId, @PathParam ("taskId") Integer taskId)
+    {
+        //TODO Implement!
+        logger.debug("getAllUserTasks() not implemented yet");
+        return null;
+    }
+
+    @GET
+    @Path ("/{userId}/comments")
+    public Response getAllUserComments(@PathParam ("userId") Integer userId)
+    {
+        //TODO Implement!
+        logger.debug("getAllUserComments() not implemented yet");
+        return null;
+    }
+
+    @GET
     @Path ("/{userId}/comments/{commentId}")
-    public Response getAllUserComments(@PathParam ("userId") Integer userId, @PathParam ("commentId") Integer commentId)
+    public Response getUserCommentById(@PathParam ("userId") Integer userId, @PathParam ("commentId") Integer commentId)
     {
         //TODO Implement!
         logger.debug("getAllUserComments() not implemented yet");

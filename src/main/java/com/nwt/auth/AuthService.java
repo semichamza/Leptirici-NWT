@@ -1,8 +1,8 @@
 package com.nwt.auth;
 
-import com.nwt.auth_entities.AuthParameter;
-import com.nwt.auth_entities.AuthResponseObject;
-import com.nwt.entities.User;
+import com.nwt.auth.entities.AuthParameter;
+import com.nwt.auth.entities.AuthResponseObject;
+import com.nwt.entities.UserPrincipal;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.AuthHelper;
 import com.nwt.util.Log;
@@ -41,15 +41,18 @@ public class AuthService {
         AuthResponseObject auth = new AuthResponseObject();
         try {
 
-            User user = entityFacade.getUserByUsername(authParameter.getUsername());
-            if (user == null || !user.getPasswordHash().equals(DigestUtils.md5Hex(authParameter.getPassword()))) {
+            UserPrincipal principal = entityFacade.getUserByUsername(authParameter.getUsername()).getUserPrincipal();
+            if (principal == null || !principal.getPasswordHash()
+                    .equals(DigestUtils.md5Hex(authParameter.getPassword())))
+            {
 
                 auth.setMessage(resourceBundle.getString("messageError"));
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity(auth).build();
             }
             //999999999L trajanje tokena u minutama
-            auth.setJwt(AuthHelper.createJsonWebToken(user.getUsername(), user.getPasswordHash(), 999999999L));
+            auth.setJwt(
+                    AuthHelper.createJsonWebToken(principal.getUsername(), principal.getPasswordHash(), 999999999L));
             auth.setMessage(resourceBundle.getString("messageSuccess"));
             auth.setIsAutorized(true);
 

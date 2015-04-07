@@ -2,7 +2,6 @@ package com.nwt.rest;
 
 import com.nwt.entities.Project;
 import com.nwt.entities.Projects;
-import com.nwt.entities.Users;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
@@ -101,9 +100,8 @@ public class ProjectRestService
         Project project = entityFacade.getProjectById(id);
         if (project == null)
             throw new NotFoundException();
-        Users users = new Users(project.getMembers());
-        logger.debug("getAllProjectMembers() for projectId: " + id + " returned: " + users.size() + "results");
-        return Response.ok(users).build();
+//        logger.debug("getAllProjectMembers() for projectId: " + id + " returned: " + users.size() + "results");
+        return Response.ok(project.getUsers()).build();
     }
 
     @GET
