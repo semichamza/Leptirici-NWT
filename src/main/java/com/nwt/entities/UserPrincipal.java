@@ -1,5 +1,7 @@
 package com.nwt.entities;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
@@ -54,5 +56,9 @@ public class UserPrincipal implements Serializable
     public void setUserRole(UserRole userRole)
     {
         this.userRole = userRole;
+    }
+
+    public void setPassword(String password) {
+        passwordHash = DigestUtils.md5Hex(password);
     }
 }

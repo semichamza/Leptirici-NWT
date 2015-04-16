@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <script src="lib/dependencies/angular.min.js"></script>
     <script src="lib/dependencies/angular-cookies.min.js"></script>
-    <script src="script/service_controller.js"></script>
+    <script src="script/test.js"></script>
     <title>Test</title>
     <style>
         TABLE, TBODY, TR, TD, TH {
@@ -16,36 +16,13 @@
 </head>
 <body ng-controller="ProjectController">
 <div ng-hide="isAutorized">
-
-    <h2>Logina</h2>
     <form name="loginForm" ng-submit="login()">
-        <input type="text" required placeholder="Username" ng-model="loginUsername"/><br>
-        <input type="password" required placeholder="Password" ng-model="loginPassword"/><br>
+        <input type="text" required placeholder="Username" ng-model="loginUsername"/>
+        <input type="password" required placeholder="Password" ng-model="loginPassword"/>
         <input type="submit" value="Login"/>
     </form>
     <br>
-    <br>
-    <br>
-
-    <h2>Registration</h2>
-
-    <form name="registrationForm" ng-submit="register()">
-        <input type="text" required placeholder="First name" ng-model="newFirstName"/><br>
-        <input type="text" required placeholder="Last name" ng-model="newLastName"/><br>
-        <input type="text" required placeholder="Username" ng-model="newUsername"/><br>
-        <input type="text" required placeholder="Email" ng-model="newEmail"/><br>
-        <input type="password" required placeholder="Password" ng-model="newPassword"/><br>
-        <input type="submit" value="Register"/>
-    </form>
-    <br>
-    <br>
-
-    <h2>Reset</h2>
-
-    <form name="resetForm" ng-submit="reset()">
-        <input type="text" required placeholder=Username" ng-model="resetUsername"/>
-        <input type="submit" value="Reset"/>
-    </form>
+    (jasmin/jasmin)
     <br>
     {{message}}
 </div>

@@ -13,7 +13,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 /**
  * Created by glasshark on 23-Mar-15.
@@ -41,6 +40,14 @@ public class ProjectRestService
     }
 
     @GET
+    @Path("/all")
+    public Response getAllProjects1() {
+        Projects projects = entityFacade.getAllProjects();
+        logger.debug("getAllProjects() returned " + projects.size() + " object(s).");
+        return Response.ok(projects).build();
+    }
+
+    @GET
     @Path("/{id}")
     public Response getProjectById(@PathParam ("id") Integer id)
     {
@@ -58,8 +65,8 @@ public class ProjectRestService
             throw new BadRequestException();
         project = entityFacade.createProject(project);
         logger.debug("Created project - " + project.toString());
-        URI projectUri = uriInfo.getAbsolutePathBuilder().path(project.getId().toString()).build();
-        return Response.created(projectUri).build();
+
+        return Response.ok().build();
     }
 
     @PUT

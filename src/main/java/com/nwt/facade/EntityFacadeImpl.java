@@ -1,5 +1,7 @@
 package com.nwt.facade;
 
+import com.nwt.auth.entities.VerificationToken;
+import com.nwt.auth.entities.VerificationTokens;
 import com.nwt.entities.*;
 
 import javax.ejb.Stateless;
@@ -157,5 +159,37 @@ public class EntityFacadeImpl implements EntityFacade
     {
         //TODO: Implement!
         return null;
+    }
+
+
+    @Override
+    public VerificationTokens getAllTokens() {
+        TypedQuery<VerificationToken> query = em.createNamedQuery(VerificationToken.FIND_ALL, VerificationToken.class);
+        return new VerificationTokens(query.getResultList());
+    }
+
+    @Override
+    public VerificationToken getToken(String id) {
+        VerificationToken token = em.find(VerificationToken.class, id);
+        return token;
+    }
+
+    @Override
+    public VerificationToken updateToken(VerificationToken token) {
+        em.merge(token);
+        assertNotNull(token.getId());
+        return token;
+    }
+
+    @Override
+    public VerificationToken createToken(VerificationToken token) {
+        em.persist(token);
+        assertNotNull(token.getId());
+        return token;
+    }
+
+    @Override
+    public void deleteToken(VerificationToken token) {
+        em.remove(token);
     }
 }

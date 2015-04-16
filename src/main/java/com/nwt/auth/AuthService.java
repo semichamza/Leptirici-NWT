@@ -2,8 +2,11 @@ package com.nwt.auth;
 
 import com.nwt.auth.entities.AuthParameter;
 import com.nwt.auth.entities.AuthResponseObject;
+import com.nwt.entities.User;
 import com.nwt.entities.UserPrincipal;
 import com.nwt.facade.EntityFacade;
+import com.nwt.mailer.Mailer;
+import com.nwt.mailer.MessageBody;
 import com.nwt.util.AuthHelper;
 import com.nwt.util.Log;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -11,10 +14,7 @@ import org.apache.log4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -41,8 +41,9 @@ public class AuthService {
         AuthResponseObject auth = new AuthResponseObject();
         try {
 
-            UserPrincipal principal = entityFacade.getUserByUsername(authParameter.getUsername()).getUserPrincipal();
-            if (principal == null || !principal.getPasswordHash()
+            User user = entityFacade.getUserByUsername(authParameter.getUsername());
+            UserPrincipal principal = user.getUserPrincipal();
+            if (principal == null || !user.getActive() || !principal.getPasswordHash()
                     .equals(DigestUtils.md5Hex(authParameter.getPassword())))
             {
 
@@ -55,13 +56,24 @@ public class AuthService {
                     AuthHelper.createJsonWebToken(principal.getUsername(), principal.getPasswordHash(), 999999999L));
             auth.setMessage(resourceBundle.getString("messageSuccess"));
             auth.setIsAutorized(true);
-
+            auth.setName(principal.getUsername());
             return Response.ok(auth).build();
 
         } catch (Exception e) {
-            auth.setMessage(resourceBundle.getString("messageException"));
+            auth.setMessage(resourceBundle.getString("messageError"));
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(auth).build();
         }
+    }
+
+    @GET
+    @Path("/mail")
+    public Response sentMail() {
+        MessageBody messageBody = new MessageBody("Test", "Test");
+        messageBody.addParagraph("TestP");
+
+        boolean send = Mailer.sendEmail("jasmin.kaldzija@gmail.com", messageBody);
+
+        return Response.ok().build();
     }
 }

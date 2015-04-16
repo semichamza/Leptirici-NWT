@@ -9,16 +9,17 @@ public class AuthResponseObject implements Serializable {
     String jwt;
     String message;
     Boolean isAutorized = false;
-
+    String name;
 
     public AuthResponseObject() {
 
     }
 
-    public AuthResponseObject(String jwt, String message, Boolean isAutorized) {
+    public AuthResponseObject(String jwt, String message, Boolean isAutorized, String name) {
         this.jwt = jwt;
         this.message = message;
         this.isAutorized = isAutorized;
+        this.name = name;
     }
 
     public String getMessage() {
@@ -43,5 +44,13 @@ public class AuthResponseObject implements Serializable {
 
     public void setJwt(String jwt) {
         this.jwt = jwt;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

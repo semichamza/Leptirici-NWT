@@ -1,5 +1,7 @@
 package com.nwt.facade;
 
+import com.nwt.auth.entities.VerificationToken;
+import com.nwt.auth.entities.VerificationTokens;
 import com.nwt.entities.*;
 
 /**
@@ -50,4 +52,16 @@ public interface EntityFacade
 
     public Tasks searchTasks(String text);
     //endregion
+
+    //TOKEN
+
+    public VerificationTokens getAllTokens();
+
+    public VerificationToken getToken(String id);
+
+    public VerificationToken updateToken(VerificationToken token);
+
+    public VerificationToken createToken(VerificationToken token);
+
+    public void deleteToken(VerificationToken token);
 }

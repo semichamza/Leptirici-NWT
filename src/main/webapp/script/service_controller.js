@@ -24,7 +24,6 @@
                 $scope.tasks = data;
             }).error(function (data, status, headers, config) {
                 $scope.status = status;
-                alert(data);
             });
         };
         $scope.login = function () {
@@ -44,6 +43,51 @@
                 $cookieStore.put('auth', data.isAutorized);
                 $cookieStore.put('username', $scope.loginUsername);
                 getProjects();
+            }).error(function (data, status, headers, config) {
+                $scope.message = data.message;
+            });
+        };
+
+        $scope.login = function () {
+            //$http.get("/PMS-NWT/rest/tasks").then(function (response) {
+            //    $scope.tasks = response.data;
+            //});
+
+            $http({
+                url: '/PMS-NWT/auth/login',
+                method: "POST",
+                data: {'username': $scope.loginUsername, 'password': $scope.loginPassword},
+                headers: {'Author': 'testawd', 'Accept': 'application/json', 'Content-Type': 'application/json'}
+            }).success(function (data, status, headers, config) {
+                $cookieStore.put('jwt', data.jwt);
+                $scope.isAutorized = data.isAutorized;
+                $scope.message = data.message;
+                $cookieStore.put('auth', data.isAutorized);
+                $cookieStore.put('username', $scope.loginUsername);
+                getProjects();
+            }).error(function (data, status, headers, config) {
+                $scope.message = data.message;
+            });
+        };
+
+        $scope.register = function () {
+            //$http.get("/PMS-NWT/rest/tasks").then(function (response) {
+            //    $scope.tasks = response.data;
+            //});
+            var regData = {
+                'name': $scope.newFirstName,
+                'lastname': 'prezime',
+                'username': $scope.newUsername,
+                'email': $scope.newEmail,
+                'password': $scope.newPassword
+            };
+            $http({
+                url: '/PMS-NWT/auth/user/register',
+                method: "POST",
+                data: regData,
+                headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
+            }).success(function (data, status, headers, config) {
+                alert("Mail poslan");
             }).error(function (data, status, headers, config) {
                 $scope.message = data.message;
             });
@@ -96,8 +140,6 @@
                     $scope.projects = data;
                 }).error(function (data, status, headers, config) {
                     $scope.status = status;
-                    alert(data.reason);
-                    alert(data.mesage);
                 });
 
             }).error(function (data, status, headers, config) {
@@ -113,12 +155,29 @@
             $scope.loginPassword = null;
             $scope.message = message;
         };
-
         if ($scope.isAutorized) {
             getProjects();
+        }
+
+        $scope.reset = function () {
+            var reqData = {
+                'username': $scope.resetUsername
+            };
+
+            $http({
+                url: '/PMS-NWT/auth/user/reset',
+                method: "PUT",
+                data: reqData,
+                headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
+            }).success(function (data, status, headers, config) {
+                alert("Mail poslan");
+            }).error(function (data, status, headers, config) {
+                $scope.message = data.message;
+            });
         }
     };
 
 
     app.controller("ProjectController", ProjectController);
+
 }())

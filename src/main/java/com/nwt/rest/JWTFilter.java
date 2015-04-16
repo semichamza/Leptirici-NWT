@@ -1,6 +1,6 @@
 package com.nwt.rest;
 
-import com.nwt.auth_entities.Token;
+import com.nwt.auth.entities.Token;
 import com.nwt.util.AuthHelper;
 
 import javax.ejb.Stateless;
