@@ -1,35 +1,24 @@
 /**
  * Created by Jasmin on 16-Apr-15.
  */
-app.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+app.config(function ($routeProvider, $httpProvider) {
 
     $httpProvider.interceptors.push('myHttpInterceptor');
 
-    $urlRouterProvider.otherwise('/404');
-    $urlRouterProvider.when('', '/login');
-    $urlRouterProvider.when('/', '/login');
-
-    $stateProvider
-        .state('dashboard', {
-            url: '/dashboard',
-            templateUrl: 'dahsboard.html',
-            access: {
-                requiresLogin: false
-            }
+    $routeProvider
+        .when("",{
+            redirectTo:"/login"
+        }).when("/",{
+            redirectTo:"/login"
         })
-        .state('login', {
-            url: '/login',
-            templateUrl: 'login.html',
-            access: {
-                requiresLogin: false
-            }
+        .when("/dashboard",{
+            templateUrl:"dahsboard.html"
         })
-        .state('404', {
-            url: '/404',
-            templateUrl: '404.html',
-            access: {
-                requiresLogin: false
-            }
-        });
-
+        .when("/login",{
+            templateUrl:"login.html"
+        })
+        .when("/404",{
+            templateUrl:"404.html"
+        })
+        .otherwise({redirectTo:"/404"});
 });

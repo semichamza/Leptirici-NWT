@@ -6,6 +6,7 @@ app.service('authService', function ($http, $rootScope, $cookieStore) {
     var apiURL = "/PMS-NWT/auth";
 
     var _setAuthorization = function (userProfile) {
+        $rootScope.userProfile=userProfile;
         $cookieStore.put('userProfile', userProfile);
     };
 
@@ -22,8 +23,8 @@ app.service('authService', function ($http, $rootScope, $cookieStore) {
         });
     };
 
-    var _login = function () {
-        _postData('/login', account).success(function (data) {
+    var _login = function (account) {
+        return _postData('/login', account).success(function (data) {
             var userProfile = {
                 jwt: data.jwt,
                 name: data.name
@@ -45,6 +46,7 @@ app.service('authService', function ($http, $rootScope, $cookieStore) {
     authService.getAuthorization = _getAuthorization;
     authService.postData = _postData;
     authService.logout = _logout;
+    authService.login = _login;
 
     return authService;
 

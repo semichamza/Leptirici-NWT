@@ -3,7 +3,7 @@
  */
 var token = "";
 
-var app = angular.module("app", ["ui.router", "ngCookies"]);
+var app = angular.module('app', ['ngRoute', 'ngCookies', 'pascalprecht.translate']);
 
 app.factory('myHttpInterceptor', function ($q, $rootScope) {
     return {
@@ -20,7 +20,7 @@ app.factory('myHttpInterceptor', function ($q, $rootScope) {
     }
 });
 
-app.run(function ($rootScope, $state, authService) {
+app.run(function ($rootScope, $location, authService) {
 
     var userProfile = authService.getAuthorization();
 
@@ -29,8 +29,6 @@ app.run(function ($rootScope, $state, authService) {
             jwt: userProfile.jwt,
             name: userProfile.name
         };
-
-        alert('user' + $rootScope.user.name);
     } else {
         $rootScope.user = {isAuth: false};
     }
@@ -45,9 +43,9 @@ app.run(function ($rootScope, $state, authService) {
         if (toState.access.requiresLogin) {
             if (!userProfile) {
                 event.preventDefault();
-                $state.go("login");
+                alert('state1');
             } else {
-                $state.go("dashboard");
+                alert('state2');
             }
         }
     })
