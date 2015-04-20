@@ -1,16 +1,18 @@
 package com.nwt.entities;
 
-//import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nwt.util.LifeCycleListener;
+import com.nwt.util.LinkAdapter;
+import org.glassfish.jersey.linking.InjectLink;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,9 +41,9 @@ public class User implements Serializable
     private List<ProjectUser> projects;
 
     //TODO
-//    @XmlJavaTypeAdapter (LinkAdapter.class)
-//    @InjectLink (value = "users/{id}", rel = "self", style = InjectLink.Style.ABSOLUTE)
-//    private Link link;
+    @XmlJavaTypeAdapter (LinkAdapter.class)
+    @InjectLink (value = "users/{id}", rel = "self", style = InjectLink.Style.ABSOLUTE)
+    private Link link;
 
     @Id
     @GeneratedValue
@@ -119,7 +121,7 @@ public class User implements Serializable
         this.active = active;
     }
 
-    @OneToMany (mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<ProjectUser> getProjects()
     {
         return projects;

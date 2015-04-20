@@ -2,42 +2,54 @@ package com.nwt.entities;
 
 //import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
  * Created by glasshark on 04-Apr-15.
  */
-@Embeddable
 public class ProjectUserId implements Serializable
 {
-    private Project project;
-    private User user;
+    private Integer userId;
+    private Integer projectId;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn (name = "project_id")
-    public Project getProject()
+    public Integer getUserId()
     {
-        return project;
+        return userId;
     }
 
-    public void setProject(Project project)
+    public void setUserId(Integer userId)
     {
-        this.project = project;
+        this.userId = userId;
     }
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn (name = "user_id")
-    public User getUser()
+    public Integer getProjectId()
     {
-        return user;
+        return projectId;
     }
 
-    public void setUser(User user)
+    public void setProjectId(Integer projectId)
     {
-        this.user = user;
+        this.projectId = projectId;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProjectUserId that = (ProjectUserId)o;
+
+        if (!userId.equals(that.userId)) return false;
+        return projectId.equals(that.projectId);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = userId.hashCode();
+        result = 31 * result + projectId.hashCode();
+        return result;
     }
 }

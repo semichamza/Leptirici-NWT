@@ -1,59 +1,74 @@
 package com.nwt.entities;
 
-//import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by glasshark on 04-Apr-15.
  */
 @Entity
 @Table (name = "projects_users")
-@AssociationOverrides ({
-        @AssociationOverride (name = "id.project",
-                joinColumns = @JoinColumn (name = "project_id")),
-        @AssociationOverride (name = "id.user",
-                joinColumns = @JoinColumn (name = "user_id"))})
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class ProjectUser
+@IdClass (ProjectUserId.class)
+public class ProjectUser implements Serializable
 {
-    private ProjectUserId id;
+    private Integer userId;
+    private Integer projectId;
+
+    private User user;
+    private Project project;
+
     private ProjectRole projectRole;
 
-    @EmbeddedId
-    public ProjectUserId getId()
+    @Id
+    @Column (name = "user_id")
+    @JsonIgnore
+    public Integer getUserId()
     {
-        return id;
+        return userId;
     }
 
-    public void setId(ProjectUserId id)
+    public void setUserId(Integer userId)
     {
-        this.id = id;
+        this.userId = userId;
     }
 
-    @Transient
+    @Id
+    @Column (name = "project_id")
+    @JsonIgnore
+    public Integer getProjectId()
+    {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId)
+    {
+        this.projectId = projectId;
+    }
+
+    @ManyToOne
+    @JoinColumn (name = "project_id", updatable = false, insertable = false, referencedColumnName = "id")
     public Project getProject()
     {
-        return id.getProject();
+        return project;
     }
 
     public void setProject(Project project)
     {
-        id.setProject(project);
+        this.project = project;
     }
 
-    @Transient
+    @ManyToOne
+    @JoinColumn (name = "user_id", updatable = false, insertable = false, referencedColumnName = "id")
     public User getUser()
     {
-        return id.getUser();
+        return user;
     }
 
     public void setUser(User user)
     {
-        id.setUser(user);
+        this.user = user;
     }
 
     @OneToOne

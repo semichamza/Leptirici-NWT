@@ -10,8 +10,8 @@ INSERT INTO `pms`.`users` (`active`, `firstName`, `lastName`, `passwordHash`, `u
 INSERT INTO `pms`.`project_roles` (`name`) VALUES ('Owner');
 INSERT INTO `pms`.`project_roles` (`name`) VALUES ('Member');
 
-INSERT INTO `pms`.`projects` (`description`, `name`, `user_id`) VALUES ('Testni projekat', 'Hello world', 1);
-INSERT INTO `pms`.`projects` (`description`, `name`, `user_id`) VALUES ('Projekat sa predmeta NWT', 'PMS-NWT', 2);
+INSERT INTO `pms`.`projects` (`description`, `name`) VALUES ('Testni projekat', 'Hello world');
+INSERT INTO `pms`.`projects` (`description`, `name`) VALUES ('Projekat sa predmeta NWT', 'PMS-NWT');
 
 INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('1', '1', '1');
 INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('2', '2', '1');

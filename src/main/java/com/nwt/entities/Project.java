@@ -57,7 +57,7 @@ public class Project implements Serializable
         this.description = description;
     }
 
-    @OneToMany (mappedBy = "id.project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<ProjectUser> getUsers()
     {
         return users;
