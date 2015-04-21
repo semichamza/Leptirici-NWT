@@ -24,11 +24,12 @@ public class JacksonMapperProvider implements ContextResolver<ObjectMapper>
     {
         ObjectMapper mapper = new ObjectMapper();
 
-        mapper.registerModule(new Hibernate4Module());
         AnnotationIntrospector jackson = new JacksonAnnotationIntrospector();
         mapper.setAnnotationIntrospector(jackson);
         mapper.disable(MapperFeature.USE_GETTERS_AS_SETTERS);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.registerModule(new Hibernate4Module());
+
         return mapper;
     }
 

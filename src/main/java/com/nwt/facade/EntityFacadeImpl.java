@@ -120,6 +120,19 @@ public class EntityFacadeImpl implements EntityFacade
         return null;
     }
 
+    @Override
+    public Project getUserProjectById(Integer userId, Integer projectId)
+    {
+        ProjectUserId projectUserId = new ProjectUserId(projectId, userId);
+        ProjectUser projectUser = em.find(ProjectUser.class, projectUserId);
+        Project project = null;
+        if (projectUser != null)
+        {
+            project = projectUser.getProject();
+        }
+        return project;
+    }
+
     /**
      * TASKS
      */
@@ -160,6 +173,14 @@ public class EntityFacadeImpl implements EntityFacade
         //TODO: Implement!
         return null;
     }
+
+//    @Override
+//    public Task getUserTaskById(Integer userId, Integer taskId)
+//    {
+//        TypedQuery<Task> query = em.createNamedQuery(Task.FIND_USER_TASK_BY_ID, Task.class);
+//        query.setParameter("id", taskId);
+//        return query.getSingleResult();
+//    }
 
 
     @Override

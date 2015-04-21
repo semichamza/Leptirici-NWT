@@ -2,6 +2,7 @@ package com.nwt.rest;
 
 import com.nwt.entities.Project;
 import com.nwt.entities.Projects;
+import com.nwt.entities.Users;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
@@ -51,11 +52,17 @@ public class ProjectRestService
     @Path("/{id}")
     public Response getProjectById(@PathParam ("id") Integer id)
     {
+        Project project = projectById(id);
+        logger.debug("getProjectById() returned: " + project.toString());
+        return Response.ok(project).build();
+    }
+
+    private Project projectById(Integer id)
+    {
         Project project = entityFacade.getProjectById(id);
         if (project == null)
             throw new NotFoundException();
-        logger.debug("getProjectById() returned: " + project.toString());
-        return Response.ok(project).build();
+        return project;
     }
 
     @POST
@@ -101,14 +108,13 @@ public class ProjectRestService
 
 
     @GET
-    @Path ("/{id}/members")
-    public Response getAllProjectMembers(@PathParam ("id") Integer id)
+    @Path ("/{id}/users")
+    public Response getAllProjectUsers(@PathParam ("id") Integer id)
     {
-        Project project = entityFacade.getProjectById(id);
-        if (project == null)
-            throw new NotFoundException();
-//        logger.debug("getAllProjectMembers() for projectId: " + id + " returned: " + users.size() + "results");
-        return Response.ok(project.getUsers()).build();
+        Project project = projectById(id);
+        Users users = project.getUsers();
+        logger.debug("getAllProjectUsers() returned " + users.size() + " object(s).");
+        return Response.ok(users).build();
     }
 
     @GET

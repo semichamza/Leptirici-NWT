@@ -10,58 +10,62 @@ import com.nwt.entities.*;
 public interface EntityFacade
 {
     //region USERS
-    public Users getAllUsers();
+    Users getAllUsers();
 
-    public User getUserById(Integer id);
+    User getUserById(Integer id);
 
-    public User getUserByUsername(String username);
+    User getUserByUsername(String username);
 
-    public User createUser(User user);
+    User createUser(User user);
 
-    public User updateUser(User user);
+    User updateUser(User user);
 
-    public void deleteUser(User user);
+    void deleteUser(User user);
 
-    public Users searchUsers(String text);
+    Users searchUsers(String text);
     //endregion
 
     //region PROJECTS
-    public Projects getAllProjects();
+    Projects getAllProjects();
 
-    public Project getProjectById(Integer id);
+    Project getProjectById(Integer id);
 
-    public Project createProject(Project project);
+    Project createProject(Project project);
 
-    public Project updateProject(Project project);
+    Project updateProject(Project project);
 
-    public void deleteProject(Project project);
+    void deleteProject(Project project);
 
-    public Projects searchProjects(String text);
+    Projects searchProjects(String text);
+
+    Project getUserProjectById(Integer userId, Integer projectId);
     //endregion
 
     //region TASKS
-    public Tasks getAllTasks();
+    Tasks getAllTasks();
 
-    public Task getTaskById(Integer id);
+    Task getTaskById(Integer id);
 
-    public Task createTask(Task task);
+    Task createTask(Task task);
 
-    public Task updateTask(Task task);
+    Task updateTask(Task task);
 
-    public void deleteTask(Task task);
+    void deleteTask(Task task);
 
-    public Tasks searchTasks(String text);
+    Tasks searchTasks(String text);
+
+//    Task getUserTaskById(Integer userId, Integer taskId);
     //endregion
 
     //TOKEN
 
-    public VerificationTokens getAllTokens();
+    VerificationTokens getAllTokens();
 
-    public VerificationToken getToken(String id);
+    VerificationToken getToken(String id);
 
-    public VerificationToken updateToken(VerificationToken token);
+    VerificationToken updateToken(VerificationToken token);
 
-    public VerificationToken createToken(VerificationToken token);
+    VerificationToken createToken(VerificationToken token);
 
-    public void deleteToken(VerificationToken token);
+    void deleteToken(VerificationToken token);
 }

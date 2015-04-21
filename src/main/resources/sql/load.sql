@@ -14,7 +14,8 @@ INSERT INTO `pms`.`projects` (`description`, `name`) VALUES ('Testni projekat', 
 INSERT INTO `pms`.`projects` (`description`, `name`) VALUES ('Projekat sa predmeta NWT', 'PMS-NWT');
 
 INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('1', '1', '1');
-INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('2', '2', '1');
+INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('1', '2', '1');
+INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('2', '2', '2');
 INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('3', '2', '2');
 INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('4', '2', '2');
 INSERT INTO `pms`.`projects_users` (`user_id`, `project_id`, `project_role_id`) VALUES ('5', '2', '2');
@@ -25,6 +26,4 @@ INSERT INTO `tasks` (`description`, `name`, `project_id`, `user_id`) VALUES ('Kr
 INSERT INTO `tasks` (`description`, `name`, `project_id`, `user_id`) VALUES ('Napisati dokumentaciju za REST servise', 'Dokumentacija API-ja', '2', '5');
 INSERT INTO `tasks` (`description`, `name`, `project_id`, `user_id`) VALUES ('Napraviti početni Angular View/Controller', 'Konfiguracija Angular frameworka', '2', '3');
 
-INSERT INTO `comments` (`id`, `text`, `time_posted`) VALUES ('1', 'Hello world', NOW());
-
-INSERT INTO `tasks_comments` (`task_id`, `comment_id`) VALUES ('1', '1');
+INSERT INTO `comments` (`id`, `text`, `time_posted`, `task_id`, `user_id`) VALUES ('1', 'Hello world', NOW(), 1, 1);

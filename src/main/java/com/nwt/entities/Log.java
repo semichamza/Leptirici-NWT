@@ -1,8 +1,10 @@
 package com.nwt.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Calendar;
 
 /**
@@ -10,13 +12,14 @@ import java.util.Calendar;
  */
 @Entity
 @Table (name = "logs")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Log implements Serializable
 {
     private Integer id;
     private Calendar time;
     private Comment comment;
     private Task task;
-//    private User user;
+    private User user;
 
     public Log()
     {
@@ -26,7 +29,7 @@ public class Log implements Serializable
     {
         this.time = time;
         this.task = task;
-//        this.user = user;
+        this.user = user;
     }
 
     @Id
@@ -52,7 +55,7 @@ public class Log implements Serializable
         this.time = time;
     }
 
-    @OneToOne (fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne (cascade = CascadeType.ALL)
     public Comment getComment()
     {
         return comment;
@@ -60,12 +63,10 @@ public class Log implements Serializable
 
     public void setComment(Comment comment)
     {
-//        comment.setTask(task);
-//        comment.setUser(user);
         this.comment = comment;
     }
 
-    @OneToOne (fetch = FetchType.LAZY, orphanRemoval = true)
+    @ManyToOne
     public Task getTask()
     {
         return task;
@@ -76,14 +77,14 @@ public class Log implements Serializable
         this.task = task;
     }
 
-//    @OneToOne
-//    public User getUser()
-//    {
-//        return user;
-//    }
-//
-//    public void setUser(User user)
-//    {
-//        this.user = user;
-//    }
+    @ManyToOne
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
 }

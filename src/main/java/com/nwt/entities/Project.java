@@ -1,7 +1,10 @@
 package com.nwt.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nwt.util.CollectionUtil;
+import com.nwt.util.EntityExtractor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,7 +24,8 @@ public class Project implements Serializable
     private Integer id;
     private String name;
     private String description;
-    private List<ProjectUser> users;
+    private List<ProjectUser> projectUsers;
+    private List<Task> tasks;
 
     @Id
     @GeneratedValue
@@ -58,14 +62,40 @@ public class Project implements Serializable
     }
 
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    public List<ProjectUser> getUsers()
+    public List<ProjectUser> getProjectUsers()
     {
+        return projectUsers;
+    }
+
+    public void setProjectUsers(List<ProjectUser> users)
+    {
+        this.projectUsers = users;
+    }
+
+    @JsonIgnore
+    @Transient
+    public Users getUsers()
+    {
+        Users users = new Users(CollectionUtil.extract(projectUsers, new EntityExtractor<User, ProjectUser>()
+        {
+            @Override
+            public User extract(ProjectUser projectUser)
+            {
+                return projectUser.getUser();
+            }
+        }));
         return users;
     }
 
-    public void setUsers(List<ProjectUser> users)
+    @OneToMany (mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<Task> getTasks()
     {
-        this.users = users;
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks)
+    {
+        this.tasks = tasks;
     }
 
     @Override

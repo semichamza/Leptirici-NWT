@@ -5,4 +5,9 @@ package com.nwt.entities;
  */
 public enum TaskStatus
 {
+    OPEN,
+    IN_PROGRESS,
+    FIXED,
+    RESOLVED,
+    CLOSED
 }

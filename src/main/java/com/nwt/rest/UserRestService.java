@@ -1,7 +1,6 @@
 package com.nwt.rest;
 
-import com.nwt.entities.User;
-import com.nwt.entities.Users;
+import com.nwt.entities.*;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
@@ -54,7 +53,7 @@ public class UserRestService
     public Response getUserById(@PathParam ("id") Integer id)
     {
         User user = userById(id);
-        logger.debug("getUserById() returned: " + user.toString());
+        logger.debug("getUserById(" + id + ") returned: " + user.toString());
         return Response.ok(user).build();
     }
 
@@ -65,7 +64,7 @@ public class UserRestService
         User user = entityFacade.getUserByUsername(username);
         if (user == null)
             throw new NotFoundException();
-        logger.debug("getUserByUsername() returned: " + user.toString());
+        logger.debug("getUserByUsername(" + username + ") returned: " + user.toString());
         return Response.ok(user).build();
     }
 
@@ -111,27 +110,29 @@ public class UserRestService
     @Path ("/{userId}/projects")
     public Response getAllUserProjects(@PathParam ("userId") Integer userId)
     {
-        //TODO popravit
         User user = userById(userId);
-        return Response.ok(user.getProjects()).build();
+        Projects projects = user.getProjects();
+        logger.debug("getAllUserProjects() returned " + projects.size() + " object(s).");
+        return Response.ok(projects).build();
     }
 
     @GET
     @Path ("/{userId}/projects/{projectId}")
     public Response getUserProjectById(@PathParam ("userId") Integer userId, @PathParam ("projectId") Integer projectId)
     {
-        //TODO Implement!
-        logger.debug("getAllUserProjects() not implemented yet");
-        return null;
+        Project project = entityFacade.getUserProjectById(userId, projectId);
+        logger.debug("getUserProjectById(" + userId + ", " + projectId + ") returned: " + project.toString());
+        return Response.ok(project).build();
     }
 
     @GET
     @Path ("/{userId}/tasks")
     public Response getAllUserTasks(@PathParam ("userId") Integer userId)
     {
-        //TODO Implement!
-        logger.debug("getAllUserTasks() not implemented yet");
-        return null;
+        User user = userById(userId);
+        Tasks tasks = new Tasks(user.getTasks());
+        logger.debug("getAllUserTasks() returned " + tasks.size() + " object(s).");
+        return Response.ok(tasks).build();
     }
 
     @GET
@@ -139,7 +140,7 @@ public class UserRestService
     public Response getUserTaskById(@PathParam ("userId") Integer userId, @PathParam ("taskId") Integer taskId)
     {
         //TODO Implement!
-        logger.debug("getAllUserTasks() not implemented yet");
+        logger.debug("getUserTaskById() not implemented yet");
         return null;
     }
 
@@ -147,9 +148,10 @@ public class UserRestService
     @Path ("/{userId}/comments")
     public Response getAllUserComments(@PathParam ("userId") Integer userId)
     {
-        //TODO Implement!
-        logger.debug("getAllUserComments() not implemented yet");
-        return null;
+        User user = userById(userId);
+        Comments comments = new Comments(user.getComments());
+        logger.debug("getAllUserComments() returned " + comments.size() + " object(s).");
+        return Response.ok(comments).build();
     }
 
     @GET

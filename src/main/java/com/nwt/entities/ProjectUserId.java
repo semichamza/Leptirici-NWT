@@ -9,16 +9,16 @@ import java.io.Serializable;
  */
 public class ProjectUserId implements Serializable
 {
-    private Integer userId;
     private Integer projectId;
+    private Integer userId;
 
-    public Integer getUserId()
+    public ProjectUserId()
     {
-        return userId;
     }
 
-    public void setUserId(Integer userId)
+    public ProjectUserId(Integer projectId, Integer userId)
     {
+        this.projectId = projectId;
         this.userId = userId;
     }
 
@@ -30,6 +30,16 @@ public class ProjectUserId implements Serializable
     public void setProjectId(Integer projectId)
     {
         this.projectId = projectId;
+    }
+
+    public Integer getUserId()
+    {
+        return userId;
+    }
+
+    public void setUserId(Integer userId)
+    {
+        this.userId = userId;
     }
 
     @Override

@@ -1,9 +1,10 @@
 package com.nwt.util;
 
-import com.nwt.entities.GenId;
 import org.apache.log4j.Logger;
 
-import javax.persistence.*;
+import javax.persistence.PostPersist;
+import javax.persistence.PostRemove;
+import javax.persistence.PostUpdate;
 
 /**
  * Created by glasshark on 27-Mar-15.
@@ -28,10 +29,5 @@ public class LifeCycleListener
     void postRemove(Object object)
     {
         logger.debug(object.getClass().getName() + " {" + object.toString() + "} removed.");
-    }
-
-    private boolean isGenId(Object object)
-    {
-        return object instanceof GenId;
     }
 }

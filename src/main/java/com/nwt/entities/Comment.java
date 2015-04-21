@@ -1,5 +1,8 @@
 package com.nwt.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -9,12 +12,13 @@ import java.util.Date;
  */
 @Entity
 @Table (name = "comments")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Comment implements Serializable
 {
     private Integer id;
     private String text;
-    //    private Task task;
-//    private User user;
+    private Task task;
+    private User user;
     private Date timePosted;
 
     @Id
@@ -41,7 +45,7 @@ public class Comment implements Serializable
     }
 
     @Temporal (TemporalType.TIMESTAMP)
-    @Column(name = "time_posted", nullable = false)
+    @Column (name = "time_posted", nullable = false)
     public Date getTimePosted()
     {
         return timePosted;
@@ -51,26 +55,26 @@ public class Comment implements Serializable
     {
         this.timePosted = timePosted;
     }
-//
-//    @OneToOne
-//    public Task getTask()
-//    {
-//        return task;
-//    }
-//
-//    public void setTask(Task task)
-//    {
-//        this.task = task;
-//    }
-//
-//    @OneToOne
-//    public User getUser()
-//    {
-//        return user;
-//    }
-//
-//    public void setUser(User user)
-//    {
-//        this.user = user;
-//    }
+
+    @ManyToOne
+    public Task getTask()
+    {
+        return task;
+    }
+
+    public void setTask(Task task)
+    {
+        this.task = task;
+    }
+
+    @ManyToOne
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
 }

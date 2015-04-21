@@ -1,5 +1,8 @@
 package com.nwt.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Past;
@@ -13,7 +16,10 @@ import java.util.List;
  */
 @Entity
 @Table (name = "tasks")
-@NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t")
+@NamedQueries ({
+        @NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t")
+})
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Task implements Serializable
 {
     public static final String FIND_ALL = "Task.findAll";
@@ -29,7 +35,6 @@ public class Task implements Serializable
     private Calendar estimation;
     private List<Log> logs;
     private List<Comment> comments;
-
 
     public Task()
     {
@@ -88,16 +93,18 @@ public class Task implements Serializable
         this.description = description;
     }
 
-    @OneToOne
-    public User getUser() {
+    @ManyToOne
+    public User getUser()
+    {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(User user)
+    {
         this.user = user;
     }
 
-    @OneToOne
+    @ManyToOne
     public Project getProject()
     {
         return project;
@@ -121,6 +128,17 @@ public class Task implements Serializable
     }
 
     @Enumerated (EnumType.STRING)
+    public TaskStatus getTaskStatus()
+    {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(TaskStatus taskStatus)
+    {
+        this.taskStatus = taskStatus;
+    }
+
+    @Enumerated (EnumType.STRING)
     public TaskPriority getTaskPriority()
     {
         return taskPriority;
@@ -131,31 +149,32 @@ public class Task implements Serializable
         this.taskPriority = taskPriority;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "log_id"))
-    public List<Log> getLogs() {
+    @OneToMany (mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    public List<Log> getLogs()
+    {
         return logs;
     }
 
-    public void setLogs(List<Log> logs) {
+    public void setLogs(List<Log> logs)
+    {
         this.logs = logs;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    @OrderBy("timePosted DESC")
-    public List<Comment> getComments() {
+    @OneToMany (mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderBy ("timePosted DESC")
+    public List<Comment> getComments()
+    {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(List<Comment> comments)
+    {
         this.comments = comments;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "task: " + name + "(id: " + id + ")";
     }
 }

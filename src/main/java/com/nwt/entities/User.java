@@ -1,7 +1,10 @@
 package com.nwt.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nwt.util.CollectionUtil;
+import com.nwt.util.EntityExtractor;
 import com.nwt.util.LifeCycleListener;
 import com.nwt.util.LinkAdapter;
 import org.glassfish.jersey.linking.InjectLink;
@@ -38,7 +41,10 @@ public class User implements Serializable
     private String lastName;
     private Boolean active;
     private String email;
-    private List<ProjectUser> projects;
+    private List<ProjectUser> projectUsers;
+    private List<Task> tasks;
+    private List<Comment> comments;
+    private List<Log> logs;
 
     //TODO
     @XmlJavaTypeAdapter (LinkAdapter.class)
@@ -122,14 +128,63 @@ public class User implements Serializable
     }
 
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    public List<ProjectUser> getProjects()
+    public List<ProjectUser> getProjectUsers()
     {
+        return projectUsers;
+    }
+
+    public void setProjectUsers(List<ProjectUser> projects)
+    {
+        this.projectUsers = projects;
+    }
+
+    @JsonIgnore
+    @Transient
+    public Projects getProjects()
+    {
+        Projects projects = new Projects(
+                CollectionUtil.extract(projectUsers, new EntityExtractor<Project, ProjectUser>()
+                {
+                    @Override
+                    public Project extract(ProjectUser projectUser)
+                    {
+                        return projectUser.getProject();
+                    }
+                }));
         return projects;
     }
 
-    public void setProjects(List<ProjectUser> projects)
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<Task> getTasks()
     {
-        this.projects = projects;
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks)
+    {
+        this.tasks = tasks;
+    }
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<Comment> getComments()
+    {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments)
+    {
+        this.comments = comments;
+    }
+
+    @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<Log> getLogs()
+    {
+        return logs;
+    }
+
+    public void setLogs(List<Log> logs)
+    {
+        this.logs = logs;
     }
 
     @Override
