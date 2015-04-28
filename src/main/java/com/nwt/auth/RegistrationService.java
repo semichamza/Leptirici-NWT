@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nwt.auth.entities.VerificationToken;
 import com.nwt.auth_entities.AuthParameterRegister;
+import com.nwt.entities.ResponseMessages;
 import com.nwt.entities.User;
 import com.nwt.entities.UserPrincipal;
 import com.nwt.enums.ActionTypeEnum;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 @Path("user")
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -41,37 +43,45 @@ public class RegistrationService {
     @Path("/register")
     public Response createUser(AuthParameterRegister aUser) {
 
-        if (aUser == null)
-            throw new BadRequestException();
+        try{
+            if (aUser == null)
+                throw new BadRequestException();
 
-        UserPrincipal principal = new UserPrincipal();
-        principal.setUsername(aUser.getUsername());
-        principal.setPassword(aUser.getPassword());
-        principal.setUserRole(UserRoleEnum.NORMAL.getRole());
+            UserPrincipal principal = new UserPrincipal();
+            principal.setUsername(aUser.getUsername());
+            principal.setPassword(aUser.getPassword());
+            principal.setUserRole(UserRoleEnum.NORMAL.getRole());
 
-        User user = new User();
-        user.setUserPrincipal(principal);
-        user.setActive(false);
-        user.setEmail(aUser.getEmail());
-        user.setFirstName(aUser.getName());
-        user.setLastName(aUser.getLastname());
+            User user = new User();
+            user.setUserPrincipal(principal);
+            user.setActive(false);
+            user.setEmail(aUser.getEmail());
+            user.setFirstName(aUser.getFirstName());
+            user.setLastName(aUser.getLastName());
 
-        user = entityFacade.createUser(user);
-        logger.debug("Created user - " + user.toString());
-
-
-        VerificationToken token = VerificationToken.generateToken();
-        token.setActiontTypeId(ActionTypeEnum.ACTIVATION.getId());
-        token.setTokenStatusId(TokenStatusEnum.ACTIVE.getId());
-        token.setUser(user);
-        entityFacade.createToken(token);
+            user = entityFacade.createUser(user);
+            logger.debug("Created user - " + user.toString());
 
 
-        boolean sent = Mailer.sendActivationMail(user.getEmail(), token.getId());
-        if (!sent)
-            throw new WebApplicationException();
+            VerificationToken token = VerificationToken.generateToken();
+            token.setActiontTypeId(ActionTypeEnum.ACTIVATION.getId());
+            token.setTokenStatusId(TokenStatusEnum.ACTIVE.getId());
+            token.setUser(user);
+            entityFacade.createToken(token);
 
-        return Response.status(201).build();
+
+            boolean sent = Mailer.sendActivationMail(user.getEmail(), token.getId());
+            if (!sent)
+                throw new WebApplicationException();
+
+            return Response.status(201).build();
+        }catch (Exception e)
+        {
+            Object message=new Object(){
+                public String messageCode= "awdawd";
+            };
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
 
     }
 
@@ -92,34 +102,36 @@ public class RegistrationService {
         //disable token
         token.setTokenStatus(TokenStatusEnum.USED);
         entityFacade.updateToken(token);
-        return Response.ok().build();
+        return Response.temporaryRedirect(URI.create("/")).build();
     }
 
     @PUT
     @Path("/reset")
     public Response reset(String jsonString) {
-        JsonParser parser = new JsonParser();
-        JsonObject jobj = (JsonObject) parser.parse(jsonString);
+        try{
+            JsonParser parser = new JsonParser();
+            JsonObject jobj = (JsonObject) parser.parse(jsonString);
 
-        String username = jobj.get("username").getAsString();
+            String username = jobj.get("username").getAsString();
 
-        User user = entityFacade.getUserByUsername(username);
-        VerificationToken token = VerificationToken.generateToken();
-        token.setActiontTypeId(ActionTypeEnum.PASSWORD_RECOVERY.getId());
-        token.setTokenStatusId(TokenStatusEnum.ACTIVE.getId());
-        token.setUser(user);
-        entityFacade.createToken(token);
+            User user = entityFacade.getUserByUsername(username);
+            VerificationToken token = VerificationToken.generateToken();
+            token.setActiontTypeId(ActionTypeEnum.PASSWORD_RECOVERY.getId());
+            token.setTokenStatusId(TokenStatusEnum.ACTIVE.getId());
+            token.setUser(user);
+            entityFacade.createToken(token);
 
 
-        boolean sent = Mailer.sendRecoveryMail("jasmin.kaldzija@gmail.com", token.getId());
-        if (!sent)
-            throw new WebApplicationException();
+            boolean sent = Mailer.sendRecoveryMail("jasmin.kaldzija@gmail.com", token.getId());
+            if (!sent)
+                throw new WebApplicationException();
 
-        return Response.ok().build();
+            return Response.ok().build();
+        }catch (Exception e)
+        {
+            return ResponseMessages.INVALID_USERNAME.getResponse();
+        }
     }
-
-    ;
-
 
     private boolean isActivationTokenValid(VerificationToken token) {
         boolean activation = token.getActiontTypeId() == ActionTypeEnum.ACTIVATION.getId();

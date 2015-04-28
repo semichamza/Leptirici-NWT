@@ -1,5 +1,6 @@
 package com.nwt.auth;
 
+import com.nwt.entities.ResponseMessages;
 import com.nwt.auth.entities.AuthParameter;
 import com.nwt.auth.entities.AuthResponseObject;
 import com.nwt.entities.User;
@@ -46,10 +47,7 @@ public class AuthService {
             if (principal == null || !user.getActive() || !principal.getPasswordHash()
                     .equals(DigestUtils.md5Hex(authParameter.getPassword())))
             {
-
-                auth.setMessage(resourceBundle.getString("messageError"));
-                return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity(auth).build();
+                return ResponseMessages.INVALID_LOGIN.getResponse();
             }
             //999999999L trajanje tokena u minutama
             auth.setJwt(
@@ -60,9 +58,7 @@ public class AuthService {
             return Response.ok(auth).build();
 
         } catch (Exception e) {
-            auth.setMessage(resourceBundle.getString("messageError"));
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity(auth).build();
+            return ResponseMessages.INVALID_LOGIN.getResponse();
         }
     }
 

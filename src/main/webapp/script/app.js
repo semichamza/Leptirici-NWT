@@ -12,10 +12,8 @@ app.factory('myHttpInterceptor', function ($q, $rootScope) {
             return config || $q.when(config);
         },
         responseError: function (response) {
-            if (response.status === 401) {
-                $rootScope.logout();
-            }
-            alert('interceptorError');
+            $rootScope.setDangerMessage(response.data.code);
+            return $q.reject(response);
         }
     }
 });
@@ -27,12 +25,34 @@ app.run(function ($rootScope, $location, authService) {
     if (userProfile) {
         $rootScope.user = {
             jwt: userProfile.jwt,
-            name: userProfile.name
+            name: userProfile.name,
+            isAuth: true
         };
+        $location.path("dashboard");
     } else {
-        $rootScope.user = {isAuth: false};
+        $rootScope.user=null;
     }
 
+    $rootScope.message={
+        text:null,
+        type:null
+    };
+
+    $rootScope.navigation={
+        current:'dashboard',
+        headerLabel:'DASHBOADR_LABEL',
+        subHeaderLabel:'DASHBOADR_LABEL',
+        header:'',
+        subHeader:''
+    };
+   /* $rootScope.setCurrentTab=function(tab){
+        var isDashboard='';
+        if(tab=='dashboard')
+            isDashboard='active';
+        $rootScope.navigation={
+            isDashboard:isDashboard
+        };
+    };*/
     //$rootScope.logout = function () {
     //    authService.logout();
     //    $rootScope.user = {isAuth: false};

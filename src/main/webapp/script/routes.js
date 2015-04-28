@@ -6,19 +6,32 @@ app.config(function ($routeProvider, $httpProvider) {
     $httpProvider.interceptors.push('myHttpInterceptor');
 
     $routeProvider
-        .when("",{
+        .when("#",{
             redirectTo:"/login"
         }).when("/",{
             redirectTo:"/login"
         })
         .when("/dashboard",{
-            templateUrl:"dahsboard.html"
+            templateUrl:"dashboard.html"
+        })
+        .when("/projects",{
+            templateUrl:"projects.html"
+        })
+        .when("/tasks",{
+            templateUrl:"tasks.html"
         })
         .when("/login",{
             templateUrl:"login.html"
         })
         .when("/404",{
             templateUrl:"404.html"
+        })
+        .when("/registration",{
+            templateUrl:"registration.html"
+        })
+        .when("/reset",{
+            templateUrl:"login.html",
+            controller:"ResetController"
         })
         .otherwise({redirectTo:"/404"});
 });

@@ -1,85 +1,63 @@
 <!DOCTYPE html>
-<html ng-app="Test">
-<head lang="en">
-    <meta charset="UTF-8">
+<html lang="en" ng-app="app">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin - Bootstrap Admin Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="style/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="style/css/sb-admin.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="style/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
     <script src="lib/dependencies/angular.min.js"></script>
     <script src="lib/dependencies/angular-cookies.min.js"></script>
-    <script src="script/service_controller.js"></script>
-    <title>Test</title>
-    <style>
-        TABLE, TBODY, TR, TD, TH {
-            text-align: left;
-            padding: 0;
-            border-spacing: 10px; /* or border-collapse:collapse */
-        }
-    </style>
+    <script data-require="angular-route@*" data-semver="1.4.0-beta.6"
+            src="https://code.angularjs.org/1.4.0-beta.6/angular-route.js"></script>
+    <script src="lib/dependencies/translate/angular-translate.js"></script>
+    <script src="script/app.js"></script>
+    <script src="script/Translate.js"></script>
+    <script src="script/authorizationService.js"></script>
+
+    <script src="script/last_load.js"></script>
+    <script src="script/routes.js"></script>
+    <!--MAIN CONTROLLER-->
+    <script src="script/controllers/MainController.js"></script>
+    <!--CONTROLLERS-->
+    <script src="script/controllers/LoginController.js"></script>
+    <script src="script/controllers/RegistrationController.js"></script>
+    <script src="script/controllers/NavigationController.js"></script>
+    <script src="script/controllers/DashboardController.js"></script>
+    <script src="script/controllers/ProjectController.js"></script>
+    <script src="script/controllers/TaskController.js"></script>
+    <script src="script/controllers/ResetController.js"></script>
+
+    <script src="script/controllers/MessageConroller.js"></script>
+    <!--CONTROLLERS-->
+
 </head>
-<body ng-controller="ProjectController">
-<div ng-hide="isAutorized">
 
-    <h2>Logina</h2>
-    <form name="loginForm" ng-submit="login()">
-        <input type="text" required placeholder="Username" ng-model="loginUsername"/><br>
-        <input type="password" required placeholder="Password" ng-model="loginPassword"/><br>
-        <input type="submit" value="Login"/>
-    </form>
-    <br>
-    <br>
-    <br>
+<body ng-controller="MainController">
 
-    <h2>Registration</h2>
+    <div ng-view></div>
 
-    <form name="registrationForm" ng-submit="register()">
-        <input type="text" required placeholder="First name" ng-model="newFirstName"/><br>
-        <input type="text" required placeholder="Last name" ng-model="newLastName"/><br>
-        <input type="text" required placeholder="Username" ng-model="newUsername"/><br>
-        <input type="text" required placeholder="Email" ng-model="newEmail"/><br>
-        <input type="password" required placeholder="Password" ng-model="newPassword"/><br>
-        <input type="submit" value="Register"/>
-    </form>
-    <br>
-    <br>
+    <script src="lib/jquery.js"></script>
 
-    <h2>Reset</h2>
+    <script src="lib/bootstrap.min.js"></script>
 
-    <form name="resetForm" ng-submit="reset()">
-        <input type="text" required placeholder=Username" ng-model="resetUsername"/>
-        <input type="submit" value="Reset"/>
-    </form>
-    <br>
-    {{message}}
-</div>
-<div ng-show="isAutorized">
-    Projekat:
-    <select ng-model="currentProject" ng-change="selectChanged()">
-        <option ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
-    </select>
+    <!-- Morris Charts JavaScript -->
 
-    <div>
-    </div>
-    <div ng-show="tasks">
-        <table>
-            <thead>
-            <tr>
-                <th>Naziv taska</th>
-                <th>Opis</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-show="task.project.id==currentProject" ng-repeat="task in tasks">
-                <td>{{task.name}}</td>
-                <td>{{task.description}}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <form name="projectAdd" ng-submit="createProject()">
-        <input type="text" required placeholder="Naziv projekta" ng-model="projectName"/>
-        <input type="submit" value="Add"/>
-    </form>
-    <br>
-    <button type="button" ng-click="logout('Uspjesno ste odjavljeni');">Logout</button>
-</div>
 </body>
+
 </html>

@@ -1,0 +1,88 @@
+<div ng-controller="NavigationController">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top mytopmenu" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header mytopmenuheader">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/dashboard">NWT Leptirici</a>
+        </div>
+        <!-- Top Menu Items -->
+        <ul class="nav navbar-right top-nav">
+            <li>
+                <a href="" class="navbar-brand" style="font-size: 14px" ng-click="toggleLang()">{{currentLng}}</a>
+            </li>
+            <li class="dropdown">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{user.name}}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-user"></i> Profile</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="" ng-click="logout()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="text-center" style="width: 100%;
+                                            background-color: rgb(35,45,50)">
+                    <img src="./style/img/butterfly_full.png" class="user-image img-responsive"/>
+                </li>
+                <li class="header" style="color: #4b646f;
+                                          width: 100%;
+                                          background: #1a2226;
+                                          background-image: initial;
+                                          background-position-x: initial;
+                                          background-position-y: initial;
+                                          background-size: initial;
+                                          background-repeat-x: initial;
+                                          background-repeat-y: initial;
+                                          background-attachment: initial;
+                                          background-origin: initial;
+                                          background-clip: initial;
+                                          font-size: 12px;
+  background-color: rgb(26, 34, 38);
+  padding: 10px 25px 10px 15px;">{{'MAIN_NAV'|translate}}</li>
+
+                <li class="{{isCurrent('dashboard')}}">
+                    <a href="#/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                </li>
+                <li class="{{isCurrent('projects')}}">
+                    <a href="#/projects"><i class="fa fa-fw fa-desktop"></i> Projects</a>
+                </li>
+                <li class="{{isCurrent('tasks')}}">
+                    <a href="#/tasks"><i class="fa fa-fw fa-table"></i> Tasks</a>
+                </li>
+               <!-- <li>
+                    <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
+                </li>
+                <li>
+                    <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
+                </li>
+                <li>
+                    <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
+                </li>
+
+                <li>
+                    <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
+                </li>-->
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+</div>

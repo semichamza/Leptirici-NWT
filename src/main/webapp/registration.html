@@ -1,0 +1,59 @@
+<div class="container">
+    <div >
+        <div class="col-md-6"style="min-height: 65px">
+
+        </div>
+        <div class="col-md-6" ng-show="message.text" style="min-height: 65px">
+            <div ng-include="'messageBox.html'"></div>
+        </div>
+    </div>
+    <div class="row text-center" style="max-height: 40px!important;">
+        <div class="col-md-12">
+            <br /><br />
+            <h2>{{'REGISTER'|translate}}</h2>
+
+            <h5>( Register yourself to get access )</h5>
+        </div>
+    </div>
+    <div class="row" ng-controller="RegistrationController">
+
+        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>  New User ? Register Yourself </strong> <a href=""  style="font-size: 14px;float: right;" ng-click="toggleLang()">{{currentLng}}</a>
+                </div>
+                <div class="panel-body">
+                    <form role="regForm" ng-submit="register()">
+                        <br/>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
+                            <input ng-model="newUser.firstName" type="text" class="form-control" placeholder="Your First Name" />
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-circle-o-notch"  ></i></span>
+                            <input ng-model="newUser.lastName" type="text" class="form-control" placeholder="Your Last Name" />
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
+                            <input ng-model="newUser.username" type="text" class="form-control" placeholder="Desired Username" />
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">@</span>
+                            <input ng-model="newUser.email" type="text" class="form-control" placeholder="Your Email" />
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
+                            <input ng-model="newUser.password" type="password" class="form-control" placeholder="Enter Password" />
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Register Me"/>
+                        <br>
+                        <a href="#/login"  >Already Registered ?  Login here</a>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

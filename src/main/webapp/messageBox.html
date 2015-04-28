@@ -1,0 +1,6 @@
+<div ng-controller="MessageController">
+    <div  class="alert alert-{{message.type}} alert-dismissible" id="message_panel" role="alert" style="padding-bottom: 10px; padding-top: 10px;">
+        <a class="close" onclick="$('#message_panel').hide()">x</a>
+        <strong>{{'MESSAGE_LABEL'|translate}}</strong>&nbsp;&nbsp;{{message.text}}
+    </div>
+</div>

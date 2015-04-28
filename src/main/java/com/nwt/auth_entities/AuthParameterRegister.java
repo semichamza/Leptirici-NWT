@@ -10,8 +10,8 @@ public class AuthParameterRegister implements Serializable {
     String password;
     String email;
 
-    String name;
-    String lastname;
+    String firstName;
+    String lastName;
 
     public AuthParameterRegister() {
     }
@@ -47,19 +47,19 @@ public class AuthParameterRegister implements Serializable {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastname) {
+        this.lastName = lastname;
     }
 }

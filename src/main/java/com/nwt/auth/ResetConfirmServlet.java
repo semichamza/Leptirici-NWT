@@ -54,7 +54,7 @@ public class ResetConfirmServlet extends HttpServlet {
             entityFacade.updateToken(token);
         }
 
-        response.sendRedirect("reset.html");
+        response.sendRedirect("#/reset");
     }
 
     private boolean isResetTokenValid(VerificationToken token) {

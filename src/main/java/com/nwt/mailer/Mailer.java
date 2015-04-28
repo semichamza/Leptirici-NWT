@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class Mailer {
-    private static String APP_URL = "http://localhost:8383/PMS-NWT";
+    private static String APP_URL = "http://localhost:8080/PMS-NWT";
 
     public static boolean sendActivationMail(String email, String token) {
         MessageBody messageBody = new MessageBody("NWT-Leptirici", "Activation mail");
