@@ -44,6 +44,8 @@ public interface EntityFacade
     //region TASKS
     Tasks getAllTasks();
 
+    Tasks getProjectTasks(Integer project_id);
+
     Task getTaskById(Integer id);
 
     Task createTask(Task task);

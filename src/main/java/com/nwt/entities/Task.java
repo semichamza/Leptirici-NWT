@@ -1,6 +1,7 @@
 package com.nwt.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -17,12 +18,14 @@ import java.util.List;
 @Entity
 @Table (name = "tasks")
 @NamedQueries ({
-        @NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t")
+        @NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t"),
+        @NamedQuery (name = Task.PROJECT_TASKS, query = "SELECT t FROM Task t where t.project.id=:project_id")
 })
 @JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Task implements Serializable
 {
     public static final String FIND_ALL = "Task.findAll";
+    public static final String PROJECT_TASKS = "Task.projectTasks";
 
     private Integer id;
     private Date timeCreated;
@@ -149,6 +152,7 @@ public class Task implements Serializable
         this.taskPriority = taskPriority;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<Log> getLogs()
     {

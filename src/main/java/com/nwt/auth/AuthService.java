@@ -55,6 +55,7 @@ public class AuthService {
             auth.setMessage(resourceBundle.getString("messageSuccess"));
             auth.setIsAutorized(true);
             auth.setName(principal.getUsername());
+            auth.setId(user.getId().toString());
             return Response.ok(auth).build();
 
         } catch (Exception e) {

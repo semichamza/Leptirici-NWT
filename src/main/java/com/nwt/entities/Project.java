@@ -61,6 +61,7 @@ public class Project implements Serializable
         this.description = description;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<ProjectUser> getProjectUsers()
     {
@@ -87,6 +88,7 @@ public class Project implements Serializable
         return users;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<Task> getTasks()
     {

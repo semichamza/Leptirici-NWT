@@ -12,6 +12,7 @@ app.factory('myHttpInterceptor', function ($q, $rootScope) {
             return config || $q.when(config);
         },
         responseError: function (response) {
+            alert("GreskaInterceptor");
             $rootScope.setDangerMessage(response.data.code);
             return $q.reject(response);
         }
@@ -25,6 +26,7 @@ app.run(function ($rootScope, $location, authService) {
     if (userProfile) {
         $rootScope.user = {
             jwt: userProfile.jwt,
+            id:userProfile.id,
             name: userProfile.name,
             isAuth: true
         };

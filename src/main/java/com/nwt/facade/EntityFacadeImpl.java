@@ -143,6 +143,13 @@ public class EntityFacadeImpl implements EntityFacade
     }
 
     @Override
+    public Tasks getProjectTasks(Integer project_id) {
+        TypedQuery<Task> query = em.createNamedQuery(Task.PROJECT_TASKS, Task.class);
+        query.setParameter("project_id", project_id);
+        return new Tasks(query.getResultList());
+    }
+
+    @Override
     public Task getTaskById(Integer id) {
         Task task = em.find(Task.class, id);
         return task;

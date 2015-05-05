@@ -10,6 +10,7 @@ public class AuthResponseObject implements Serializable {
     String message;
     Boolean isAutorized = false;
     String name;
+    String id;
 
     public AuthResponseObject() {
 
@@ -20,6 +21,14 @@ public class AuthResponseObject implements Serializable {
         this.message = message;
         this.isAutorized = isAutorized;
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMessage() {

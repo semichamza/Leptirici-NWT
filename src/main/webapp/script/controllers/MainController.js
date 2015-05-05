@@ -15,6 +15,10 @@ app.controller('MainController', function ($translate, $scope,$rootScope,$cookie
                 $rootScope.navigation.header=translatedValue;
             });
     };
+    $rootScope.setFixedHeader=function(header_label)
+    {
+        $rootScope.navigation.header=header_label;
+    };
 
     $rootScope.setSubHeader=function(subHeader_label)
     {

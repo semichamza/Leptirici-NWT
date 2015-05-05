@@ -127,6 +127,7 @@ public class User implements Serializable
         this.active = active;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<ProjectUser> getProjectUsers()
     {
@@ -154,6 +155,7 @@ public class User implements Serializable
         return projects;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<Task> getTasks()
     {
@@ -165,6 +167,7 @@ public class User implements Serializable
         this.tasks = tasks;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<Comment> getComments()
     {
@@ -176,6 +179,7 @@ public class User implements Serializable
         this.comments = comments;
     }
 
+    @JsonIgnore
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<Log> getLogs()
     {

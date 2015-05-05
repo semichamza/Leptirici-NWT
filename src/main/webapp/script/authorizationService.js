@@ -35,6 +35,7 @@ app.service('authService', function ($http, $rootScope, $cookieStore,$location) 
         return _postData('/login', account).success(function (data) {
             var userProfile = {
                 jwt: data.jwt,
+                id:data.id,
                 name: data.name
             };
             _setAuthorization(userProfile);

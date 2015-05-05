@@ -17,6 +17,9 @@ app.config(function ($routeProvider, $httpProvider) {
         .when("/projects",{
             templateUrl:"projects.html"
         })
+        .when("/projectDetails/:projectId",{
+            templateUrl:"projectDetails.html"
+        })
         .when("/tasks",{
             templateUrl:"tasks.html"
         })

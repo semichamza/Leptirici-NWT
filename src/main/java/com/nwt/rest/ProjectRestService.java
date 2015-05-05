@@ -2,6 +2,7 @@ package com.nwt.rest;
 
 import com.nwt.entities.Project;
 import com.nwt.entities.Projects;
+import com.nwt.entities.Tasks;
 import com.nwt.entities.Users;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
@@ -121,8 +122,8 @@ public class ProjectRestService
     @Path ("/{id}/tasks")
     public Response getAllProjectTasks(@PathParam ("id") Integer id)
     {
-        //TODO: Implementirat koristeci novi named query u Tasks za pretragu po project_id-ju
-        logger.debug("getAllProjectTasks() not implemented yet");
-        return null;
+        Tasks tasks = entityFacade.getProjectTasks(id);
+        logger.debug("getAllTasks() returned " + tasks.size() + " object(s).");
+        return Response.ok(tasks).build();
     }
 }
