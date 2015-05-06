@@ -58,8 +58,8 @@ public class ResetConfirmServlet extends HttpServlet {
     }
 
     private boolean isResetTokenValid(VerificationToken token) {
-        boolean activation = token.getActiontTypeId() == ActionTypeEnum.PASSWORD_RECOVERY.getId();
-        boolean unused = token.getTokenStatusId() == TokenStatusEnum.ACTIVE.getId();
+        boolean activation = token.getActionType() == ActionTypeEnum.PASSWORD_RECOVERY;
+        boolean unused = token.getTokenStatus() == TokenStatusEnum.ACTIVE;
 
         return activation && unused;
     }

@@ -1,7 +1,6 @@
-package com.nwt.rest;
+package com.nwt.util;
 
 import com.nwt.auth.entities.Token;
-import com.nwt.util.AuthHelper;
 
 import javax.ejb.Stateless;
 import javax.servlet.*;
@@ -25,7 +24,7 @@ public class JWTFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //ako je token istekao->exception
-        Token tokenInfo = getToken((HttpServletRequest) request);
+//        Token tokenInfo = getToken((HttpServletRequest) request);
 
         chain.doFilter(request, response);
     }

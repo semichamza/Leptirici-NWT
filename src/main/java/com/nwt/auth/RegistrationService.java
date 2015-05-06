@@ -50,7 +50,7 @@ public class RegistrationService {
             UserPrincipal principal = new UserPrincipal();
             principal.setUsername(aUser.getUsername());
             principal.setPassword(aUser.getPassword());
-            principal.setUserRole(UserRoleEnum.NORMAL.getRole());
+            principal.setUserRole(UserRoleEnum.NORMAL);
 
             User user = new User();
             user.setUserPrincipal(principal);
@@ -64,8 +64,8 @@ public class RegistrationService {
 
 
             VerificationToken token = VerificationToken.generateToken();
-            token.setActiontTypeId(ActionTypeEnum.ACTIVATION.getId());
-            token.setTokenStatusId(TokenStatusEnum.ACTIVE.getId());
+            token.setActionType(ActionTypeEnum.ACTIVATION);
+            token.setTokenStatus(TokenStatusEnum.ACTIVE);
             token.setUser(user);
             entityFacade.createToken(token);
 
@@ -116,8 +116,8 @@ public class RegistrationService {
 
             User user = entityFacade.getUserByUsername(username);
             VerificationToken token = VerificationToken.generateToken();
-            token.setActiontTypeId(ActionTypeEnum.PASSWORD_RECOVERY.getId());
-            token.setTokenStatusId(TokenStatusEnum.ACTIVE.getId());
+            token.setActionType(ActionTypeEnum.PASSWORD_RECOVERY);
+            token.setTokenStatus(TokenStatusEnum.ACTIVE);
             token.setUser(user);
             entityFacade.createToken(token);
 
@@ -134,8 +134,8 @@ public class RegistrationService {
     }
 
     private boolean isActivationTokenValid(VerificationToken token) {
-        boolean activation = token.getActiontTypeId() == ActionTypeEnum.ACTIVATION.getId();
-        boolean unused = token.getTokenStatusId() == TokenStatusEnum.ACTIVE.getId();
+        boolean activation = token.getActionType() == ActionTypeEnum.ACTIVATION;
+        boolean unused = token.getTokenStatus() == TokenStatusEnum.ACTIVE;
 
         return activation && unused;
     }

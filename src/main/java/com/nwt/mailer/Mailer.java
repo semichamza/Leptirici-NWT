@@ -36,7 +36,8 @@ public class Mailer {
         return sendEmail(email, messageBody);
     }
 
-    public static boolean sendEmail(String mailTo, MessageBody messageBody, MailerAttachment attachment) {
+    public static boolean sendEmail(String mailTo, MessageBody messageBody, MailerAttachmentImpl attachment)
+    {
         List<String> mails = new ArrayList<String>();
         mails.add(mailTo);
         return sendEmail(mails, messageBody, attachment);
@@ -45,20 +46,23 @@ public class Mailer {
     public static boolean sendEmail(String mailTo, MessageBody messageBody) {
         List<String> mails = new ArrayList<String>();
         mails.add(mailTo);
-        return sendEmail(mails, messageBody, new ArrayList<MailerAttachment>());
+        return sendEmail(mails, messageBody, new ArrayList<MailerAttachmentImpl>());
     }
 
     public static boolean sendEmail(List<String> mailTo, MessageBody messageBody) {
-        return sendEmail(mailTo, messageBody, new ArrayList<MailerAttachment>());
+        return sendEmail(mailTo, messageBody, new ArrayList<MailerAttachmentImpl>());
     }
 
-    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody, MailerAttachment attachment) {
-        List<MailerAttachment> attachments = new ArrayList<MailerAttachment>();
+    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody, MailerAttachmentImpl attachment)
+    {
+        List<MailerAttachmentImpl> attachments = new ArrayList<MailerAttachmentImpl>();
         attachments.add(attachment);
         return sendEmail(mailTo, messageBody, attachments);
     }
 
-    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody, List<MailerAttachment> attachments) {
+    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody,
+                                    List<MailerAttachmentImpl> attachments)
+    {
         // Sender's email ID needs to be mentioned
         try {
 
@@ -107,7 +111,8 @@ public class Mailer {
                 Multipart multipart = new MimeMultipart();
                 multipart.addBodyPart(messageBodyPart);
 
-                for (MailerAttachment attachment : attachments) {
+                for (MailerAttachmentImpl attachment : attachments)
+                {
                     DataSource dataSource = new ByteArrayDataSource(attachment.getFileBody(), "text/plain");
                     messageBodyPart = new MimeBodyPart();
                     messageBodyPart.setDataHandler(new DataHandler(dataSource));

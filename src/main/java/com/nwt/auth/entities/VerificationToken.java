@@ -14,95 +14,89 @@ import java.util.UUID;
  * Created by Jasmin on 14-Apr-15.
  */
 @Entity
-@Table(name = "VerificationToken")
-@NamedQueries({
-        @NamedQuery(name = VerificationToken.FIND_ALL, query = "SELECT v FROM VerificationToken v")
+@Table (name = "VerificationToken")
+@NamedQueries ({
+        @NamedQuery (name = VerificationToken.FIND_ALL, query = "SELECT v FROM VerificationToken v")
 })
-@EntityListeners(LifeCycleListener.class)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class VerificationToken {
+@EntityListeners (LifeCycleListener.class)
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class VerificationToken
+{
 
     public static final String FIND_ALL = "VerificationToken.findAll";
 
     String id;
     User user;
-    Integer actiontTypeId;
-    Integer tokenStatusId;
+    ActionTypeEnum actionType;
+    TokenStatusEnum tokenStatus;
 
-    public VerificationToken() {
-
+    public VerificationToken()
+    {
     }
 
-    public VerificationToken(String id, User user, Integer actiontTypeId, Integer tokenStatusId) {
+    public VerificationToken(String id, User user, ActionTypeEnum actionType, TokenStatusEnum tokenStatus)
+    {
         this.id = id;
         this.user = user;
-        this.actiontTypeId = actiontTypeId;
-        this.tokenStatusId = tokenStatusId;
+        this.actionType = actionType;
+        this.tokenStatus = tokenStatus;
     }
 
-    public static VerificationToken generateToken() {
+    public static VerificationToken generateToken()
+    {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setId(UUID.randomUUID().toString());
         return verificationToken;
     }
 
     @Id
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    public User getUser() {
+    @OneToOne (cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public User getUser()
+    {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(User user)
+    {
         this.user = user;
     }
 
-    @Column(nullable = false)
-    public Integer getActiontTypeId() {
-        return actiontTypeId;
+    @Enumerated (EnumType.STRING)
+    public TokenStatusEnum getTokenStatus()
+    {
+        return tokenStatus;
     }
 
-    public void setActiontTypeId(Integer actiontTypeId) {
-        this.actiontTypeId = actiontTypeId;
+    public void setTokenStatus(TokenStatusEnum tokenStatus)
+    {
+        this.tokenStatus = tokenStatus;
     }
 
-    @Column(nullable = false)
-    public Integer getTokenStatusId() {
-        return tokenStatusId;
+    @Enumerated (EnumType.STRING)
+    public ActionTypeEnum getActionType()
+    {
+        return actionType;
     }
 
-    public void setTokenStatusId(Integer tokenStatusId) {
-        this.tokenStatusId = tokenStatusId;
+    public void setActionType(ActionTypeEnum actionType)
+    {
+        this.actionType = actionType;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Token:" + id;
     }
-
-    public TokenStatusEnum getTokenStatus() {
-        return TokenStatusEnum.fromId(tokenStatusId);
-    }
-
-    public void setTokenStatus(TokenStatusEnum status) {
-        this.tokenStatusId = status.getId();
-    }
-
-    public ActionTypeEnum getActionType() {
-        return ActionTypeEnum.fromId(actiontTypeId);
-    }
-
-    public void setActionType(ActionTypeEnum type) {
-        this.actiontTypeId = type.getId();
-    }
-
-
 }
 
