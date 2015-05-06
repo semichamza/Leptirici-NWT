@@ -1,8 +1,8 @@
 package com.nwt.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nwt.enums.ProjectRoleEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,20 +13,30 @@ import java.io.Serializable;
 @Entity
 @Table (name = "projects_users")
 @IdClass (ProjectUserId.class)
-@JsonIdentityInfo (generator = ObjectIdGenerators.None.class)
+@JsonIdentityInfo (generator = ObjectIdGenerators.None.class, scope = ProjectUser.class)
 public class ProjectUser implements Serializable
 {
     private Integer userId;
     private Integer projectId;
-
     private User user;
     private Project project;
+    private ProjectRoleEnum projectRole;
 
-    private ProjectRole projectRole;
+    public ProjectUser()
+    {
+    }
+
+    public ProjectUser(User user, Project project, ProjectRoleEnum projectRole)
+    {
+        this.user = user;
+        this.userId = user.getId();
+        this.project = project;
+        this.projectId = project.getId();
+        this.projectRole = projectRole;
+    }
 
     @Id
     @Column (name = "user_id")
-    @JsonIgnore
     public Integer getUserId()
     {
         return userId;
@@ -39,7 +49,6 @@ public class ProjectUser implements Serializable
 
     @Id
     @Column (name = "project_id")
-    @JsonIgnore
     public Integer getProjectId()
     {
         return projectId;
@@ -74,14 +83,13 @@ public class ProjectUser implements Serializable
         this.user = user;
     }
 
-    @OneToOne
-    @JoinColumn (name = "project_role_id")
-    public ProjectRole getProjectRole()
+    @Enumerated (EnumType.STRING)
+    public ProjectRoleEnum getProjectRole()
     {
         return projectRole;
     }
 
-    public void setProjectRole(ProjectRole projectRole)
+    public void setProjectRole(ProjectRoleEnum projectRole)
     {
         this.projectRole = projectRole;
     }

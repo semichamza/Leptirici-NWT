@@ -3,10 +3,10 @@ package com.nwt.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nwt.enums.TaskPriorityEnum;
+import com.nwt.enums.TaskStatusEnum;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.List;
         @NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t"),
         @NamedQuery (name = Task.PROJECT_TASKS, query = "SELECT t FROM Task t where t.project.id=:project_id")
 })
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Task.class)
 public class Task implements Serializable
 {
     public static final String FIND_ALL = "Task.findAll";
@@ -33,8 +33,8 @@ public class Task implements Serializable
     private String description;
     private User user;
     private Project project;
-    private TaskStatus taskStatus;
-    private TaskPriority taskPriority;
+    private TaskStatusEnum taskStatus;
+    private TaskPriorityEnum taskPriority;
     private Calendar estimation;
     private List<Log> logs;
     private List<Comment> comments;
@@ -61,7 +61,6 @@ public class Task implements Serializable
         this.id = id;
     }
 
-    @Past
     @Column (name = "time_created")
     @Temporal (TemporalType.TIMESTAMP)
     public Date getTimeCreated()
@@ -119,7 +118,6 @@ public class Task implements Serializable
     }
 
     //    @Temporal(TemporalType.TIME)
-    @Future
     public Calendar getEstimation()
     {
         return estimation;
@@ -131,23 +129,23 @@ public class Task implements Serializable
     }
 
     @Enumerated (EnumType.STRING)
-    public TaskStatus getTaskStatus()
+    public TaskStatusEnum getTaskStatus()
     {
         return taskStatus;
     }
 
-    public void setTaskStatus(TaskStatus taskStatus)
+    public void setTaskStatus(TaskStatusEnum taskStatus)
     {
         this.taskStatus = taskStatus;
     }
 
     @Enumerated (EnumType.STRING)
-    public TaskPriority getTaskPriority()
+    public TaskPriorityEnum getTaskPriority()
     {
         return taskPriority;
     }
 
-    public void setTaskPriority(TaskPriority taskPriority)
+    public void setTaskPriority(TaskPriorityEnum taskPriority)
     {
         this.taskPriority = taskPriority;
     }

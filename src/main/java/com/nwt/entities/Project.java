@@ -3,6 +3,7 @@ package com.nwt.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nwt.enums.ProjectRoleEnum;
 import com.nwt.util.CollectionUtil;
 import com.nwt.util.EntityExtractor;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @Table (name = "projects")
 @NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Project p")
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Project.class)
 public class Project implements Serializable
 {
     public static final String FIND_ALL = "Project.findAll";
@@ -100,7 +101,15 @@ public class Project implements Serializable
         this.tasks = tasks;
     }
 
+    @JsonIgnore
+    public void addUser(User user, ProjectRoleEnum projectRole)
+    {
+        ProjectUser projectUser = new ProjectUser(user, this, projectRole);
+        projectUsers.add(projectUser);
+    }
+
     @Override
+
     public String toString()
     {
         return "project name: " + name;

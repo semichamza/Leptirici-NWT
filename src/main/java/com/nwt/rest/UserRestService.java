@@ -24,7 +24,7 @@ import java.net.URI;
 public class UserRestService
 {
     @Context
-    private UriInfo uriInfo;
+    protected UriInfo uriInfo;
     @Inject
     private EntityFacade entityFacade;
     @Inject
@@ -44,7 +44,7 @@ public class UserRestService
     {
         User user = entityFacade.getUserById(id);
         if (user == null)
-            throw new NotFoundException();
+            throw new NotFoundException("User not found");
         return user;
     }
 
@@ -58,7 +58,7 @@ public class UserRestService
     }
 
     @GET
-    @Path("/{username: [a-zA-Z]*}")
+    @Path ("/{username: [a-zA-Z1-9]*}")
     public Response getUserByUsername(@PathParam ("username") String username)
     {
         User user = entityFacade.getUserByUsername(username);
@@ -83,7 +83,7 @@ public class UserRestService
     public Response updateUser(User user)
     {
         userById(user.getId());     //TODO: bolje implementirat validatore!
-        entityFacade.updateUser(user);
+        user = entityFacade.updateUser(user);
         logger.debug("Updated user  - " + user.toString());
         return Response.ok(user).build();
     }
@@ -97,6 +97,17 @@ public class UserRestService
         logger.debug("Deleted user - " + user.toString());
         return Response.noContent().build();
     }
+
+//    TODO: Vidjet koje je njabolje rjesenje kad se koriste transakcijske operacije, tj. kad vise objekata treba
+    //TODO: sinhronizovat u isto vrijme
+//    @POST
+//    public Response createUserRole(UserRole userRole)
+//    {
+//        User user = userById(id);
+//        entityFacade.deleteUser(user);
+//        logger.debug("Deleted user - " + user.toString());
+//        return Response.noContent().build();
+//    }
 
     //    TODO: Dodat vise parametara pretrage
     @GET

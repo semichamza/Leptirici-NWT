@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table (name = "comments")
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Comment.class)
 public class Comment implements Serializable
 {
     private Integer id;

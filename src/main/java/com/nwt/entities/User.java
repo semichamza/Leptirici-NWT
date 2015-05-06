@@ -6,16 +6,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nwt.util.CollectionUtil;
 import com.nwt.util.EntityExtractor;
 import com.nwt.util.LifeCycleListener;
-import com.nwt.util.LinkAdapter;
-import org.glassfish.jersey.linking.InjectLink;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.ws.rs.core.Link;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,7 +25,7 @@ import java.util.List;
         @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.userPrincipal.username = :username")
 })
 @EntityListeners (LifeCycleListener.class)
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = User.class)
 public class User implements Serializable
 {
     public static final String FIND_ALL = "User.findAll";
@@ -46,10 +42,23 @@ public class User implements Serializable
     private List<Comment> comments;
     private List<Log> logs;
 
-    //TODO
-    @XmlJavaTypeAdapter (LinkAdapter.class)
-    @InjectLink (value = "users/{id}", rel = "self", style = InjectLink.Style.ABSOLUTE)
-    private Link link;
+    public User()
+    {
+    }
+
+    public User(UserPrincipal userPrincipal, String firstName, String lastName, Boolean active, String email)
+    {
+        this.userPrincipal = userPrincipal;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.active = active;
+        this.email = email;
+    }
+
+//    TODO
+//    @XmlJavaTypeAdapter (LinkAdapter.class)
+//    @InjectLink (value = "users/{id}", rel = "self", style = InjectLink.Style.ABSOLUTE)
+//    private Link link;
 
     @Id
     @GeneratedValue

@@ -2,8 +2,9 @@ package com.nwt.rest;
 
 import com.nwt.entities.Project;
 import com.nwt.entities.Projects;
-import com.nwt.entities.Tasks;
+import com.nwt.entities.User;
 import com.nwt.entities.Users;
+import com.nwt.enums.ProjectRoleEnum;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
@@ -36,14 +37,6 @@ public class ProjectRestService
     @GET
     public Response getAllProjects()
     {
-        Projects projects = entityFacade.getAllProjects();
-        logger.debug("getAllProjects() returned " + projects.size() + " object(s).");
-        return Response.ok(projects).build();
-    }
-
-    @GET
-    @Path("/all")
-    public Response getAllProjects1() {
         Projects projects = entityFacade.getAllProjects();
         logger.debug("getAllProjects() returned " + projects.size() + " object(s).");
         return Response.ok(projects).build();
@@ -100,6 +93,24 @@ public class ProjectRestService
         return Response.noContent().build();
     }
 
+    @POST
+    @Path ("/{id}/addUser")
+    public Response addUserToProject(@PathParam ("id") Integer id, @QueryParam ("userId") Integer userId,
+                                     @DefaultValue ("MEMBER") @QueryParam ("projectRole") ProjectRoleEnum projectRole)
+    {
+        Project project = entityFacade.getProjectById(id);
+        if (project == null)
+            throw new NotFoundException();
+        User user = entityFacade.getUserById(userId);
+        if (user == null)
+            throw new NotFoundException("User not found");
+        //is valid role
+        project.addUser(user, projectRole);
+        updateProject(project);
+
+        return Response.ok().build();
+    }
+
     @GET
     @Path("/search/{text}")
     public Response searchProjects(@PathParam ("text") String text)
@@ -122,8 +133,8 @@ public class ProjectRestService
     @Path ("/{id}/tasks")
     public Response getAllProjectTasks(@PathParam ("id") Integer id)
     {
-        Tasks tasks = entityFacade.getProjectTasks(id);
-        logger.debug("getAllTasks() returned " + tasks.size() + " object(s).");
-        return Response.ok(tasks).build();
+        //TODO: Implementirat koristeci novi named query u Tasks za pretragu po project_id-ju
+        logger.debug("getAllProjectTasks() not implemented yet");
+        return null;
     }
 }

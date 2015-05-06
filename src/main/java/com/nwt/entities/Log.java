@@ -12,7 +12,7 @@ import java.util.Calendar;
  */
 @Entity
 @Table (name = "logs")
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Log.class)
 public class Log implements Serializable
 {
     private Integer id;
