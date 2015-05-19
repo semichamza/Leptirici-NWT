@@ -20,11 +20,9 @@ app.controller('RegistrationController',function($rootScope,$scope,$location,aut
     {
         authService.register($scope.newUser)
             .success(function(data){
-                alert('Mail je poslan1 na '+$scope.newUser.email);
-                $rootScope.setInfoMessage('HEADER');})
+                $rootScope.setInfoMessage('ACTIVATION_LINK');})
             .error(function(){
-                alert('Pala registracija');
-                $rootScope.setInfoMessage('HEADER');
+                $rootScope.setDangerMessage('REGISTRATION_ERROR');
         });
     };
 });

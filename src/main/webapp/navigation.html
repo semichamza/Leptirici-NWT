@@ -1,6 +1,4 @@
-<div ng-controller="NavigationController">
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top mytopmenu" role="navigation">
+<nav ng-controller="NavigationController" class="navbar navbar-inverse navbar-fixed-top mytopmenu" role="navigation">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header mytopmenuheader">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -14,14 +12,16 @@
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
             <li language-directive></li>
+            <li>
+                <a href="#/messages" class="navbar-brand" style="font-size: 14px">Messages <span class="badge">{{unreadMessages.length}}</span></a>
+            </li>
             <li class="dropdown" user-directive></li>
         </ul>
 
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li class="text-center" style="width: 100%;
-                                            background-color: rgb(35,45,50)">
+                <li class="text-center" style="width: 100%;background-color: rgb(35,45,50);" >
                     <img src="./style/img/butterfly_full.png" class="user-image img-responsive"/>
                 </li>
                 <li class="header" style="color: #4b646f;
@@ -37,18 +37,25 @@
                                           background-origin: initial;
                                           background-clip: initial;
                                           font-size: 12px;
-  background-color: rgb(26, 34, 38);
-  padding: 10px 25px 10px 15px;">{{'MAIN_NAV'|translate}}</li>
+                                          background-color: rgb(26, 34, 38);
+                                          padding: 10px 25px 10px 15px;" >{{'MAIN_NAV'|translate}}</li>
 
-                <li class="{{isCurrent('dashboard')}}">
+                <li class="{{isCurrent('dashboard')}}" ng-show="{{tabs.dashboard}}">
                     <a href="#/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                 </li>
-                <li class="{{isCurrent('projects')}}">
+                <li class="{{isCurrent('dashboardAdmin')}}" ng-show="{{tabs.dashboardAdmin}}">
+                    <a href="#/dashboardAdmin"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                </li>
+                <li class="{{isCurrent('statistics')}}" ng-show="{{tabs.statistics}}">
+                    <a href="#/statistics"><i class="fa fa-fw fa-dashboard"></i> Statistics</a>
+                </li>
+                <li class="{{isCurrent('projects')}}" ng-show="{{tabs.projects}}">
                     <a href="#/projects"><i class="fa fa-fw fa-desktop"></i> Projects</a>
                 </li>
-                <li class="{{isCurrent('tasks')}}">
+                <li class="{{isCurrent('tasks')}}" ng-show="{{tabs.tasks}}">
                     <a href="#/tasks"><i class="fa fa-fw fa-table"></i> Tasks</a>
                 </li>
+
                <!-- <li>
                     <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
                 </li>
@@ -65,5 +72,4 @@
             </ul>
         </div>
         <!-- /.navbar-collapse -->
-    </nav>
-</div>
+</nav>

@@ -20,6 +20,10 @@ app.controller('MainController', function ($translate, $scope,$rootScope,$cookie
         $rootScope.navigation.header=header_label;
     };
 
+    $rootScope.setFixedSubHeader=function(subHeader_label)
+    {
+        $rootScope.navigation.subHeader=subHeader_label;
+    };
     $rootScope.setSubHeader=function(subHeader_label)
     {
         $rootScope.navigation.subHeaderLabel=subHeader_label;
@@ -62,7 +66,6 @@ app.controller('MainController', function ($translate, $scope,$rootScope,$cookie
             };
         });
     };
-
     $scope.toggleLang = function () {
         $translate.use() == 'en' ? $translate.use('bs') : $translate.use('en');
         $cookieStore.put('currentLng',$translate.use());

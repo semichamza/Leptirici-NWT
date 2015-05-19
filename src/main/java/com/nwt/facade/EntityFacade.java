@@ -22,6 +22,16 @@ public interface EntityFacade
 
     void deleteUser(User user);
 
+    Message createMessage(Message message);
+
+    Message updateMessage(Message message);
+
+    public Messages getUserMessage(Integer userId);
+
+    public Messages getUserSentMessage(Integer userId);
+
+    public Messages getUnreadMessages(Integer userId);
+
     Users searchUsers(String text);
     //endregion
 

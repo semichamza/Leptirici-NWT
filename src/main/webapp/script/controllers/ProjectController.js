@@ -9,7 +9,7 @@ app.controller('ProjectController', function ($translate, $scope,$rootScope,$coo
     $scope.test="awdawdawd";
     $scope.currentProject={};
     $scope.tasks=[];
-    pmsService.getProjects($rootScope.user.id).success(function(data){
+    pmsService.getProjects($rootScope.authData.user.id).success(function(data){
         $scope.projects=data;
     });
 

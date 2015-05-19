@@ -1,0 +1,160 @@
+<div id="wrapper">
+    <div ng-include="'navigation.html'"></div>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1>
+                                {{navigation.header}}
+                                <small>{{navigation.subHeader}}</small>
+                            </h1>
+                        </div>
+                        <div class="col-md-6" ng-show="message.text">
+                            <div message-directive=""></div>
+                        </div>
+                    </div>
+                    <!--BODY-->
+                    <div ng-controller="DashboardAdminController">
+
+
+                        <nav class="navbar navbar-default" role="navigation">
+                            <div class="container">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                    <a href="" class="navbar-brand">Tools:</a>
+                                </div>
+                                <div class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+
+                                        <li><a href="" class="navbar-brand" ng-click="globalBlock()">Ban</a>
+                                        </li>
+                                        <li><a href="" class="navbar-brand" ng-click="globalUnblock()">Unban</a>
+                                        </li>
+                                        <!--<li class="dropdown">-->
+                                            <!--<a href="" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>-->
+                                            <!--<ul class="dropdown-menu">-->
+                                                <!--<li><a href="">Action</a>-->
+                                                <!--</li>-->
+                                                <!--<li><a href="">Another action</a>-->
+                                                <!--</li>-->
+                                                <!--<li><a href="">Something else here</a>-->
+                                                <!--</li>-->
+                                                <!--<li class="divider"></li>-->
+                                                <!--<li class="dropdown-header">Nav header</li>-->
+                                                <!--<li><a href="#">Separated link</a>-->
+                                                <!--</li>-->
+                                                <!--<li><a href="#">One more separated link</a>-->
+                                                <!--</li>-->
+                                            <!--</ul>-->
+                                        <!--</li>-->
+                                    </ul>
+                                    <div class="col-sm-4 col-md-4 pull-right">
+                                        <form class="navbar-form" role="search">
+                                            <div class="input-group">
+                                                <input type="text" ng-model="searchParameter" g class="form-control" placeholder="Search" name="q">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-default" ng-click="searchUsers()"><i class="glyphicon glyphicon-search"></i></button>
+                                                    <button class="btn btn-default" ng-click="clear()"><i class="glyphicon glyphicon-remove"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!--/.nav-collapse -->
+
+                            </div>
+                        </nav>
+
+                        <!--NAVIGATION END-->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table id="usersTable" class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="display:none;">ID</th>
+
+                                        <th>First name</th>
+
+                                        <th>Last name</th>
+
+                                        <th>Username</th>
+
+                                        <th>E-mail</th>
+
+                                        <!--<th class="text-center btn-primary">Actions</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="user in users" class="{{user.tr_class+' '+user.escapeClass}}">
+                                        <td style="display:none;" class="userId">{{user.id}}</td>
+                                        <td>{{user.firstName}}</td>
+                                        <td>{{user.lastName}}</td>
+                                        <td>{{user.userPrincipal.username}}</td>
+                                        <td>{{user.email}}</td>
+                                        <!--<td align="center" class="info">-->
+                                            <!--<div class="btn-group" role="group" aria-label="...">-->
+                                                <!--<button class='btn btn-success' ng-click="unblockUser(user.id)">Unblock</button>-->
+                                                <!--<button class='btn btn-danger' ng-click="blockUser(user.id)">Block</button>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    </tr>
+                                </table>
+                                <input type="hidden" id="selectedItems" name="selectedItems" value="" />
+                                <script src="lib/dependencies/multiselect.js" type="text/javascript"></script>
+                                <script>
+                                    var test=function()
+                                    {
+                                        $('selectedItems').empty();
+                                        $('#usersTable tr').each(function() {
+                                           var id=($(this).find(".userId").html());
+                                            if(id)
+                                                $('selectedItems').append(id+',');
+                                        });
+                                    };
+
+
+                                    $(function () {
+                                        $('#usersTable').multiSelect({
+                                            actcls: 'info',
+                                            selector: 'tbody tr',
+                                            except: ['tbody'],
+                                            statics: ['.escape','[data-no="1"]'],
+                                            replaceClass:'danger',
+                                            replaceWith:'success',
+                                            callback: function (items1,items2) {
+                                               // $('#table2').empty().append(items.clone().removeClass('info').addClass('success'));
+                                                $('#selectedItems').empty();
+                                                items1.each(function() {
+                                                    var id=($(this).find(".userId").html());
+                                                    if(id)
+                                                        $('#selectedItems').append(id+',');
+                                                });
+                                                items2.each(function() {
+                                                    var id=($(this).find(".userId").html());
+                                                    if(id)
+                                                        $('#selectedItems').append(id+',');
+                                                });
+                                            }
+                                        });
+                                    })
+
+                                </script>
+                                </tbody>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>

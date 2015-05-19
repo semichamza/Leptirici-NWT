@@ -1,0 +1,156 @@
+<div id="wrapper">
+    <script src="lib/dependencies/JSOG.js"></script>
+    <style type="text/css">
+        a:focus {
+            outline: none;
+        }
+        .nav-tabs.nav-justified > li {
+            padding-bottom: 0 !important;
+        }
+        .nav-tabs.nav-justified > li > a {
+            margin-left: 2px ;
+            top: 1px;
+            border: none;
+        }
+        .nav-tabs.nav-justified > li:first-child > a {
+            margin-left: 0;
+        }
+        .nav-tabs.nav-justified > li > a:link {
+            background: #eee;
+        }
+    </style>
+    <div ng-include="'navigation.html'"></div>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <!--HEADER-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1>
+                            {{navigation.header}}
+                            <small>{{navigation.subHeader}}</small>
+                        </h1>
+                    </div>
+                    <div class="col-md-6" ng-show="message.text">
+                        <div message-directive=""></div>
+                    </div>
+                </div>
+                <!--BODY-->
+                <div ng-controller="UserMessageController">
+                    <nav class="navbar navbar-default" role="navigation">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                <a href="" class="navbar-brand">Tools:</a>
+                            </div>
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+
+                                    <li><a href="" data-toggle="modal" data-target="#messageModal" class="navbar-brand" >{{'NEW_MESSAGE'|translate}}</a>
+                                    </li>
+                                </ul>
+                                <div class="col-sm-4 col-md-4 pull-right">
+                                    <!--<form class="navbar-form" role="search">-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" ng-model="searchParameter" g class="form-control" placeholder="Search" name="q">-->
+                                            <!--<div class="input-group-btn">-->
+                                                <!--<button class="btn btn-default" ng-click="searchUsers()"><i class="glyphicon glyphicon-search"></i></button>-->
+                                                <!--<button class="btn btn-default" ng-click="clear()"><i class="glyphicon glyphicon-remove"></i></button>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</form>-->
+                                </div>
+                            </div>
+                            <!--/.nav-collapse -->
+
+                        </div>
+                    </nav>
+                    <tabset justified="true">
+                        <tab heading="Inbox">
+                            <div style="border: 1px solid #ddd; border-radius: 0 0 5px 5px; padding: 10px">
+                                <br>
+                                <h4 ng-show="messages.length==0">{{'NO_MESSAGES'|translate}}</h4>
+                                <div ng-repeat="message in messages" class="panel {{message.seen==1?'panel-default':'panel-success'}}">
+                                    <div class="panel-heading">
+                                        <h1 class="panel-title">{{message.sender.firstName}} {{message.sender.lastName}} <span class="text-right pull-right">{{message.date}}</span></h1>
+                                    </div>
+                                    <div class="panel-body">{{message.text}}</div>
+                                </div>
+                            </div>
+                        </tab>
+                        <tab heading="Outbox">
+                            <div style="border: 1px solid #ddd; border-radius: 0 0 5px 5px; padding: 10px">
+                                <br>
+                                <h4 ng-show="sentMessages.length==0">{{'NO_MESSAGES'|translate}}</h4>
+                                <div ng-repeat="message in sentMessages" class="panel {{message.seen==1?'panel-success':'panel-danger'}}">
+                                    <div class="panel-heading">
+                                        <h1 class="panel-title">{{message.receiver.firstName}} {{message.receiver.lastName}} <span class="text-right pull-right">{{message.date}}</span></h1>
+                                    </div>
+                                    <div class="panel-body">{{message.text}}</div>
+                                </div>
+                            </div>
+                        </tab>
+                    </tabset>
+
+
+                    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button"
+                                            class="close"
+                                            data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">{{'NEW_MESSAGE'|translate}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="receiver1" class="col-sm-2 control-label">{{'TO_LABEL'|translate}}:</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" id="receiver1" ng-model="receiver" ng-options="user as (user.firstName+' '+user.lastName) for user in users"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="messageText" class="col-sm-2 control-label">{{'MESSAGE'|translate}}</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="messageText"
+                                                          ng-model="messageText"
+                                                          class="form-control"
+                                                          placeholder="{{'MESSAGE'|translate}}">
+                                            </textarea>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button"
+                                            class="btn btn-primary"
+                                            data-dismiss="modal"
+                                            ng-click="sendMessage()">
+                                        {{'SEND'|translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--BODY-->
+            </div>
+        </div>
+
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>

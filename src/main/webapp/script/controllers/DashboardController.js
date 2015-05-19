@@ -3,12 +3,16 @@
  */
 (function () {
 
-    var DashboardController=function ($translate, $scope,$rootScope,$cookieStore,pmsService) {
+    var DashboardController=function ($translate, $scope,$rootScope,$location,pmsService) {
         $rootScope.setHeader('DASHBOADR_LABEL');
         $rootScope.setSubHeader('DASHBOADR_LABEL');
         $rootScope.navigation.current='dashboard';
 
-            };
+        if($rootScope.authData.user.userPrincipal.userRole=='ADMINISTRATOR') {
+            $location.path("/dashboardAdmin");
+        }
+
+    };
 
     app.controller('DashboardController',DashboardController );
 

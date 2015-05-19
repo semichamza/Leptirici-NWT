@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nwt.util.CollectionUtil;
 import com.nwt.util.EntityExtractor;
 import com.nwt.util.LifeCycleListener;
+import com.nwt.util.jsog.JSOGGenerator;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -22,20 +23,23 @@ import java.util.List;
 @Table (name = "users")
 @NamedQueries ({
         @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u"),
-        @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.userPrincipal.username = :username")
+        @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.userPrincipal.username = :username"),
+        @NamedQuery (name = User.FIND_BY_TEXT, query = "SELECT u FROM User u WHERE CONCAT(u.firstName,' ' , u.lastName ,' ', u.userPrincipal.username) like :text ")
 })
 @EntityListeners (LifeCycleListener.class)
-@JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = User.class)
+@JsonIdentityInfo (generator = JSOGGenerator.class)
 public class User implements Serializable
 {
     public static final String FIND_ALL = "User.findAll";
     public static final String FIND_BY_USERNAME = "User.findByUsername";
+    public static final String FIND_BY_TEXT = "User.findByText";
 
     private Integer id;
     private UserPrincipal userPrincipal;
     private String firstName;
     private String lastName;
     private Boolean active;
+    private Boolean blocked;
     private String email;
     private List<ProjectUser> projectUsers;
     private List<Task> tasks;
@@ -46,6 +50,11 @@ public class User implements Serializable
     {
     }
 
+    public User(User user)
+    {
+        this(user.getUserPrincipal(),user.getFirstName(),user.getLastName(),user.getActive(),user.getEmail());
+        setId(user.id);
+    }
     public User(UserPrincipal userPrincipal, String firstName, String lastName, Boolean active, String email)
     {
         this.userPrincipal = userPrincipal;
@@ -204,5 +213,14 @@ public class User implements Serializable
     public String toString()
     {
         return "username: " + userPrincipal.getUsername();
+    }
+
+    @Column
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
     }
 }

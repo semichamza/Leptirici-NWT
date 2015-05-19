@@ -13,4 +13,7 @@ public class ResponseMessages {
 
     public static final ResponseMessage
             INVALID_USERNAME=new ResponseMessage(Status.BAD_REQUEST,"2", AppMessages.INVALID_USERNAME);
+
+    public static final ResponseMessage
+            USER_BLOCKED=new ResponseMessage(Status.BAD_REQUEST,"3", AppMessages.USER_BLOCKED);
 }

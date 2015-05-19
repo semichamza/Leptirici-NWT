@@ -26,8 +26,8 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 @Path("user")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class RegistrationService {
     @Context

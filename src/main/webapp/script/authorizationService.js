@@ -1,17 +1,17 @@
 /**
  * Created by Jasmin on 16-Apr-15.
  */
-app.service('authService', function ($http, $rootScope, $cookieStore,$location) {
+app.service('authService', function ($http, $rootScope,$resource, $cookieStore,$location) {
     var authService = {};
     var apiURL = "/PMS-NWT/auth";
 
-    var _setAuthorization = function (userProfile) {
-        $rootScope.user=userProfile;
-        $cookieStore.put('userProfile', userProfile);
+    var _setAuthorization = function (authData) {
+        $rootScope.authData=authData;
+        $cookieStore.put('authData', authData);
     };
 
     var _getAuthorization = function () {
-        return $cookieStore.get('userProfile');
+        return $cookieStore.get('authData');
     };
 
     var _postData = function (path, data) {
@@ -33,18 +33,19 @@ app.service('authService', function ($http, $rootScope, $cookieStore,$location) 
 
     var _login = function (account) {
         return _postData('/login', account).success(function (data) {
-            var userProfile = {
+            var authData = {
                 jwt: data.jwt,
-                id:data.id,
-                name: data.name
+                user:data.user
             };
-            _setAuthorization(userProfile);
+            $rootScope.showTabs(authData.user);
+            _setAuthorization(authData);
         });
     };
 
+
     var _logout = function () {
-        $cookieStore.remove('userProfile');
-        $rootScope.user=null;
+        $cookieStore.remove('authData');
+        $rootScope.authData=null;
         $location.path("/login");
     };
 

@@ -2,9 +2,8 @@
  * Created by Jasmin on 16-Apr-15.
  */
 
-app.controller('NavigationController',function($rootScope,$scope,$location,authService, $translate,$cookieStore)
+app.controller('NavigationController',function($rootScope,$scope,$location,authService, pmsService,$cookieStore)
 {
-
     if(!authService.getAuthorization())
     {
         $location.path('login');
@@ -21,4 +20,11 @@ app.controller('NavigationController',function($rootScope,$scope,$location,authS
         return '';
     };
 
+    $scope.getUnreadMessages=function(){
+        pmsService.getUserUnreadMessages($rootScope.authData.user.id).success(function(data) {
+            $rootScope.unreadMessages=data;
+        });
+    };
+
+    $scope.getUnreadMessages();
 });

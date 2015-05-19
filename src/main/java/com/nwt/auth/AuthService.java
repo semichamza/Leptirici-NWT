@@ -20,11 +20,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.*;
 import java.util.ResourceBundle;
-
 @Path("login")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class AuthService {
     @Context
@@ -35,6 +35,8 @@ public class AuthService {
     @Log
     private Logger logger;
 
+    static byte[] bytes;
+    static byte[] bytes1;
 
     @POST
     public Response login(AuthParameter authParameter) {
@@ -44,18 +46,16 @@ public class AuthService {
 
             User user = entityFacade.getUserByUsername(authParameter.getUsername());
             UserPrincipal principal = user.getUserPrincipal();
-            if (principal == null || !user.getActive() || !principal.getPasswordHash()
+            if (principal == null ||!user.getActive() || !principal.getPasswordHash()
                     .equals(DigestUtils.md5Hex(authParameter.getPassword())))
             {
                 return ResponseMessages.INVALID_LOGIN.getResponse();
+            }else if(user.getBlocked())
+            {
+                return ResponseMessages.USER_BLOCKED.getResponse();
             }
-            //999999999L trajanje tokena u minutama
-            auth.setJwt(
-                    AuthHelper.createJsonWebToken(principal.getUsername(), principal.getPasswordHash(), 999999999L));
-            auth.setMessage(resourceBundle.getString("messageSuccess"));
-            auth.setIsAutorized(true);
-            auth.setName(principal.getUsername());
-            auth.setId(user.getId().toString());
+            auth.setJwt(AuthHelper.createJsonWebToken(principal.getUsername(), principal.getPasswordHash(), 999999999L));
+            auth.setUser(user);
             return Response.ok(auth).build();
 
         } catch (Exception e) {

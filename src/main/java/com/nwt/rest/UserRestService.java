@@ -13,6 +13,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by glasshark on 23-Mar-15.
@@ -82,10 +85,13 @@ public class UserRestService
     @PUT
     public Response updateUser(User user)
     {
-        userById(user.getId());     //TODO: bolje implementirat validatore!
-        user = entityFacade.updateUser(user);
-        logger.debug("Updated user  - " + user.toString());
-        return Response.ok(user).build();
+        User orginUser=userById(user.getId());     //TODO: bolje implementirat validatore!
+        orginUser.setFirstName(user.getFirstName());
+        orginUser.setLastName(user.getLastName());
+        orginUser.setEmail(user.getEmail());
+        orginUser = entityFacade.updateUser(orginUser);
+        logger.debug("Updated user  - " + orginUser.toString());
+        return Response.ok(orginUser).build();
     }
 
     @DELETE
@@ -114,7 +120,9 @@ public class UserRestService
     @Path("/search/{text}")
     public Response searchUsers(@PathParam ("text") String text)
     {
-        return Response.ok(entityFacade.searchUsers(text)).build();
+        Users users = entityFacade.searchUsers(text);
+        logger.debug("getAllUsers() returned " + users.size() + " object(s).");
+        return Response.ok(users).build();
     }
 
     @GET
@@ -173,4 +181,101 @@ public class UserRestService
         logger.debug("getAllUserComments() not implemented yet");
         return null;
     }
+
+    @PUT
+    @Path ("/block/{id}")
+    public Response blockUser(@PathParam ("id") Integer userId)
+    {
+        User user=entityFacade.getUserById(userId);
+        user.setBlocked(true);
+        entityFacade.updateUser(user);
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path ("/block")
+    public Response blockUsers(Users users)
+    {
+       for(User tempUser:users.getUsers())
+       {
+           User user=entityFacade.getUserById(Integer.valueOf(tempUser.getId()));
+           user.setBlocked(true);
+           entityFacade.updateUser(user);
+       }
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path ("unblock")
+    public Response unblockUsers(Users users)
+    {
+        for(User tempUser:users.getUsers())
+        {
+            User user=entityFacade.getUserById(Integer.valueOf(tempUser.getId()));
+            user.setBlocked(false);
+            entityFacade.updateUser(user);
+        }
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path ("/unblock/{id}")
+    public Response unblockUser(@PathParam ("id") Integer userId)
+    {
+        User user=entityFacade.getUserById(userId);
+        user.setBlocked(false);
+        entityFacade.updateUser(user);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path ("/messages/send")
+    public Response sendMessage(Message message)
+    {
+        message.setId(null);
+        message.setSeen(false);
+        message.setDate(new Date());
+        message=entityFacade.createMessage(message);
+        return Response.ok(message).build();
+    }
+
+    @GET
+    @Path ("/{id}/messages")
+    public Response getMessages(@PathParam("id")Integer userId)
+    {
+        Messages messages=entityFacade.getUserMessage(userId);
+        Collections.reverse(messages);
+        return Response.ok(messages).build();
+    }
+
+    @GET
+    @Path ("/{id}/sentmessages")
+    public Response getSentMessages(@PathParam("id")Integer userId)
+    {
+        Messages messages=entityFacade.getUserSentMessage(userId);
+        Collections.reverse(messages);
+        return Response.ok(messages).build();
+    }
+    @GET
+    @Path ("/{id}/messages/unread")
+    public Response getUnreadMesages(@PathParam("id")Integer userId)
+    {
+        Messages messages=entityFacade.getUnreadMessages(userId);
+        Collections.reverse(messages);
+        return Response.ok(messages).build();
+    }
+
+    @PUT
+    @Path ("/{id}/messages/readAll")
+    public Response readAllMessages(@PathParam("id")Integer userId)
+    {
+        Messages messages=entityFacade.getUnreadMessages(userId);
+        for(Message message:messages)
+        {
+            message.setSeen(true);
+            entityFacade.updateMessage(message);
+        }
+        return Response.ok().build();
+    }
+
 }

@@ -18,8 +18,8 @@ import javax.ws.rs.core.UriInfo;
  * Created by glasshark on 23-Mar-15.
  */
 @Path ("projects")
-@Produces ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Consumes ({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces (MediaType.APPLICATION_JSON)
+@Consumes (MediaType.APPLICATION_JSON)
 @Stateless
 public class ProjectRestService
 {

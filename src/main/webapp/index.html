@@ -21,11 +21,14 @@
     <!-- Custom Fonts -->
     <link href="style/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <script data-require="jquery@*" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="lib/dependencies/angular.min.js"></script>
-    <script src="lib/ui-bootstrap-tpls-0.13.0.min.js"></script>
+    <script src="lib/dependencies/angular.js"></script>
+    <script src="lib/ui-bootstrap-tpls-0.13.0.js"></script>
     <script src="lib/dependencies/angular-cookies.min.js"></script>
     <script data-require="angular-route@*" data-semver="1.4.0-beta.6"
             src="https://code.angularjs.org/1.4.0-beta.6/angular-route.js"></script>
+    <script src="lib/angular-resource.js"></script>
+    <script src="lib/Chart.js"></script>
+    <script src="lib/angular-chart.js"></script>
     <script src="lib/dependencies/translate/angular-translate.js"></script>
     <script src="script/app.js"></script>
     <script src="script/Translate.js"></script>
@@ -44,10 +47,15 @@
     <script src="script/controllers/RegistrationController.js"></script>
     <script src="script/controllers/NavigationController.js"></script>
     <script src="script/controllers/DashboardController.js"></script>
+    <script src="script/controllers/DashboardAdminController.js"></script>
     <script src="script/controllers/ProjectController.js"></script>
     <script src="script/controllers/TaskController.js"></script>
     <script src="script/controllers/ResetController.js"></script>
     <script src="script/controllers/ProjectDetailsController.js"></script>
+    <script src="script/controllers/UserSettings.js"></script>
+    <script src="script/controllers/UserMessageController.js"></script>
+    <script src="script/controllers/StatisticsController.js"></script>
+    <script src="script/controllers/ChartControllers.js"></script>
 
     <script src="script/controllers/MessageConroller.js"></script>
     <!--CONTROLLERS-->
@@ -56,7 +64,7 @@
 
 <body ng-controller="MainController">
 
-    <div ng-view></div>
+<div ng-view></div>
 
     <script src="lib/jquery.js"></script>
 

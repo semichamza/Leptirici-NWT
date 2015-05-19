@@ -21,8 +21,8 @@ import java.net.URI;
  * Created by glasshark on 23-Mar-15.
  */
 @Path("tasks")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class TaskRestService {
     @Context

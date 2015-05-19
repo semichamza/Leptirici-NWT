@@ -3,7 +3,7 @@
  */
 var token = "";
 
-var app = angular.module('app', ['ngRoute', 'ngCookies', 'pascalprecht.translate']);
+var app = angular.module('app', ['ngRoute', 'ngCookies', 'pascalprecht.translate','ui.bootstrap','ngResource','chart.js']);
 
 app.factory('myHttpInterceptor', function ($q, $rootScope) {
     return {
@@ -12,27 +12,69 @@ app.factory('myHttpInterceptor', function ($q, $rootScope) {
             return config || $q.when(config);
         },
         responseError: function (response) {
-            alert("GreskaInterceptor");
             $rootScope.setDangerMessage(response.data.code);
             return $q.reject(response);
         }
     }
 });
-
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    scope.$apply(function () {
+                        scope.fileread = loadEvent.target.result;
+                    });
+                }
+                reader.readAsDataURL(changeEvent.target.files[0]);
+            });
+        }
+    }
+}]);
 app.run(function ($rootScope, $location, authService) {
 
-    var userProfile = authService.getAuthorization();
+    var authData = authService.getAuthorization();
+    $rootScope.authData = {
+        jwt: null,
+        user: {
+            "id": '',
+            "userPrincipal": {
+                "username": "",
+                "passwordHash": "",
+                "userRole": ""
+            },
+            "firstName": "",
+            "lastName": "",
+            "active": "",
+            "blocked": "",
+            "email": ""
+        }
+    };
+    $rootScope.unreadMessages=[];
 
-    if (userProfile) {
-        $rootScope.user = {
-            jwt: userProfile.jwt,
-            id:userProfile.id,
-            name: userProfile.name,
-            isAuth: true
+    $rootScope.showTabs=function(user){
+        $rootScope.tabs={
+            dashboard:user.userPrincipal.userRole=='NORMAL',
+            projects:user.userPrincipal.userRole=='NORMAL',
+            tasks:user.userPrincipal.userRole=='NORMAL',
+            dashboardAdmin:user.userPrincipal.userRole=='ADMINISTRATOR',
+            statistics:user.userPrincipal.userRole=='ADMINISTRATOR'
         };
+    };
+
+    if (authData) {
+        $rootScope.authData = {
+            jwt: authData.jwt,
+            user:authData.user
+        };
+        $rootScope.showTabs($rootScope.authData.user);
         $location.path("dashboard");
     } else {
-        $rootScope.user=null;
+        $rootScope.authData=null;
     }
 
     $rootScope.message={
@@ -63,7 +105,7 @@ app.run(function ($rootScope, $location, authService) {
 
     $rootScope.$on("$stateChangeStart", function (event, toState) {
         if (toState.access.requiresLogin) {
-            if (!userProfile) {
+            if (!authData) {
                 event.preventDefault();
                 alert('state1');
             } else {
@@ -71,6 +113,7 @@ app.run(function ($rootScope, $location, authService) {
             }
         }
     })
+
 
 });
 

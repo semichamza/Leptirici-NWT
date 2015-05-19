@@ -14,6 +14,18 @@ app.config(function ($routeProvider, $httpProvider) {
         .when("/dashboard",{
             templateUrl:"dashboard.html"
         })
+        .when("/statistics",{
+            templateUrl:"statistics.html"
+        })
+        .when("/messages",{
+            templateUrl:"userMessages.html"
+        })
+        .when("/userSettings",{
+            templateUrl:"userSettings.html"
+        })
+        .when("/dashboardAdmin",{
+            templateUrl:"dashboardAdmin.html"
+        })
         .when("/projects",{
             templateUrl:"projects.html"
         })

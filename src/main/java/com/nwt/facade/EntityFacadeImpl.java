@@ -68,11 +68,48 @@ public class EntityFacadeImpl implements EntityFacade
     }
 
     @Override
+    public Message createMessage(Message message) {
+        em.persist(message);
+        assertNotNull(message.getId());
+        return message;
+    }
+
+    @Override
+    public Message updateMessage(Message message) {
+        em.merge(message);
+        assertNotNull(message.getId());
+        return message;
+    }
+
+    @Override
+    public Messages getUserMessage(Integer userId) {
+        TypedQuery<Message> query = em.createNamedQuery(Message.USER_MESSAGES, Message.class);
+        query.setParameter(Message.USER_MESSAGE_RECEIVER_PARAM, userId);
+        return new Messages(query.getResultList());
+    }
+
+    @Override
+    public Messages getUserSentMessage(Integer userId) {
+        TypedQuery<Message> query = em.createNamedQuery(Message.USER_SENT_MESSAGES, Message.class);
+        query.setParameter(Message.USER_MESSAGE_SENDER_PARAM, userId);
+        return new Messages(query.getResultList());
+    }
+
+    @Override
+    public Messages getUnreadMessages(Integer userId) {
+        TypedQuery<Message> query = em.createNamedQuery(Message.USER_MESSAGES_UNREAD, Message.class);
+        query.setParameter(Message.USER_MESSAGE_RECEIVER_PARAM, userId);
+        return new Messages(query.getResultList());
+    }
+
+
+    @Override
     public Users searchUsers(String text)
     {
-        //Query query = em.createNamedQuery("findWithParam").setParameter("username", "admin");//.setMaxResults(3);
-        //TODO: Implement!
-        return null;
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_TEXT, User.class);
+        query.setParameter("text","%"+text+"%");
+        //CONCAT(u.firstName,' ' , u.lastName ,' ', u.userPrincipal.username)
+        return new Users(query.getResultList());
     }
 
     /**

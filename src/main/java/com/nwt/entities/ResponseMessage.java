@@ -3,7 +3,12 @@ package com.nwt.entities;
 /**
  * Created by Jasmin on 21-Apr-15.
  */
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.ws.rs.core.Response;
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "code", scope = ResponseMessage.class)
 public class ResponseMessage {
     private String code;
     private String message;
@@ -48,6 +53,7 @@ public class ResponseMessage {
         this.message = message;
     }
 
+    @JsonIgnore
     public Response getResponse()
     {
         return Response.status(status).entity(this).build();

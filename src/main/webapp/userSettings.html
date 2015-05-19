@@ -1,0 +1,56 @@
+<div id="wrapper">
+    <div ng-include="'navigation.html'"></div>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <!--HEADER-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1>
+                            {{navigation.header}}
+                            <small>{{navigation.subHeader}}</small>
+                        </h1>
+                    </div>
+                    <div class="col-md-6" ng-show="message.text">
+                        <div ng-include="'messageBox.html'"></div>
+                    </div>
+                </div>
+                <!--BODY-->
+                <div ng-controller="UserSettings">
+                    <form role="form" ng-submit="update()">
+
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input ng-model="tempUser.firstName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input ng-model="tempUser.lastName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input ng-model="tempUser.email"  class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-default">Submit Button</button>
+                        <button type="reset" class="btn btn-default">Reset Button</button>
+
+                    </form>
+
+                    <!--<br><br>-->
+                    <!--<form method="post" action="UploadServlet"-->
+                          <!--enctype="multipart/form-data">-->
+                        <!--Select file to upload: <input type="file" name="file" size="60" /><br />-->
+                        <!--<br /> <input type="submit" value="Upload" />-->
+                    <!--</form>-->
+
+                </div>
+                <!--BODY-->
+            </div>
+        </div>
+
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>

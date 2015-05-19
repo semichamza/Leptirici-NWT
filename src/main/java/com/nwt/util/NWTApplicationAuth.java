@@ -1,5 +1,6 @@
 package com.nwt.util;
 
+import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.ApplicationPath;
@@ -10,6 +11,8 @@ import javax.ws.rs.ApplicationPath;
 @ApplicationPath("auth")
 public class NWTApplicationAuth extends ResourceConfig {
     public NWTApplicationAuth() {
-        packages("com.nwt.auth");
+        register(DeclarativeLinkingFeature.class);
+        register(JacksonFeature.class);
+        packages("com.nwt.auth","com.nwt.entities", "com.nwt.rest", "com.nwt.util");
     }
 }
