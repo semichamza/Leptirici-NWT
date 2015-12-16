@@ -1,6 +1,7 @@
 package com.nwt.auth;
 
 import com.nwt.auth.entities.VerificationToken;
+import com.nwt.entities.ConfigConstants;
 import com.nwt.entities.User;
 import com.nwt.enums.ActionTypeEnum;
 import com.nwt.enums.TokenStatusEnum;
@@ -47,7 +48,10 @@ public class ResetConfirmServlet extends HttpServlet {
         user.getUserPrincipal().setPassword(newPass);
         entityFacade.updateUser(user);
 
-        boolean sent = Mailer.sendNewPassword("jasmin.kaldzija@gmail.com", newPass);
+        String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
+        String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
+        Mailer mailer=new Mailer(mail,password);
+        boolean sent = mailer.sendNewPassword("jasmin.kaldzija@gmail.com", newPass);
 
         if (sent) {
             token.setTokenStatus(TokenStatusEnum.USED);

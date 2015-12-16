@@ -2,9 +2,10 @@
  * Created by Jasmin on 16-Apr-15.
  */
 app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
-    var UserApiURL = "/PMS-NWT/rest/users";
-    var ProjectApiURL = "/PMS-NWT/rest/projects";
-    var TaskApiURL = "/PMS-NWT/rest/tasks";
+    var UserApiURL = "/PMS-NSI/rest/users";
+    var ProjectApiURL = "/PMS-NSI/rest/projects";
+    var TaskApiURL = "/PMS-NSI/rest/tasks";
+    var ConfigApiURL = "/PMS-NSI/rest/config";
     var pmsService={};
 
      var _postData = function (path, data) {
@@ -49,11 +50,31 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     var _getUsers=function(){
         return _getData(UserApiURL);
     };
-    var _searchUsers=function(text){
-        return _getData(UserApiURL+"/search/"+text);
+    var _getDeletedUsers=function(){
+        return _getData(UserApiURL+"/deleted");
+    };
+    var _searchUsers=function(text,deleted){
+        return _getData(UserApiURL+"/search/"+text+"/"+deleted);
+    };
+    var _searchConfigs=function(text){
+        return _getData(ConfigApiURL+"/search/"+text);
+    };
+    var _removeUser=function(projectId,userId){
+        return _putData(ProjectApiURL+"/"+projectId+"/users/"+userId+"/delete");
+    };
+
+    var _getUserRole=function(projectId,userId){
+        return _getData(ProjectApiURL+"/"+projectId+"/users/"+userId+"/role");
     };
     var _getProject=function(id){
         return _getData(ProjectApiURL+"/"+id);
+    };
+
+    var _createProject=function(project){
+        return _postData(ProjectApiURL,project);
+    };
+    var _createTask=function(task){
+        return _postData(TaskApiURL,task);
     };
 
     var _getProjects=function(id){
@@ -67,6 +88,23 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     var _getProjectTasks=function(id){
         return _getData(ProjectApiURL+"/"+id+"/tasks");
     };
+
+    var _getProjectUsers=function(id){
+        return _getData(ProjectApiURL+"/"+id+"/users");
+    };
+
+    var _getFreeUsers=function(id){
+        return _getData(ProjectApiURL+"/"+id+"/users/free");
+    };
+
+    var _getConfigs=function(){
+        return _getData(ConfigApiURL);
+    };
+
+    var _addUserToProject=function(projectId,userId,projectRole){
+        return _postData(ProjectApiURL+"/"+projectId+"/addUser?userId="+userId+"&projectRole="+projectRole);
+    };
+
     var _blockUser=function(id){
         return _putData(UserApiURL+"/block/"+id,'{}');
     };
@@ -79,10 +117,25 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     var _unblockUsers=function(users){
         return _putData(UserApiURL+"/unblock",users);
     };
+    var _deleteUsers=function(users){
+        return _putData(UserApiURL+"/delete",users);
+    };
+    var _revertUsers=function(users){
+        return _putData(UserApiURL+"/revert",users);
+    };
     var _updateUser=function(user){
         return _putData(UserApiURL,user);
     };
 
+    var _updateTask=function(task){
+        return _putData(TaskApiURL,task);
+    };
+    var _updateProject=function(project){
+        return _putData(ProjectApiURL,project);
+    };
+    var _updateConfigs=function(configs){
+        return _putData(ConfigApiURL,configs);
+    };
     var _getUserMessages=function(userId){
         return _getData(UserApiURL+"/"+userId+"/messages");
     };
@@ -97,6 +150,7 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     var _readAllMessages=function(userId){
         return _putData(UserApiURL+"/"+userId+"/messages/readAll","");
     };
+
     var _sendMessage=function(sender,receiver,text){
         console.log(sender);
         console.log(receiver);
@@ -122,17 +176,31 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     pmsService.readAllMessages=_readAllMessages;
     pmsService.blockUsers=_blockUsers;
     pmsService.unblockUsers=_unblockUsers;
+    pmsService.deleteUsers=_deleteUsers;
+    pmsService.revertUsers=_revertUsers;
     pmsService.updateUser=_updateUser;
     pmsService.searchUsers=_searchUsers;
     pmsService.unblockUser=_unblockUser;
     pmsService.getUser=_getUser;
     pmsService.getUsers=_getUsers;
+    pmsService.getDeletedUsers=_getDeletedUsers;
     pmsService.getUserData=_getUserData;
     pmsService.getProjects=_getProjects;
     pmsService.getProject=_getProject;
+    pmsService.createProject=_createProject;
+    pmsService.createTask=_createTask;
     pmsService.getTask=_getTask;
     pmsService.getProjectTasks=_getProjectTasks;
-
+    pmsService.getProjectUsers=_getProjectUsers;
+    pmsService.getFreeUsers=_getFreeUsers;
+    pmsService.addUserToProject=_addUserToProject;
+    pmsService.getConfigs=_getConfigs;
+    pmsService.updateConfigs=_updateConfigs;
+    pmsService.searchConfigs=_searchConfigs;
+    pmsService.removeUser=_removeUser;
+    pmsService.getUserRole=_getUserRole;
+    pmsService.updateTask=_updateTask;
+    pmsService.updateProject=_updateProject;
     return pmsService;
 
 

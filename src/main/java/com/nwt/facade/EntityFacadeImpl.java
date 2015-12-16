@@ -7,6 +7,7 @@ import com.nwt.entities.*;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -27,6 +28,14 @@ public class EntityFacadeImpl implements EntityFacade
     public Users getAllUsers()
     {
         TypedQuery<User> query = em.createNamedQuery(User.FIND_ALL, User.class);
+        query.setParameter("deleted",false);
+        return new Users(query.getResultList());
+    }
+
+    @Override
+    public Users getAllDeletedUsers() {
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_ALL, User.class);
+        query.setParameter("deleted",true);
         return new Users(query.getResultList());
     }
 
@@ -104,12 +113,22 @@ public class EntityFacadeImpl implements EntityFacade
 
 
     @Override
-    public Users searchUsers(String text)
+    public Users searchUsers(String text,boolean deleted)
     {
         TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_TEXT, User.class);
         query.setParameter("text","%"+text+"%");
+        query.setParameter("deleted",deleted);
         //CONCAT(u.firstName,' ' , u.lastName ,' ', u.userPrincipal.username)
         return new Users(query.getResultList());
+    }
+
+    @Override
+    public ConfigProperties searchConfigs(String text)
+    {
+        TypedQuery<ConfigProperty> query = em.createNamedQuery(ConfigProperty.FIND_BY_TEXT, ConfigProperty.class);
+        query.setParameter("text","%"+text+"%");
+        //CONCAT(u.firstName,' ' , u.lastName ,' ', u.userPrincipal.username)
+        return new ConfigProperties(query.getResultList());
     }
 
     /**
@@ -257,4 +276,53 @@ public class EntityFacadeImpl implements EntityFacade
     public void deleteToken(VerificationToken token) {
         em.remove(token);
     }
+
+    @Override
+    public ConfigProperties getConfigProperties() {
+        TypedQuery<ConfigProperty> query = em.createNamedQuery(ConfigProperty.FIND_ALL, ConfigProperty.class);
+        return new ConfigProperties(query.getResultList());
+    }
+
+    @Override
+    public ConfigProperties updateProperties(ConfigProperties properties) {
+       for(ConfigProperty property:properties)
+       {
+           em.merge(property);
+           assertNotNull(property.getId());
+       }
+
+        return properties;
+    }
+
+    @Override
+    public ConfigProperty getConfigProperty(String id)
+    {
+        return em.find(ConfigProperty.class,id);
+    }
+
+
+    @Override
+    public Users getProjectUsers(Project project)
+    {
+        TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_PROJECT_ID, User.class);
+        query.setParameter("projectId",project.getId());
+        return new Users(query.getResultList());
+    }
+
+    @Override
+    public Users getFreeUsers(Project project) {
+        TypedQuery<User> query = em.createNamedQuery(User.UNLONKED_USERS, User.class);
+        query.setParameter("projectId",project.getId());
+        return new Users(query.getResultList());
+    }
+
+    @Override
+    public void removeUserFromProject(ProjectUser projectUser)
+    {
+        Query query = em.createNamedQuery(User.DELETE_FROM_PROJECT);
+        query.setParameter("projectId",projectUser.getProjectId());
+        query.setParameter("userId",projectUser.getUserId());
+        query.executeUpdate();
+    }
+
 }

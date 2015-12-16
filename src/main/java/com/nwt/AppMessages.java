@@ -7,4 +7,6 @@ public class AppMessages {
     public static final String INVALID_LOGIN="Invalid username or password";
     public static final String INVALID_USERNAME="Invalid username";
     public static final String USER_BLOCKED="User blocked";
+    public static final String PROJECT_EXIST="Project exist";
+    public static final String USER_DELETED="User deleted";
 }

@@ -1,73 +1,85 @@
 package com.nwt.mailer;
 
+import com.nwt.facade.EntityFacade;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 public class Mailer {
-    private static String APP_URL = "http://localhost:8080/PMS-NWT";
+   private String registrationMail;
+   private String password;
 
-    public static boolean sendActivationMail(String email, String token) {
-        MessageBody messageBody = new MessageBody("NWT-Leptirici", "Activation mail");
+    private String APP_URL = "http://localhost:18080/PMS-NSI";
+
+    public Mailer(String registrationMail, String password) {
+        this.registrationMail = registrationMail;
+        this.password = password;
+    }
+
+    public boolean sendActivationMail(String email, String token) {
+        MessageBody messageBody = new MessageBody("NSI - Registration", "Activation mail");
         messageBody.addParagraph(" ");
         messageBody.addParagraph("<a href=\"" + APP_URL + "/auth/user/activate/" + token + "\">Activate</a>");
         return sendEmail(email, messageBody);
     }
 
-    public static boolean sendRecoveryMail(String email, String token) {
-        MessageBody messageBody = new MessageBody("NWT-Leptirici", "Recovery mail");
+    public boolean sendRecoveryMail(String email, String token) {
+        MessageBody messageBody = new MessageBody("NSI - Recovery", "Recovery mail");
         messageBody.addParagraph(" ");
         messageBody.addParagraph("<a href=\"" + APP_URL + "/resetConfirmation?id=" + token + "\">Reset</a>");
         return sendEmail(email, messageBody);
     }
 
-    public static boolean sendNewPassword(String email, String pass) {
-        MessageBody messageBody = new MessageBody("NWT-Leptirici", "New password");
+    public boolean sendNewPassword(String email, String pass) {
+        MessageBody messageBody = new MessageBody("NSI", "New password");
         messageBody.addParagraph(" ");
         messageBody.addParagraph("Your new password: <b>" + pass + "</b>");
         return sendEmail(email, messageBody);
     }
 
-    public static boolean sendEmail(String mailTo, MessageBody messageBody, MailerAttachmentImpl attachment)
+    public boolean sendEmail(String mailTo, MessageBody messageBody, MailerAttachmentImpl attachment)
     {
         List<String> mails = new ArrayList<String>();
         mails.add(mailTo);
         return sendEmail(mails, messageBody, attachment);
     }
 
-    public static boolean sendEmail(String mailTo, MessageBody messageBody) {
+    public boolean sendEmail(String mailTo, MessageBody messageBody) {
         List<String> mails = new ArrayList<String>();
         mails.add(mailTo);
         return sendEmail(mails, messageBody, new ArrayList<MailerAttachmentImpl>());
     }
 
-    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody) {
+    public boolean sendEmail(List<String> mailTo, MessageBody messageBody) {
         return sendEmail(mailTo, messageBody, new ArrayList<MailerAttachmentImpl>());
     }
 
-    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody, MailerAttachmentImpl attachment)
+    public boolean sendEmail(List<String> mailTo, MessageBody messageBody, MailerAttachmentImpl attachment)
     {
         List<MailerAttachmentImpl> attachments = new ArrayList<MailerAttachmentImpl>();
         attachments.add(attachment);
         return sendEmail(mailTo, messageBody, attachments);
     }
 
-    public static boolean sendEmail(List<String> mailTo, MessageBody messageBody,
+    public boolean sendEmail(List<String> mailTo, MessageBody messageBody,
                                     List<MailerAttachmentImpl> attachments)
     {
         // Sender's email ID needs to be mentioned
         try {
 
             Boolean auth = true;
-            String from = "leptirici.nwt@gmail.com";
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.gmail.com");
             props.put("mail.smtp.auth", "true");
@@ -75,8 +87,8 @@ public class Mailer {
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.port", "587");
 
-            final String username = from;
-            final String password = "sinansakic";
+            final String username = registrationMail;
+            final String password = this.password;
             Session session;
             if (auth) {
                 session = Session.getInstance(props,
@@ -92,7 +104,7 @@ public class Mailer {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
             // Set From: header field of the header.
-            message.setFrom(new InternetAddress(from));
+            message.setFrom(new InternetAddress(registrationMail));
             // Set To: header field of the header.
             InternetAddress[] addressTo = new InternetAddress[mailTo.size()];
             for (int i = 0; i < mailTo.size(); i++) {

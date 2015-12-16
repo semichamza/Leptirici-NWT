@@ -32,7 +32,7 @@
                 $scope.clear();
                 return;
             }
-            pmsService.searchUsers($scope.searchParameter).success(function(data){
+            pmsService.searchUsers($scope.searchParameter,"notDeleted").success(function(data){
                 $scope.users=data;
                 var i;
                 for(i=0;i<$scope.users.length;i++)
@@ -64,6 +64,32 @@
                         $scope.users[i].tr_class='';
                     }
                 }
+            });
+        };
+
+        $scope.globalDelete=function(){
+            var items=$('#selectedItems').text();
+            var userIds=items.substr(0,items.length-1).split(',');
+            if(!userIds.length>0 || !items.length>0)
+                return;
+            var users=[];
+            for(var i=0;i<userIds.length;i++)
+            {
+                var id=userIds[i];
+                var user={"id":id};
+                users.push(user);
+            }
+            pmsService.deleteUsers(users).success(function(){
+                $rootScope.setInfoMessage('USERS_UPDATED') ;
+                var i;
+                for(i=0;i<$scope.users.length;i++)
+                {
+                    if(userIds.indexOf($scope.users[i].id+'')>-1)
+                    {
+                        $scope.users[i].tr_class='';
+                    }
+                }
+                $scope.loadUsers();
             });
         };
 

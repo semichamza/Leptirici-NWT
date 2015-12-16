@@ -4,6 +4,8 @@ import com.nwt.entities.*;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -12,6 +14,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +43,15 @@ public class UserRestService
     public Response getAllUsers()
     {
         Users users = entityFacade.getAllUsers();
+        logger.debug("getAllUsers() returned " + users.size() + " object(s).");
+        return Response.ok(users).build();
+    }
+
+    @GET
+    @Path("/deleted")
+    public Response getAllDeletedUsers()
+    {
+        Users users = entityFacade.getAllDeletedUsers();
         logger.debug("getAllUsers() returned " + users.size() + " object(s).");
         return Response.ok(users).build();
     }
@@ -117,10 +131,11 @@ public class UserRestService
 
     //    TODO: Dodat vise parametara pretrage
     @GET
-    @Path("/search/{text}")
-    public Response searchUsers(@PathParam ("text") String text)
+    @Path("/search/{text}/{deleted}")
+    public Response searchUsers(@PathParam ("text") String text,@PathParam ("deleted") String deleted)
     {
-        Users users = entityFacade.searchUsers(text);
+        boolean isDeleted=deleted.equals("deleted");
+        Users users = entityFacade.searchUsers(text,isDeleted);
         logger.debug("getAllUsers() returned " + users.size() + " object(s).");
         return Response.ok(users).build();
     }
@@ -219,6 +234,32 @@ public class UserRestService
     }
 
     @PUT
+    @Path ("delete")
+    public Response deleteUsers(Users users)
+    {
+        for(User tempUser:users.getUsers())
+        {
+            User user=entityFacade.getUserById(Integer.valueOf(tempUser.getId()));
+            user.setDeleted(true);
+            entityFacade.updateUser(user);
+        }
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path ("revert")
+    public Response revertUsers(Users users)
+    {
+        for(User tempUser:users.getUsers())
+        {
+            User user=entityFacade.getUserById(Integer.valueOf(tempUser.getId()));
+            user.setDeleted(false);
+            entityFacade.updateUser(user);
+        }
+        return Response.ok().build();
+    }
+
+    @PUT
     @Path ("/unblock/{id}")
     public Response unblockUser(@PathParam ("id") Integer userId)
     {
@@ -277,5 +318,4 @@ public class UserRestService
         }
         return Response.ok().build();
     }
-
 }

@@ -16,4 +16,11 @@ public class ResponseMessages {
 
     public static final ResponseMessage
             USER_BLOCKED=new ResponseMessage(Status.BAD_REQUEST,"3", AppMessages.USER_BLOCKED);
+
+    public static final ResponseMessage
+            PROJECT_EXIST=new ResponseMessage(Status.BAD_REQUEST,"4", AppMessages.PROJECT_EXIST);
+
+    public static final ResponseMessage
+            USER_DELETED=new ResponseMessage(Status.BAD_REQUEST,"5", AppMessages.USER_DELETED);
+
 }

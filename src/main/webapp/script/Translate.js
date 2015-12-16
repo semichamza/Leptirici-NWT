@@ -16,10 +16,14 @@ app.config( function ($translateProvider) {
         'MESSAGE_LABEL':'Message:',
         'EMPTY_SUBHEADER':'',
         'DASHBOADR_LABEL':'Dashboard',
+        'DELETED_USERS_LABEL':'Deleted users',
+        'CONFIG_LABEL':'Control panel',
         'STATISTICS_LABEL':'Statistics',
         'SETTINGS':'Settings',
         'MESSAGES':'Messages',
         'MESSAGE_SENT':'Message sent',
+        'PROJECT_CREATED':'Project created',
+        'TASK_CREATED':'Task created',
         'NEW_MESSAGE':'New message',
         'MESSAGE':'Message',
         'SEND':'Send',
@@ -34,9 +38,11 @@ app.config( function ($translateProvider) {
         'INVALID_LOGIN':'Invalid username or password',
         'USER_BLOCKED':'User blocked',
         'USER_UNBLOCKED':'User unblocked',
+        'USERS_UPDATED':'Users updated',
         '1':'Invalid username or password',
         '2':'Invalid username',
         '3':'Your account is blocked',
+        '5':'Your account has been deleted',
         'TO_LABEL':'To',
         'NO_MESSAGES':'No messages',
         'TASKS_PER_PROJECT':'Tasks per project',
@@ -48,7 +54,10 @@ app.config( function ($translateProvider) {
         'MESSAGE_FOR_USER':"Number of user messages",
         'MESSAGES_FOR_USER_DETAILS':'Shows number of send received and sent messages for selected user',
         'MESSAGES_FOR_USERS_DETAILS':'Shows number of send received and sent messages for all users',
-        'MODAL_HEADER_RESET_PASSWORD':'Reset password'
+        'MODAL_HEADER_RESET_PASSWORD':'Reset password',
+        'CONFIGS_UPDATED':'Configuration updated',
+        'TASK_EDITED':'Task updated',
+        'PROJECT_EDITED':'Project updated'
     });
 
     $translateProvider.translations('en', {
@@ -92,6 +101,7 @@ app.config( function ($translateProvider) {
         '1':'Pogresano korisnicko ime ili sifra!',
         '2':'Pogresano korisnicko ime!',
         '3':'Vas racun je blokiran!',
+        '5':'Vas racun je obrisan!',
         'TASKS_PER_PROJECT':'Taskova po projektu',
         'DETAILS':'Detalji ',
         'TASKS_PER_PROJECT_DETAILS':"Prikazuje broj taskova koji su dodjeljenu projektu",
@@ -101,7 +111,15 @@ app.config( function ($translateProvider) {
         'MESSAGES_FOR_USER_DETAILS':'Prkazuje broj primljenih i poslanih poruka za izabranog korisnika',
         'MESSAGES_FOR_USERS_DETAILS':'Prkazuje broj primljenih i poslanih poruka za sve korisnike',
         'USER':'Korisnik',
-        'MODAL_HEADER_RESET_PASSWORD':'Resetovanje sifre'
+        'MODAL_HEADER_RESET_PASSWORD':'Resetovanje sifre',
+        'PROJECT_CREATED':'Projekat kreiran',
+        'CONFIG_LABEL':'Kontrolna ploča',
+        'CONFIGS_UPDATED':'Postavke azururane',
+        'TASK_CREATED':'Task created',
+        'TASK_EDITED':'Task created',
+        'DELETED_USERS_LABEL':'Obrisani korisnici',
+        'USERS_UPDATED':'Users updated',
+        'PROJECT_EDITED':'Project updated'
     });
 
     //$translateProvider.preferredLanguage($rootScope.currentLng);

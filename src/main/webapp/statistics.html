@@ -44,51 +44,6 @@
                     </div>
 
                     <!--NAVIGATION END-->
-                    <div class="row" ng-controller="BarCtrl">
-                        <div class="col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">{{'MESSAGE_FOR_USER'|translate}}</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div >
-                                        <canvas id="bar" class="chart chart-bar" data="data" series="series"
-                                                labels="labels"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h4>{{'DETAILS'|translate}}</h4>
-                            {{'MESSAGES_FOR_USER_DETAILS'|translate}}
-                            <br>
-                            <br>
-                            <label for="selectedUser1" class="control-label">{{'USER'|translate}}:</label>
-                            <select class="form-control" id="selectedUser1" ng-model="selectedUser" ng-options="user as (user.firstName+' '+user.lastName) for user in users" ng-change="refresh()"></select>
-
-                        </div>
-                    </div>
-
-                    <h1 class="page-header"></h1>
-                    <div class="row" ng-controller="BarCtrlAll">
-                        <div class="col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">{{'MESSAGE_FOR_USER'|translate}}</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div >
-                                        <canvas id="barAll" class="chart chart-bar" data="data" series="series"
-                                                labels="labels"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h4>{{'DETAILS'|translate}}</h4>
-                            {{'MESSAGES_FOR_USERS_DETAILS'|translate}}
-                        </div>
-                    </div>
 
                     <h1 class="page-header"></h1>
                     <div class="row" ng-controller="DoughnutCtrl">

@@ -3,7 +3,7 @@
  */
 app.service('authService', function ($http, $rootScope,$resource, $cookieStore,$location) {
     var authService = {};
-    var apiURL = "/PMS-NWT/auth";
+    var apiURL = "/PMS-NSI/auth";
 
     var _setAuthorization = function (authData) {
         $rootScope.authData=authData;

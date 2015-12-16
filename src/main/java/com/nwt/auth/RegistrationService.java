@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nwt.auth.entities.VerificationToken;
 import com.nwt.auth_entities.AuthParameterRegister;
+import com.nwt.entities.ConfigConstants;
 import com.nwt.entities.ResponseMessages;
 import com.nwt.entities.User;
 import com.nwt.entities.UserPrincipal;
@@ -69,8 +70,10 @@ public class RegistrationService {
             token.setUser(user);
             entityFacade.createToken(token);
 
-
-            boolean sent = Mailer.sendActivationMail(user.getEmail(), token.getId());
+            String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
+            String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
+            Mailer mailer=new Mailer(mail,password);
+            boolean sent = mailer.sendActivationMail(user.getEmail(), token.getId());
             if (!sent)
                 throw new WebApplicationException();
 
@@ -97,12 +100,13 @@ public class RegistrationService {
         //activate user
         User user = token.getUser();
         user.setActive(true);
+        user.setBlocked(false);
         entityFacade.updateUser(user);
 
         //disable token
         token.setTokenStatus(TokenStatusEnum.USED);
         entityFacade.updateToken(token);
-        return Response.temporaryRedirect(URI.create("/")).build();
+        return Response.temporaryRedirect(URI.create("/PMS-NSI")).build();
     }
 
     @PUT
@@ -121,8 +125,10 @@ public class RegistrationService {
             token.setUser(user);
             entityFacade.createToken(token);
 
-
-            boolean sent = Mailer.sendRecoveryMail("jasmin.kaldzija@gmail.com", token.getId());
+            String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
+            String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
+            Mailer mailer=new Mailer(mail,password);
+            boolean sent = mailer.sendRecoveryMail("jasmin.kaldzija@gmail.com", token.getId());
             if (!sent)
                 throw new WebApplicationException();
 

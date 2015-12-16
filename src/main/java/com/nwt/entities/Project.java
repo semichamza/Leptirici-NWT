@@ -27,7 +27,6 @@ public class Project implements Serializable
     private String description;
     private List<ProjectUser> projectUsers;
     private List<Task> tasks;
-
     @Id
     @GeneratedValue
     public Integer getId()
@@ -108,8 +107,19 @@ public class Project implements Serializable
         projectUsers.add(projectUser);
     }
 
-    @Override
+    @JsonIgnore
+   public ProjectUser getProjectUser(Integer id)
+    {
+        for(ProjectUser projectUser:projectUsers)
+        {
+            if(projectUser.getUserId().equals(id))
+                return projectUser;
+        }
 
+        return null;
+    }
+
+    @Override
     public String toString()
     {
         return "project name: " + name;

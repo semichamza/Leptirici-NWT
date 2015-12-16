@@ -22,9 +22,12 @@ import java.util.List;
 @Entity
 @Table (name = "users")
 @NamedQueries ({
-        @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u"),
+        @NamedQuery (name = User.FIND_ALL, query = "SELECT u FROM User u WHERE u.deleted=:deleted"),
         @NamedQuery (name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.userPrincipal.username = :username"),
-        @NamedQuery (name = User.FIND_BY_TEXT, query = "SELECT u FROM User u WHERE CONCAT(u.firstName,' ' , u.lastName ,' ', u.userPrincipal.username) like :text ")
+        @NamedQuery (name = User.FIND_BY_PROJECT_ID, query = "SELECT u FROM User u,ProjectUser up WHERE u.id=up.userId and up.projectId=:projectId"),
+        @NamedQuery (name = User.UNLONKED_USERS, query = "SELECT u FROM User u WHERE u.id NOT IN(SELECT up.userId FROM ProjectUser up where up.projectId=:projectId)"),
+        @NamedQuery (name = User.DELETE_FROM_PROJECT, query = "DELETE FROM ProjectUser where projectId=:projectId AND userId=:userId"),
+        @NamedQuery (name = User.FIND_BY_TEXT, query = "SELECT u FROM User u WHERE CONCAT(u.firstName,' ' , u.lastName ,' ', u.userPrincipal.username) like :text and u.deleted=:deleted")
 })
 @EntityListeners (LifeCycleListener.class)
 @JsonIdentityInfo (generator = JSOGGenerator.class)
@@ -33,6 +36,9 @@ public class User implements Serializable
     public static final String FIND_ALL = "User.findAll";
     public static final String FIND_BY_USERNAME = "User.findByUsername";
     public static final String FIND_BY_TEXT = "User.findByText";
+    public static final String FIND_BY_PROJECT_ID = "User.finByProjectId";
+    public static final String UNLONKED_USERS = "User.unlinked";
+    public static final String DELETE_FROM_PROJECT = "User.deleteFromProject";
 
     private Integer id;
     private UserPrincipal userPrincipal;
@@ -40,6 +46,7 @@ public class User implements Serializable
     private String lastName;
     private Boolean active;
     private Boolean blocked;
+    private Boolean deleted;
     private String email;
     private List<ProjectUser> projectUsers;
     private List<Task> tasks;
@@ -222,5 +229,14 @@ public class User implements Serializable
 
     public void setBlocked(Boolean blocked) {
         this.blocked = blocked;
+    }
+
+    @Column()
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

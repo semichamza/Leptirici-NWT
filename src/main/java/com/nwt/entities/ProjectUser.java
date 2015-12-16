@@ -93,4 +93,23 @@ public class ProjectUser implements Serializable
     {
         this.projectRole = projectRole;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProjectUser that = (ProjectUser) o;
+
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        return !(projectId != null ? !projectId.equals(that.projectId) : that.projectId != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (projectId != null ? projectId.hashCode() : 0);
+        return result;
+    }
 }

@@ -26,6 +26,12 @@ app.config(function ($routeProvider, $httpProvider) {
         .when("/dashboardAdmin",{
             templateUrl:"dashboardAdmin.html"
         })
+        .when("/configAdmin",{
+            templateUrl:"configAdmin.html"
+        })
+        .when("/deletedUsers",{
+            templateUrl:"deletedUsersAdmin.html"
+        })
         .when("/projects",{
             templateUrl:"projects.html"
         })

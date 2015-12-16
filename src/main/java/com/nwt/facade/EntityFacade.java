@@ -12,6 +12,8 @@ public interface EntityFacade
     //region USERS
     Users getAllUsers();
 
+    Users getAllDeletedUsers();
+
     User getUserById(Integer id);
 
     User getUserByUsername(String username);
@@ -32,8 +34,10 @@ public interface EntityFacade
 
     public Messages getUnreadMessages(Integer userId);
 
-    Users searchUsers(String text);
-    //endregion
+
+    Users searchUsers(String text, boolean deleted);
+
+    ConfigProperties searchConfigs(String text);
 
     //region PROJECTS
     Projects getAllProjects();
@@ -80,4 +84,16 @@ public interface EntityFacade
     VerificationToken createToken(VerificationToken token);
 
     void deleteToken(VerificationToken token);
+
+    ConfigProperties getConfigProperties();
+
+    ConfigProperties updateProperties(ConfigProperties properties);
+
+    ConfigProperty getConfigProperty(String id);
+
+    Users getProjectUsers(Project project);
+
+    Users getFreeUsers(Project project);
+
+    void removeUserFromProject(ProjectUser projectUser);
 }

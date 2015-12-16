@@ -1,5 +1,6 @@
 package com.nwt.auth;
 
+import com.nwt.entities.ConfigConstants;
 import com.nwt.entities.ResponseMessages;
 import com.nwt.auth.entities.AuthParameter;
 import com.nwt.auth.entities.AuthResponseObject;
@@ -20,7 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.*;
 import java.util.ResourceBundle;
 @Path("login")
 @Produces(MediaType.APPLICATION_JSON)
@@ -50,7 +50,11 @@ public class AuthService {
                     .equals(DigestUtils.md5Hex(authParameter.getPassword())))
             {
                 return ResponseMessages.INVALID_LOGIN.getResponse();
-            }else if(user.getBlocked())
+            }else if(user.getDeleted())
+            {
+                return ResponseMessages.USER_DELETED.getResponse();
+            }
+            else if(user.getBlocked())
             {
                 return ResponseMessages.USER_BLOCKED.getResponse();
             }
@@ -69,7 +73,10 @@ public class AuthService {
         MessageBody messageBody = new MessageBody("Test", "Test");
         messageBody.addParagraph("TestP");
 
-        boolean send = Mailer.sendEmail("jasmin.kaldzija@gmail.com", messageBody);
+        String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
+        String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
+        Mailer mailer=new Mailer(mail,password);
+        boolean send = mailer.sendEmail("jasmin.kaldzija@gmail.com", messageBody);
 
         return Response.ok().build();
     }

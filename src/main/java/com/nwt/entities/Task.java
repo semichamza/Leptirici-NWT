@@ -35,7 +35,7 @@ public class Task implements Serializable
     private Project project;
     private TaskStatusEnum taskStatus;
     private TaskPriorityEnum taskPriority;
-    private Calendar estimation;
+    private String dueDate;
     private List<Log> logs;
     private List<Comment> comments;
 
@@ -118,15 +118,6 @@ public class Task implements Serializable
     }
 
     //    @Temporal(TemporalType.TIME)
-    public Calendar getEstimation()
-    {
-        return estimation;
-    }
-
-    public void setEstimation(Calendar estimation)
-    {
-        this.estimation = estimation;
-    }
 
     @Enumerated (EnumType.STRING)
     public TaskStatusEnum getTaskStatus()
@@ -171,12 +162,20 @@ public class Task implements Serializable
 
     public void setComments(List<Comment> comments)
     {
-        this.comments = comments;
+        this.   comments = comments;
     }
 
     @Override
     public String toString()
     {
         return "task: " + name + "(id: " + id + ")";
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
     }
 }

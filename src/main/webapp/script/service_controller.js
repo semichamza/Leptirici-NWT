@@ -1,5 +1,5 @@
 (function () {
-    var url = "/PMS-NWT/rest/projects";
+    var url = "/PMS-NSI/rest/projects";
     var app = angular.module("Test", ['ngCookies']);
 
     var ProjectController = function ($scope, $http, $cookieStore) {
@@ -11,7 +11,7 @@
 
         $scope.selectChanged = function () {
             $http({
-                url: '/PMS-NWT/rest/tasks',
+                url: '/PMS-NSI/rest/tasks',
                 method: "GET",
                 data: {},
                 headers: {
@@ -32,7 +32,7 @@
             //});
 
             $http({
-                url: '/PMS-NWT/auth/login',
+                url: '/PMS-NSI/auth/login',
                 method: "POST",
                 data: {'username': $scope.loginUsername, 'password': $scope.loginPassword},
                 headers: {'Author': 'testawd', 'Accept': 'application/json', 'Content-Type': 'application/json'}
@@ -54,7 +54,7 @@
             //});
 
             $http({
-                url: '/PMS-NWT/auth/login',
+                url: '/PMS-NSI/auth/login',
                 method: "POST",
                 data: {'username': $scope.loginUsername, 'password': $scope.loginPassword},
                 headers: {'Author': 'testawd', 'Accept': 'application/json', 'Content-Type': 'application/json'}
@@ -82,7 +82,7 @@
                 'password': $scope.newPassword
             };
             $http({
-                url: '/PMS-NWT/auth/user/register',
+                url: '/PMS-NSI/auth/user/register',
                 method: "POST",
                 data: regData,
                 headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
@@ -95,7 +95,7 @@
 
         var getProjects = function () {
             $http({
-                url: '/PMS-NWT/rest/projects',
+                url: '/PMS-NSI/rest/projects',
                 method: "GET",
                 data: {},
                 headers: {
@@ -113,7 +113,7 @@
 
         $scope.createProject = function () {
             $http({
-                url: '/PMS-NWT/rest/projects',
+                url: '/PMS-NSI/rest/projects',
                 method: "POST",
                 data: {"name": $scope.projectName},
                 headers: {
@@ -165,7 +165,7 @@
             };
 
             $http({
-                url: '/PMS-NWT/auth/user/reset',
+                url: '/PMS-NSI/auth/user/reset',
                 method: "PUT",
                 data: reqData,
                 headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}
@@ -178,6 +178,6 @@
     };
 
 
-    app.controller("ProjectController", ProjectController);
+    app.controller("ProjectController1", ProjectController);
 
 }())

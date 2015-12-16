@@ -56,8 +56,7 @@ public class TaskRestService {
             throw new BadRequestException();
         task = entityFacade.createTask(task);
         logger.debug("Created task - " + task.toString());
-        URI userUri = uriInfo.getAbsolutePathBuilder().path(task.getId().toString()).build();
-        return Response.created(userUri).build();
+        return Response.status(Response.Status.CREATED).entity(task).build();
     }
 
     @PUT

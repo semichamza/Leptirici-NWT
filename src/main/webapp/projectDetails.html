@@ -1,5 +1,6 @@
-<div id="wrapper">
+<div id="wrapper" ng-controller="ProjectDetailsController">
     <div ng-include="'navigation.html'"></div>
+    <script src="lib/dependencies/JSOG.js"></script>
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
 
@@ -7,7 +8,7 @@
             <div class="col-lg-12">
                 <!--HEADER-->
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <h1>
                             {{navigation.header}}
                             <small>{{navigation.subHeader}}</small>
@@ -18,7 +19,7 @@
                     </div>
                 </div>
                 <!--BODY-->
-                <div ng-controller="ProjectDetailsController">
+                <div>
                     <div class="navbar navbar-default">
                         <div class="container">
                             <div class="navbar-header">
@@ -32,28 +33,11 @@
                             </div>
                             <div class="navbar-collapse collapse">
                                 <ul class="nav navbar-nav">
-
-                                    <li><a href="">New</a>
-                                    </li>
-                                    <li><a href="">Delete</a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Other<b class="caret"></b></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="">Action</a>
-                                            </li>
-                                            <li><a href="">Another action</a>
-                                            </li>
-                                            <li><a href="">Something else here</a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li class="dropdown-header">Nav header</li>
-                                            <li><a href="#">Separated link</a>
-                                            </li>
-                                            <li><a href="#">One more separated link</a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="" data-toggle="modal" data-target="#newTaskModal">New task</a></li>
+                                    <li><a href="" data-toggle="modal" data-target="#userPreviewModal">View project users</a></li>
+                                    <li ng-show="isUserOwner"><a ng-show="isUserOwner" href="" data-toggle="modal" data-target="#addUserOnProjectModal">Add user</a></li>
+                                    <li><a href="/PMS-NSI/rest/projects/{{project.id}}/report" ng-click="getReport()">Export statistics</a></li>
+                                    <li><a href="" data-toggle="modal" data-target="#editProjectModal">Edit project</a></li>
                                 </ul>
                             </div>
                             <!--/.nav-collapse -->
@@ -64,16 +48,56 @@
                         <div class="col-lg-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-tasks fa-fw"></i> Tasks Panel</h3>
+                                   <h3 class="panel-title"> <i class="fa fa-tasks fa-fw"></i> Tasks Panel</h3>
+                                </div>
+                                <!--<div class="panel-body">-->
+                                    <!--<div class="list-group" ng-repeat="task in tasks">-->
+                                        <!--<div class="list-group-item" ng-click="setSelectedTask(task)">-->
+                                            <!--<span class="badge">{{task.user.userPrincipal.username}}</span>-->
+                                            <!--<i class="fa fa-fw fa-calendar"></i>{{task.name}}-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <table class="table table-bordered table-hover table-striped">
+                                    <tbody>
+                                    <tr ng-repeat="task in tasks" ng-click="setSelectedTask(task)">
+                                        <!--<td style="background-color:#f0c74e">{{task.name}}</td>-->
+                                        <td>{{task.name}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><i class="fa fa-tasks fa-fw"></i> Task details
+                                        <!--<span class="badge pull-right"><a href="" style="color: yellow" data-toggle="modal" data-target="#editTaskModal">Edit</a></span></h3>-->
+                                        <span class="badge pull-right"><a href="" data-toggle="modal" data-target="#editTaskModal">Edit</a></span></h3>
+
                                 </div>
                                 <div class="panel-body">
-                                    <div class="list-group" ng-repeat="task in tasks">
-                                        <div class="list-group-item">
-                                            <span class="badge">{{task.user.userPrincipal.username}}</span>
-                                            <i class="fa fa-fw fa-calendar"></i>{{task.name}}
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="previewTaskName">Task name</label>
+                                            <input type="text" readonly ng-required="true" ng-min="1" class="form-control" id="previewtaskName" ng-model="selectedTask.name" placeholder="Task name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="previewDescription">Task description</label>
+                                            <textarea class="form-control" readonly id="previewDescription" ng-model="selectedTask.description" rows="3"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="previewtaskPriority">Priority</label>
+                                            <input type="text" ng-required="true" readonly ng-min="1" class="form-control" id="previewtaskPriority" ng-model="selectedTask.taskPriority" placeholder="Priority">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="previewtaskDueDate">Due date</label>
+                                            <input type="text" name="taskDueDate" readonly class="form-control" id="previewtaskDueDate"  ng-model="formatedDate"><br><br>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -85,4 +109,203 @@
 
     </div>
     <!-- /. PAGE WRAPPER  -->
+
+    <!--MODALS-->
+
+    <!-- Users-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="userPreviewModal" aria-labelledby="userPreviewModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="userPreviewModalLabel">Preview users</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Login</th>
+                            <th ng-show="isUserOwner"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="user in projectUsers">
+                            <td>{{user.firstName}}</td>
+                            <td>{{user.lastName}}</td>
+                            <td>{{user.userPrincipal.username}}</td>
+                            <td ng-show="isUserOwner">
+                                <a href="" ng-show="user.id!=authData.user.id" ng-click="removeUserFromProject(user.id)"><i class="glyphicon glyphicon-trash"></i></a>
+                                <div ng-show="user.id==authData.user.id">
+                                    Owner
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+             </div>
+        </div>
+    </div>
+
+    <!-- Add user on project-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="addUserOnProjectModal" aria-labelledby="addUserOnProjectModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addUserOnProjectModalLabel">Add users</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Login</th>
+                            <th ng-show="isUserOwner"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="user in unlinkedUsers">
+                            <td>{{user.firstName}}</td>
+                            <td>{{user.lastName}}</td>
+                            <td>{{user.userPrincipal.username}}</td>
+                            <td ng-show="isUserOwner">
+                                <a href=""ng-click="addUser(user.id)"><i class="glyphicon glyphicon-plus"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+             </div>
+        </div>
+    </div>
+
+    <!-- New Task-->
+    <div class="modal fade" id="newTaskModal" tabindex="-1" role="dialog" aria-labelledby="newTaskModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="newTaskModalLabel">New task</h4>
+                </div>
+                <form ng-submit="createNewTask()">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="taskName">Task name</label>
+                            <input type="text" ng-required="true" ng-min="1" class="form-control" id="taskName" ng-model="newTask.name" placeholder="Task name">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectDescription">Task description</label>
+                            <textarea class="form-control" id="projectDescription" ng-model="newTask.description" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taskPriority">Priority</label>
+                            <select name="taskPriority" class="form-control" id="taskPriority" ng-model="newTask.taskPriority"  ng-required="true">
+                                <option value="LOW" selected>Low</option>
+                                <option value="NORMAL">Normal</option>
+                                <option value="HIGH">High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taskDueDate">Due date</label>
+                            <input type="date" name="taskDueDate" class="form-control" id="taskDueDate"  ng-model="newTask.dueDate" placeholder="yyyy-MM-dd" min="2015-01-01" max="2020-12-31" required><br><br>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Edit task-->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editTaskModalLabel">Edit task</h4>
+                </div>
+                <form ng-submit="updateTask()">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="editTaskName">Task name</label>
+                            <input type="text" ng-required="true" ng-min="1" class="form-control" id="editTaskName" ng-model="selectedTask.name" placeholder="Task name">
+                        </div>
+                        <div class="form-group">
+                            <label for="editTastDescription">Task description</label>
+                            <textarea class="form-control" id="editTastDescription" ng-model="selectedTask.description" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editTaskPriority">Priority</label>
+                            <select name="taskPriority" class="form-control" id="editTaskPriority" ng-model="selectedTask.taskPriority"  ng-required="true">
+                                <option value="LOW" selected>Low</option>
+                                <option value="NORMAL">Normal</option>
+                                <option value="HIGH">High</option>
+                            </select>
+                        </div>
+
+                        <!--<div class="form-group">-->
+                            <!--<label for="editTaskDueDate">Due date</label>-->
+                            <!--<input type="date" name="taskDueDate" class="form-control" id="editTaskDueDate"  ng-model="selectedTask.dueDate" value="{{formatedDate}}"  ng-required="true" min="2000-01-02"><br><br>-->
+                        <!--</div>-->
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Edit project modal-->
+    <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="editProjectModalLabel">Edit task</h4>
+                </div>
+                <form ng-submit="updateProject()">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="projectName">Project name</label>
+                            <input type="text" ng-required="true" ng-min="1" class="form-control" id="projectName" ng-model="project.name" placeholder="Project name">
+                        </div>
+                        <div class="form-group">
+                            <label for="editProjectDescription">Task description</label>
+                            <textarea class="form-control" id="editProjectDescription" ng-model="project.description" rows="5"></textarea>
+                        </div>
+
+                        <!--<div class="form-group">-->
+                        <!--<label for="editTaskDueDate">Due date</label>-->
+                        <!--<input type="date" name="taskDueDate" class="form-control" id="editTaskDueDate"  ng-model="selectedTask.dueDate" value="{{formatedDate}}"  ng-required="true" min="2000-01-02"><br><br>-->
+                        <!--</div>-->
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

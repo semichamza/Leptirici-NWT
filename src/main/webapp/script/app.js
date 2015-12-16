@@ -62,6 +62,8 @@ app.run(function ($rootScope, $location, authService) {
             projects:user.userPrincipal.userRole=='NORMAL',
             tasks:user.userPrincipal.userRole=='NORMAL',
             dashboardAdmin:user.userPrincipal.userRole=='ADMINISTRATOR',
+            configAdmin:user.userPrincipal.userRole=='ADMINISTRATOR',
+            deletedUsers:user.userPrincipal.userRole=='ADMINISTRATOR',
             statistics:user.userPrincipal.userRole=='ADMINISTRATOR'
         };
     };
@@ -112,8 +114,12 @@ app.run(function ($rootScope, $location, authService) {
                 alert('state2');
             }
         }
-    })
+    });
 
-
+    $rootScope.closeModal=$(function(modalId){
+        $('#closeModal').click(function(){
+            $('#'+modalId).modal('hide');
+        });
+    });
 });
 

@@ -2,9 +2,14 @@ package com.nwt.rest;
 
 import com.nwt.entities.*;
 import com.nwt.enums.ProjectRoleEnum;
+import com.nwt.enums.TaskStatusEnum;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -13,6 +18,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by glasshark on 23-Mar-15.
@@ -48,6 +56,83 @@ public class ProjectRestService
         return Response.ok(project).build();
     }
 
+    @GET
+    @Path("/{id}/report")
+    @Produces("application/pdf")
+    public Response getProjectReport(@PathParam ("id") Integer id)
+    {
+        Project project=projectById(id);
+        String fileName = "Report.pdf"; // name of our file
+        Users users = entityFacade.getProjectUsers(project);
+        User owner=null;
+        for(ProjectUser projectUser:project.getProjectUsers())
+        {
+            if(projectUser.getProjectRole().equals(ProjectRoleEnum.OWNER))
+                owner=projectUser.getUser();
+        }
+
+        PDDocument doc = new PDDocument();
+        PDPage page = new PDPage();
+        Tasks tasks= entityFacade.getProjectTasks(id);
+        doc.addPage(page);
+
+        try {
+            PDPageContentStream content = new PDPageContentStream(doc, page);
+
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA, 26);
+            content.moveTextPositionByAmount(220, 700);
+            content.drawString("Project statistics");
+            content.endText();
+
+
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA, 16);
+            content.moveTextPositionByAmount(80, 650);
+            content.drawString("Name : "+project.getName());
+            content.endText();
+
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA, 16);
+            content.moveTextPositionByAmount(80, 600);
+            content.drawString("Project owner : "+owner.getLastName()+" "+owner.getFirstName());
+            content.endText();
+
+
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA, 16);
+            content.moveTextPositionByAmount(80,550);
+            content.drawString("Number of members: "+users.size());
+            content.endText();
+
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA, 16);
+            content.moveTextPositionByAmount(80,500);
+            content.drawString("Number of tasks : "+entityFacade.getProjectTasks(id).size());
+            content.endText();
+
+            content.beginText();
+            content.setFont(PDType1Font.HELVETICA, 16);
+            content.moveTextPositionByAmount(80,450);
+            content.drawString("Completed : 0.0%");
+            content.endText();
+
+            content.close();
+            doc.save(fileName);
+            doc.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File file = new File(fileName);
+
+        Response.ResponseBuilder response = Response.ok((Object) file);
+        response.header("Content-Disposition",
+                "attachment; filename=report.pdf");
+        return response.build();
+    }
+
     private Project projectById(Integer id)
     {
         Project project = entityFacade.getProjectById(id);
@@ -64,16 +149,18 @@ public class ProjectRestService
         project = entityFacade.createProject(project);
         logger.debug("Created project - " + project.toString());
 
-        return Response.ok().build();
+        return Response.ok().entity(project).build();
     }
 
     @PUT
     public Response updateProject(Project project)
     {
-        Project existingProject = entityFacade.getProjectById(project.getId());
+            Project existingProject = entityFacade.getProjectById(project.getId());
         if (existingProject == null)
             throw new BadRequestException();//TODO: Implementirat validatore!
-        entityFacade.updateProject(project);
+        existingProject.setName(project.getName());
+        existingProject.setDescription(project.getDescription());
+        entityFacade.updateProject(existingProject);
         logger.debug("Updated project  - " + project.toString());
         return Response.ok(project).build();
     }
@@ -121,7 +208,17 @@ public class ProjectRestService
     public Response getAllProjectUsers(@PathParam ("id") Integer id)
     {
         Project project = projectById(id);
-        Users users = project.getUsers();
+        Users users = entityFacade.getProjectUsers(project);
+        logger.debug("getAllProjectUsers() returned " + users.size() + " object(s).");
+        return Response.ok(users).build();
+    }
+
+    @GET
+    @Path ("/{id}/users/free")
+    public Response getFreeUsers(@PathParam ("id") Integer id)
+    {
+        Project project = projectById(id);
+        Users users = entityFacade.getFreeUsers(project);
         logger.debug("getAllProjectUsers() returned " + users.size() + " object(s).");
         return Response.ok(users).build();
     }
@@ -133,5 +230,30 @@ public class ProjectRestService
         Tasks tasks = entityFacade.getProjectTasks(id);
         logger.debug("getAllTasks() returned " + tasks.size() + " object(s).");
         return Response.ok(tasks).build();
+    }
+
+    @PUT
+    @Path( "/{id}/users/{userId}/delete")
+    public Response deleteUserFromProfjec(@PathParam("id") Integer projectId,@PathParam("userId") Integer userId )
+    {
+        Project project = entityFacade.getProjectById(projectId);
+        if (project == null)
+            throw new NotFoundException();
+        entityFacade.removeUserFromProject(project.getProjectUser(userId));
+
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path ("/{id}/users/{userId}/role")
+    public Response getUserRole(@PathParam("id") Integer projectId,@PathParam("userId") Integer userId)
+    {
+        Project project = projectById(projectId);
+        for(ProjectUser projectUser:project.getProjectUsers())
+        {
+            if(projectUser.getUserId().equals(userId))
+                return Response.status(Response.Status.ACCEPTED).entity(projectUser.getProjectRole()).build();
+        }
+        return Response.ok().build();
     }
 }

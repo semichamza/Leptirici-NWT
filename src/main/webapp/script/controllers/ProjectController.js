@@ -9,9 +9,15 @@ app.controller('ProjectController', function ($translate, $scope,$rootScope,$coo
     $scope.test="awdawdawd";
     $scope.currentProject={};
     $scope.tasks=[];
-    pmsService.getProjects($rootScope.authData.user.id).success(function(data){
-        $scope.projects=data;
-    });
+    $scope.projects=null;
+    $scope.loadProjects=function()
+       {
+           pmsService.getProjects($rootScope.authData.user.id).success(function(data){
+               $scope.projects=data;
+           });
+       };
+
+    $scope.loadProjects();
 
     $scope.goToProjectDetails=function(projectId){
 
@@ -30,4 +36,24 @@ app.controller('ProjectController', function ($translate, $scope,$rootScope,$coo
             }
         });
     };
+
+    $scope.newProject={
+      name:""
+    };
+    $scope.createNewProject=function(){
+        pmsService.createProject($scope.newProject).success(function(data)
+        {
+
+            $scope.currentProject=data;
+            pmsService.addUserToProject($scope.currentProject.id,$rootScope.authData.user.id,'OWNER').success(function(data)
+                {
+                    $rootScope.setInfoMessage("PROJECT_CREATED");
+                    $scope.newProject={
+                        name:""
+                    };
+                    $scope.loadProjects();
+                }
+            )
+        });
+    }
 });
