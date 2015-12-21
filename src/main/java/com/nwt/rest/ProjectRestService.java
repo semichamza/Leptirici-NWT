@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by glasshark on 23-Mar-15.
@@ -162,6 +163,25 @@ public class ProjectRestService
         existingProject.setDescription(project.getDescription());
         entityFacade.updateProject(existingProject);
         logger.debug("Updated project  - " + project.toString());
+        Users users = entityFacade.getProjectUsers(project);
+        User sender=null;
+        for(ProjectUser projectUser:existingProject.getProjectUsers())
+        {
+            if(projectUser.getProjectRole().equals(ProjectRoleEnum.OWNER))
+                sender=projectUser.getUser();
+        }
+        for(User user:users)
+        {
+            if(user.getId().equals(sender.getId()))
+                continue;
+            Message message=new Message();
+            message.setDate(new Date());
+            message.setReceiver(user);
+            message.setSender(sender);
+            message.setSeen(false);
+            message.setText("Project \""+project.getName()+"\" has been updated!");
+            entityFacade.createMessage(message);
+        }
         return Response.ok(project).build();
     }
 
@@ -191,6 +211,22 @@ public class ProjectRestService
         //is valid role
         project.addUser(user, projectRole);
         updateProject(project);
+
+        Users users = entityFacade.getProjectUsers(project);
+        User sender=null;
+        for(ProjectUser projectUser:project.getProjectUsers())
+        {
+            if(projectUser.getProjectRole().equals(ProjectRoleEnum.OWNER))
+                sender=projectUser.getUser();
+        }
+
+        Message message=new Message();
+        message.setDate(new Date());
+        message.setReceiver(user);
+        message.setSender(sender);
+        message.setSeen(false);
+        message.setText("You are added to \""+project.getName()+"!");
+        entityFacade.createMessage(message);
 
         return Response.ok().build();
     }
@@ -254,6 +290,16 @@ public class ProjectRestService
             if(projectUser.getUserId().equals(userId))
                 return Response.status(Response.Status.ACCEPTED).entity(projectUser.getProjectRole()).build();
         }
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path ("/{id}/close")
+    public Response getClose(@PathParam("id") Integer projectId)
+    {
+        Project project = projectById(projectId);
+        project.setClosed(true);
+        entityFacade.updateProject(project);
         return Response.ok().build();
     }
 }

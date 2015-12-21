@@ -172,8 +172,9 @@ public class EntityFacadeImpl implements EntityFacade
 
     @Override
     public Projects searchProjects(String text) {
-        //TODO: Implement!
-        return null;
+        TypedQuery<Project> query = em.createNamedQuery(Project.FIND_BY_TEXT, Project.class);
+        query.setParameter("text","%"+text+"%");
+        return new Projects(query.getResultList());
     }
 
     @Override

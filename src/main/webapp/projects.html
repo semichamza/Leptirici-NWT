@@ -41,7 +41,7 @@
                                         <div class="input-group">
                                             <input type="text" ng-model="searchParameter" g class="form-control" placeholder="Search" name="q">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-default" ng-click="searchUsers()"><i class="glyphicon glyphicon-search"></i></button>
+                                                <button class="btn btn-default" ng-click="searchProjects()"><i class="glyphicon glyphicon-search"></i></button>
                                                 <button class="btn btn-default" ng-click="clear()"><i class="glyphicon glyphicon-remove"></i></button>
                                             </div>
                                         </div>
@@ -57,18 +57,23 @@
                             <table class="table table-bordered table-hover table-striped">
                                 <colgroup>
                                     <col span="1" style="width: 30%;">
-                                    <col span="1" style="width: 70%;">
+                                    <col span="1" style="width: 65%;">
+                                    <col span="1" style="width: 5%;">
                                 </colgroup>
                                 <thead>
                                 <tr >
                                     <th>Project name</th>
                                     <th>Description</th>
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="project in projects" ng-click="goToProjectDetails(project.id)">
-                                    <td>{{project.name}}</td>
-                                    <td>{{project.description}}</td>
+                                <tr ng-repeat="project in projects" class="{{project.closed ? 'success':''}}">
+                                    <td ng-click="goToProjectDetails(project.id)">{{project.name}}</td>
+                                    <td ng-click="goToProjectDetails(project.id)">{{project.description}}</td>
+                                    <td>
+                                        <a href="" ng-show="!project.closed" ng-click="closeProject(project)"><i class="glyphicon glyphicon-ok"></i>Close</a>
+                                    </td>
                                 </tr>
 
                                 </tbody>

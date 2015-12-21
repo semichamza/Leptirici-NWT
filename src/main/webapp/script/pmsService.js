@@ -56,6 +56,9 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     var _searchUsers=function(text,deleted){
         return _getData(UserApiURL+"/search/"+text+"/"+deleted);
     };
+    var _searchProjects=function(text){
+        return _getData(ProjectApiURL+"/search/"+text);
+    };
     var _searchConfigs=function(text){
         return _getData(ConfigApiURL+"/search/"+text);
     };
@@ -72,6 +75,10 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
 
     var _createProject=function(project){
         return _postData(ProjectApiURL,project);
+    };
+
+    var _closeProject=function(projectId){
+        return _putData(ProjectApiURL+"/"+projectId+"/close");
     };
     var _createTask=function(task){
         return _postData(TaskApiURL,task);
@@ -188,6 +195,7 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     pmsService.getProjects=_getProjects;
     pmsService.getProject=_getProject;
     pmsService.createProject=_createProject;
+    pmsService.closeProject=_closeProject;
     pmsService.createTask=_createTask;
     pmsService.getTask=_getTask;
     pmsService.getProjectTasks=_getProjectTasks;
@@ -197,6 +205,7 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     pmsService.getConfigs=_getConfigs;
     pmsService.updateConfigs=_updateConfigs;
     pmsService.searchConfigs=_searchConfigs;
+    pmsService.searchProjects=_searchProjects;
     pmsService.removeUser=_removeUser;
     pmsService.getUserRole=_getUserRole;
     pmsService.updateTask=_updateTask;

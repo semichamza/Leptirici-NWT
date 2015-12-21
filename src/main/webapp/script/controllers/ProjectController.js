@@ -10,6 +10,7 @@ app.controller('ProjectController', function ($translate, $scope,$rootScope,$coo
     $scope.currentProject={};
     $scope.tasks=[];
     $scope.projects=null;
+    $scope.searchParameter=null;
     $scope.loadProjects=function()
        {
            pmsService.getProjects($rootScope.authData.user.id).success(function(data){
@@ -56,4 +57,27 @@ app.controller('ProjectController', function ($translate, $scope,$rootScope,$coo
             )
         });
     }
+
+    $scope.closeProject=function(project){
+        console.log(project);
+        pmsService.closeProject(project.id).success(function(data)
+        {
+            $scope.loadProjects();
+        });
+    };
+    $scope.clear=function(){
+        $scope.searchParameter='';
+        $scope.loadProjects();
+    };
+
+    $scope.searchProjects=function(){
+        if($scope.searchParameter==null || $scope.searchParameter=='')
+        {
+            $scope.clear();
+            return;
+        }
+        pmsService.searchProjects($scope.searchParameter).success(function(data){
+            $scope.projects=data;
+        });
+    };
 });

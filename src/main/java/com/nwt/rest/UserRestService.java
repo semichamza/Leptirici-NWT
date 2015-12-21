@@ -146,6 +146,22 @@ public class UserRestService
     {
         User user = userById(userId);
         Projects projects = user.getProjects();
+        Projects tmpProjects=new Projects();
+        Projects tmpProjectsClosed=new Projects();
+        for(Project project:projects)
+        {
+            if(project.getClosed()!=null)
+            {
+                tmpProjectsClosed.add(project);
+            }
+            else {
+                tmpProjects.add(project);
+            }
+        }
+
+        projects.clear();
+        projects.addAll(tmpProjects);
+        projects.addAll(tmpProjectsClosed);
         logger.debug("getAllUserProjects() returned " + projects.size() + " object(s).");
         return Response.ok(projects).build();
     }

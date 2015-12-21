@@ -16,17 +16,21 @@ import java.util.List;
  */
 @Entity
 @Table (name = "projects")
-@NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Project p")
+@NamedQueries ({
+    @NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Project p"),
+    @NamedQuery (name = Project.FIND_BY_TEXT, query = "SELECT p FROM Project p where p.name like :text")})
 @JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Project.class)
 public class Project implements Serializable
 {
     public static final String FIND_ALL = "Project.findAll";
+    public static final String FIND_BY_TEXT = "Project.findByText";
 
     private Integer id;
     private String name;
     private String description;
     private List<ProjectUser> projectUsers;
     private List<Task> tasks;
+    private Boolean closed;
     @Id
     @GeneratedValue
     public Integer getId()
@@ -117,6 +121,15 @@ public class Project implements Serializable
         }
 
         return null;
+    }
+
+    @Column
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
     }
 
     @Override
