@@ -4,6 +4,7 @@ import com.nwt.entities.Comments;
 import com.nwt.entities.Logs;
 import com.nwt.entities.Task;
 import com.nwt.entities.Tasks;
+import com.nwt.enums.TaskStatusEnum;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
@@ -54,6 +55,7 @@ public class TaskRestService {
     public Response createTask(Task task) {
         if (task == null)
             throw new BadRequestException();
+        task.setTaskStatus(TaskStatusEnum.OPEN);
         task = entityFacade.createTask(task);
         logger.debug("Created task - " + task.toString());
         return Response.status(Response.Status.CREATED).entity(task).build();
@@ -64,9 +66,14 @@ public class TaskRestService {
         Task existingTask = entityFacade.getTaskById(task.getId());
         if (existingTask == null)
             throw new BadRequestException();//TODO: Implementirat validatore!
-        entityFacade.updateTask(task);
-        logger.debug("Updated user  - " + task.toString());
-        return Response.ok(task).build();
+        existingTask.setName(task.getName());
+        existingTask.setDescription(task.getDescription());
+        existingTask.setDueDate(task.getDueDate());
+        existingTask.setTaskPriority(task.getTaskPriority());
+        existingTask.setTaskStatus(task.getTaskStatus());
+        entityFacade.updateTask(existingTask);
+        logger.debug("Updated user  - " + existingTask.toString());
+        return Response.ok(existingTask).build();
     }
 
     @DELETE
@@ -126,5 +133,30 @@ public class TaskRestService {
         //TODO Implement!
         logger.debug("getTaskLogById() not implemented yet");
         return null;
+    }
+
+    @GET
+    @Path("/users")
+    public Response getUserTasks(@QueryParam("userId") int userId,@QueryParam("projectId") int projectId)
+    {
+        Tasks tasks=entityFacade.getUserTasks(userId,projectId);
+        return Response.status(Response.Status.OK).entity(tasks).build();
+    }
+
+    @PUT
+    @Path("/{taskId}/users/{userId}/assignee")
+    public Response assigneeTask(@PathParam("taskId") Integer taskId,@PathParam("userId") Integer userId) {
+        Task task=entityFacade.getTaskById(taskId);
+        task.setUser(entityFacade.getUserById(userId));
+        entityFacade.updateTask(task);
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @PUT
+    @Path("/{id}/status/{status}")
+    public Response updateTaskStatus(@PathParam("id") Integer taskId,@PathParam("status") String status) {
+        Task existingTask = entityFacade.getTaskById(taskId);
+        existingTask.setTaskStatus(TaskStatusEnum.getStatus(status));
+        return Response.ok(existingTask).build();
     }
 }

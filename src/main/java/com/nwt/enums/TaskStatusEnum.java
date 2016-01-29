@@ -7,9 +7,30 @@ import java.io.Serializable;
  */
 public enum TaskStatusEnum implements Serializable
 {
-    OPEN,
-    IN_PROGRESS,
-    FIXED,
-    RESOLVED,
-    CLOSED
+    OPEN("OPEN"),
+    IN_PROGRESS("IN_PROGRESS"),
+    FIXED("FIXED"),
+    RESOLVED("RESOLVED"),
+    CLOSED("CLOSED");
+
+    String id;
+
+    TaskStatusEnum(String id)
+    {
+        this.id=id;
+    }
+    public String getId() {
+        return id;
+    }
+
+    public static TaskStatusEnum getStatus(String id)
+    {
+        for(TaskStatusEnum status:values())
+        {
+            if(status.getId().equals(id))
+                return status;
+        }
+
+        return null;
+    }
 }

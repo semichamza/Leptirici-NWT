@@ -80,8 +80,16 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     var _closeProject=function(projectId){
         return _putData(ProjectApiURL+"/"+projectId+"/close");
     };
+    var _assigneeTask=function(taskId,userId){
+        return _putData(TaskApiURL+"/"+taskId+"/users/"+userId+"/assignee");
+    };
+
     var _createTask=function(task){
         return _postData(TaskApiURL,task);
+    };
+
+    var _createUser=function(user){
+        return _postData(UserApiURL,user);
     };
 
     var _getProjects=function(id){
@@ -134,8 +142,16 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
         return _putData(UserApiURL,user);
     };
 
+    var _updatePassword=function(password){
+        return _putData(UserApiURL+"/newPassword",password);
+    };
+
     var _updateTask=function(task){
         return _putData(TaskApiURL,task);
+    };
+
+    var _updateTaskStatus=function(task,status){
+        return _putData(TaskApiURL+"/"+task+"/status/"+status);
     };
     var _updateProject=function(project){
         return _putData(ProjectApiURL,project);
@@ -148,6 +164,10 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     };
     var _getUserSentMessages=function(userId){
         return _getData(UserApiURL+"/"+userId+"/sentmessages");
+    };
+
+    var _getUserTasks=function(userId,projectId){
+        return _getData(TaskApiURL+"/users?userId="+userId+"&projectId="+projectId);
     };
 
     var _getUserUnreadMessages=function(userId){
@@ -196,7 +216,9 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     pmsService.getProject=_getProject;
     pmsService.createProject=_createProject;
     pmsService.closeProject=_closeProject;
+    pmsService.assigneeTask=_assigneeTask;
     pmsService.createTask=_createTask;
+    pmsService.createUser=_createUser;
     pmsService.getTask=_getTask;
     pmsService.getProjectTasks=_getProjectTasks;
     pmsService.getProjectUsers=_getProjectUsers;
@@ -209,7 +231,10 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     pmsService.removeUser=_removeUser;
     pmsService.getUserRole=_getUserRole;
     pmsService.updateTask=_updateTask;
+    pmsService.getUserTasks=_getUserTasks;
     pmsService.updateProject=_updateProject;
+    pmsService.updateTaskStatus=_updateTaskStatus;
+    pmsService.updatePassword=_updatePassword;
     return pmsService;
 
 

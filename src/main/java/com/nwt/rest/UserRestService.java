@@ -1,8 +1,10 @@
 package com.nwt.rest;
 
+import com.nwt.auth.entities.Password;
 import com.nwt.entities.*;
 import com.nwt.facade.EntityFacade;
 import com.nwt.util.Log;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -90,10 +92,13 @@ public class UserRestService
     {
         if (user == null)
             throw new BadRequestException();
+        user.setDeleted(false);
+        user.setActive(true);
+        user.setBlocked(false);
+        user.getUserPrincipal().setPasswordHash(DigestUtils.md5Hex(user.getUserPrincipal().getPasswordHash()));
         user = entityFacade.createUser(user);
         logger.debug("Created user - " + user.toString());
-        URI userUri = uriInfo.getAbsolutePathBuilder().path(user.getId().toString()).build();
-        return Response.created(userUri).build();
+        return Response.status(Response.Status.CREATED).entity(user).build();
     }
 
     @PUT
@@ -103,6 +108,17 @@ public class UserRestService
         orginUser.setFirstName(user.getFirstName());
         orginUser.setLastName(user.getLastName());
         orginUser.setEmail(user.getEmail());
+        orginUser = entityFacade.updateUser(orginUser);
+        logger.debug("Updated user  - " + orginUser.toString());
+        return Response.ok(orginUser).build();
+    }
+
+    @PUT
+    @Path("/newPassword")
+    public Response UpdatePassword(Password password)
+    {
+        User orginUser=userById(Integer.valueOf(password.getUserId()));     //TODO: bolje implementirat validatore!
+        orginUser.getUserPrincipal().setPassword(password.getPassword());
         orginUser = entityFacade.updateUser(orginUser);
         logger.debug("Updated user  - " + orginUser.toString());
         return Response.ok(orginUser).build();
@@ -145,7 +161,7 @@ public class UserRestService
     public Response getAllUserProjects(@PathParam ("userId") Integer userId)
     {
         User user = userById(userId);
-        Projects projects = user.getProjects();
+        Projects projects = entityFacade.getUserProjects(userId);
         Projects tmpProjects=new Projects();
         Projects tmpProjectsClosed=new Projects();
         for(Project project:projects)

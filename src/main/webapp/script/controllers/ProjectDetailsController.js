@@ -10,6 +10,7 @@
         $scope.isUserOwner=false;
         $scope.selectedTask={};
         $scope.formatedDate=null;
+        $scope.assigneedTaskUserId=null;
 
         $scope.setSelectedTask=function(task){
             $scope.selectedTask=task;
@@ -21,8 +22,35 @@
         $scope.loadTasks=function()
         {
             pmsService.getProjectTasks($routeParams.projectId).success(function(data){
-                $scope.tasks=data;
-                $scope.setSelectedTask(data[0]);
+                $scope.tasks=JSOG.decode(data);
+                console.log($scope.tasks);
+                //$scope.setSelectedTask(data[0]);
+                for(var i=0;i<$scope.tasks.length;i++)
+                {
+                    if($scope.tasks[i].taskStatus=='OPEN')
+                    {
+                        $scope.tasks[i].style='warning';
+                        $scope.tasks[i].taskStatusString='Open';
+                    }
+                    if($scope.tasks[i].taskStatus=='RESOLVED')
+                    {
+                        $scope.tasks[i].style='success';
+                        $scope.tasks[i].taskStatusString='Resolved';
+                    }
+                    if($scope.tasks[i].taskStatus=='IN_PROGRESS')
+                    {
+                        $scope.tasks[i].style='info';
+                        $scope.tasks[i].taskStatusString='In progress';
+                    }
+                    if($scope.tasks[i].taskStatus=='CLOSED')
+                    {
+                        $scope.tasks[i].style='danger';
+                        $scope.tasks[i].taskStatusString='Closed';
+                    }
+
+
+                    console.log($scope.tasks[i].style);
+                }
             });
         };
 
@@ -59,18 +87,21 @@
         $scope.newTask={
             project:{id:$routeParams.projectId}
         };
-        $scope.createNewTask=function()
-        {
-            pmsService.createTask($scope.newTask).success(function(data)
-            {
-                $rootScope.setInfoMessage("TASK_CREATED");
-                $('#newTaskModal').modal('hide');
-                $scope.loadTasks();
-            });
-        };
+        //$scope.createNewTask=function()
+        //{
+        //    pmsService.createTask($scope.newTask).success(function(data)
+        //    {
+        //        $rootScope.setInfoMessage("TASK_CREATED");
+        //        $('#newTaskModal').modal('hide');
+        //        $scope.loadTasks();
+        //    });
+        //};
 
         $scope.createNewTask=function()
         {
+            user={id:JSOG.parse($scope.newTask.user).id};
+            $scope.newTask.user=user;
+
             pmsService.createTask($scope.newTask).success(function(data)
             {
                 $rootScope.setInfoMessage("TASK_CREATED");
@@ -109,7 +140,13 @@
 
         $scope.updateTask=function()
         {
-            console.log("Begin task update");
+            console.log($scope.selectedTask);
+            delete $scope.selectedTask.taskStatusString;
+            delete $scope.selectedTask.style;
+            $scope.loadTasks();
+            $scope.selectedTask.user={id:$scope.selectedTask.user.id};
+            $scope.selectedTask.project={id:$scope.selectedTask.project.id};
+            delete $scope.selectedTask.comments;
             pmsService.updateTask($scope.selectedTask).success(function(data){
                 $rootScope.setInfoMessage("TASK_EDITED");
                 $('#editTaskModal').modal('hide');
@@ -130,6 +167,14 @@
                     $rootScope.setFixedHeader(data.name);
                 });
             });
+        };
+
+        $scope.assigneTask=function(taskId,userId)
+        {
+           pmsService.assigneeTask(taskId,userId).success(function(data){
+               $('#assigneeTaskModal').modal('hide');
+               $scope.loadTasks();
+           })
         };
     };
 

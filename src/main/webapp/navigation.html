@@ -7,11 +7,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/dashboard">NSI - PMS </a>
+            <a style="font-size: 15px;" class="navbar-brand" href="#/projects">Project Management System</a>
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
-            <li language-directive></li>
+            <!--<li language-directive></li>-->
             <li>
                 <a href="#/messages" class="navbar-brand" style="font-size: 14px">Messages <span class="badge">{{unreadMessages.length}}</span></a>
             </li>
@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
                 <li class="text-center" style="width: 100%;background-color: rgb(35,45,50);" >
-                    <img src="./style/img/profile2.jpg" class="user-image img-responsive"/>
+                    <img src="./style/img/plan.jpg" class="user-image img-responsive"/>
                 </li>
                 <li class="header" style="color: #4b646f;
                                           width: 100%;
@@ -40,8 +40,15 @@
                                           background-color: rgb(26, 34, 38);
                                           padding: 10px 25px 10px 15px;" >{{'MAIN_NAV'|translate}}</li>
 
-                <li class="{{isCurrent('dashboard')}}" ng-show="{{tabs.dashboard}}">
-                    <a href="#/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                <!--<li class="{{isCurrent('dashboard')}}" ng-show="{{tabs.dashboard}}">-->
+                    <!--<a href="#/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>-->
+                <!--</li>-->
+
+                <li class="{{isCurrent('projects')}}">
+                    <a href="#/projects"><i class="fa fa-fw fa-desktop"></i> Projects</a>
+                </li>
+                <li class="{{isCurrent('tasks')}}">
+                    <a href="#/tasks"><i class="fa fa-fw fa-table"></i> Tasks</a>
                 </li>
                 <li class="{{isCurrent('dashboardAdmin')}}" ng-show="{{tabs.dashboardAdmin}}">
                     <a href="#/dashboardAdmin"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
@@ -55,12 +62,6 @@
 
                 <li class="{{isCurrent('statistics')}}" ng-show="{{tabs.statistics}}">
                     <a href="#/statistics"><i class="fa fa-fw fa-dashboard"></i> Statistics</a>
-                </li>
-                <li class="{{isCurrent('projects')}}" ng-show="{{tabs.projects}}">
-                    <a href="#/projects"><i class="fa fa-fw fa-desktop"></i> Projects</a>
-                </li>
-                <li class="{{isCurrent('tasks')}}" ng-show="{{tabs.tasks}}">
-                    <a href="#/tasks"><i class="fa fa-fw fa-table"></i> Tasks</a>
                 </li>
 
                <!-- <li>

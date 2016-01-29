@@ -28,6 +28,9 @@ app.config( function ($translateProvider) {
         'MESSAGE':'Message',
         'SEND':'Send',
         'USER_UPDATED':'User detalis updated.',
+        'PASSWORD_UPDATED':'Password updated.',
+        'PASSWORD_NOT_MATCHES':'Password not matches',
+        'PASSWORD_EMPTY':'Password field is empty',
         'TASK_LABEL':'Tasks',
         'PROJECT_LABEL':'Projects',
         'PROJECT_DETAIL_LABEL':'Project details',
@@ -57,6 +60,7 @@ app.config( function ($translateProvider) {
         'MODAL_HEADER_RESET_PASSWORD':'Reset password',
         'CONFIGS_UPDATED':'Configuration updated',
         'TASK_EDITED':'Task updated',
+        'USER_CREATED':'User created',
         'PROJECT_EDITED':'Project updated'
     });
 
@@ -119,7 +123,8 @@ app.config( function ($translateProvider) {
         'TASK_EDITED':'Task created',
         'DELETED_USERS_LABEL':'Obrisani korisnici',
         'USERS_UPDATED':'Users updated',
-        'PROJECT_EDITED':'Project updated'
+        'PROJECT_EDITED':'Project updated',
+        'USER_CREATED':'Korsnik kreiran'
     });
 
     //$translateProvider.preferredLanguage($rootScope.currentLng);

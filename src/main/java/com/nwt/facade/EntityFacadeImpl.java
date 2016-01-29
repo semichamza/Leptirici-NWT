@@ -142,6 +142,13 @@ public class EntityFacadeImpl implements EntityFacade
     }
 
     @Override
+    public Projects getUserProjects(int userId) {
+        TypedQuery<Project> query = em.createNamedQuery(Project.USER_PROJECTS, Project.class);
+        query.setParameter("userId",userId);
+        return new Projects(query.getResultList());
+    }
+
+    @Override
     public Project getProjectById(Integer id)
     {
         Project project = em.find(Project.class, id);
@@ -196,6 +203,14 @@ public class EntityFacadeImpl implements EntityFacade
     @Override
     public Tasks getAllTasks() {
         TypedQuery<Task> query = em.createNamedQuery(Task.FIND_ALL, Task.class);
+        return new Tasks(query.getResultList());
+    }
+
+    @Override
+    public Tasks getUserTasks(int userId,int projectId) {
+        TypedQuery<Task> query = em.createNamedQuery(Task.USER_TASK, Task.class);
+        query.setParameter("userId",userId);
+        query.setParameter("projectId",projectId);
         return new Tasks(query.getResultList());
     }
 

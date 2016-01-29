@@ -42,6 +42,8 @@ public interface EntityFacade
     //region PROJECTS
     Projects getAllProjects();
 
+    Projects getUserProjects(int userId);
+
     Project getProjectById(Integer id);
 
     Project createProject(Project project);
@@ -57,6 +59,8 @@ public interface EntityFacade
 
     //region TASKS
     Tasks getAllTasks();
+
+    Tasks getUserTasks(int userId,int projectId);
 
     Tasks getProjectTasks(Integer project_id);
 

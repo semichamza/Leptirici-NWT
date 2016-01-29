@@ -6,4 +6,5 @@ package com.nwt.entities;
 public interface ConfigConstants {
     public static final String REGISTRATION_MAIL= "REGISTRATION_MAIL";
     public static final String MAIL_PASSWORD= "MAIL_PASSWORD";
+    public static final String APP_URL= "APP_URL";
 }

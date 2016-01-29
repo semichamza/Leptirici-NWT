@@ -19,6 +19,7 @@ import java.util.List;
 @Table (name = "tasks")
 @NamedQueries ({
         @NamedQuery (name = Task.FIND_ALL, query = "SELECT t FROM Task t"),
+        @NamedQuery (name = Task.USER_TASK, query = "SELECT t FROM Task t where t.user.id=:userId AND t.project.id=:projectId"),
         @NamedQuery (name = Task.PROJECT_TASKS, query = "SELECT t FROM Task t where t.project.id=:project_id")
 })
 @JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Task.class)
@@ -26,6 +27,7 @@ public class Task implements Serializable
 {
     public static final String FIND_ALL = "Task.findAll";
     public static final String PROJECT_TASKS = "Task.projectTasks";
+    public static final String USER_TASK = "Task.userTasks";
 
     private Integer id;
     private Date timeCreated;

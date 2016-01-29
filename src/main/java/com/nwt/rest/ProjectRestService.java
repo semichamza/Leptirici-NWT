@@ -170,18 +170,7 @@ public class ProjectRestService
             if(projectUser.getProjectRole().equals(ProjectRoleEnum.OWNER))
                 sender=projectUser.getUser();
         }
-        for(User user:users)
-        {
-            if(user.getId().equals(sender.getId()))
-                continue;
-            Message message=new Message();
-            message.setDate(new Date());
-            message.setReceiver(user);
-            message.setSender(sender);
-            message.setSeen(false);
-            message.setText("Project \""+project.getName()+"\" has been updated!");
-            entityFacade.createMessage(message);
-        }
+
         return Response.ok(project).build();
     }
 
@@ -219,14 +208,6 @@ public class ProjectRestService
             if(projectUser.getProjectRole().equals(ProjectRoleEnum.OWNER))
                 sender=projectUser.getUser();
         }
-
-        Message message=new Message();
-        message.setDate(new Date());
-        message.setReceiver(user);
-        message.setSender(sender);
-        message.setSeen(false);
-        message.setText("You are added to \""+project.getName()+"!");
-        entityFacade.createMessage(message);
 
         return Response.ok().build();
     }

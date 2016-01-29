@@ -12,7 +12,7 @@ app.config(function ($routeProvider, $httpProvider) {
             redirectTo:"/login"
         })
         .when("/dashboard",{
-            templateUrl:"dashboard.html"
+            templateUrl:"projects.html"
         })
         .when("/statistics",{
             templateUrl:"statistics.html"

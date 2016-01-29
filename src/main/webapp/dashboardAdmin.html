@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <!--BODY-->
-                    <div ng-controller="DashboardAdminController">
+                    <div class="custom-navigation-container" ng-controller="DashboardAdminController">
 
 
                         <nav class="navbar navbar-default" role="navigation">
@@ -38,6 +38,8 @@
                                         <li><a href="" class="navbar-brand" ng-click="globalBlock()">Ban</a>
                                         </li>
                                         <li><a href="" class="navbar-brand" ng-click="globalUnblock()">Unban</a>
+                                        </li>
+                                        <li><a href="" class="navbar-brand" data-toggle="modal" data-target="#addNewUserModal">Add new</a>
                                         </li>
                                         <li><a href="" class="navbar-brand" ng-click="globalDelete()">Delete</a>
                                         </li>
@@ -153,6 +155,58 @@
                                 </tbody>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="addNewUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewUserModal">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="addNewUserModalLabel">Add new user</h4>
+                                    </div>
+                                    <form ng-submit="createUser()">
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label for="newUserFirstName">First name</label>
+                                                <input type="text" ng-required="true" ng-min="1" class="form-control" id="newUserFirstName" ng-model="newUser.firstName" placeholder="First name">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="newUserLastName">First name</label>
+                                                <input type="text" ng-required="true" ng-min="1" class="form-control" id="newUserLastName" ng-model="newUser.lastName" placeholder="Last name">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="newUserEmail">Email</label>
+                                                <input type="text" ng-required="true" ng-min="1" class="form-control" id="newUserEmail" ng-model="newUser.email" placeholder="Email">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="newUserUsername">Username</label>
+                                                <input type="text" ng-required="true" ng-min="1" class="form-control" id="newUserUsername" ng-model="newUser.userPrincipal.username" placeholder="Username">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="newUserPassword">Password</label>
+                                                <input type="password" ng-required="true" ng-min="1" class="form-control" id="newUserPassword" ng-model="newUser.userPrincipal.passwordHash" placeholder="Password">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newUserRole">Role</label>
+                                                <select name="newUserRole" class="form-control" id="newUserRole" ng-model="newUser.userPrincipal.userRole"  required>
+                                                <option value="ADMINISTRATOR" selected>Administrator</option>
+                                                <option value="NORMAL">Normal</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="submit"  class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

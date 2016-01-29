@@ -10,7 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 
-@WebFilter(filterName = "jwt-filter", urlPatterns = {"/rest/*"})
+//@WebFilter(filterName = "jwt-filter", urlPatterns = {"/rest/*"})
 @Stateless
 public class JWTFilter implements Filter {
     @Context

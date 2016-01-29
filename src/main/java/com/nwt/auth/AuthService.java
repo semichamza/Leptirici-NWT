@@ -75,7 +75,8 @@ public class AuthService {
 
         String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
         String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
-        Mailer mailer=new Mailer(mail,password);
+        String appURL=entityFacade.getConfigProperty(ConfigConstants.APP_URL).getValue();
+        Mailer mailer=new Mailer(mail,password,appURL);
         boolean send = mailer.sendEmail("jasmin.kaldzija@gmail.com", messageBody);
 
         return Response.ok().build();

@@ -18,11 +18,13 @@ import java.util.List;
 @Table (name = "projects")
 @NamedQueries ({
     @NamedQuery (name = Project.FIND_ALL, query = "SELECT p FROM Project p"),
+    @NamedQuery (name = Project.USER_PROJECTS, query = "SELECT p FROM Project p, ProjectUser pu where pu.projectId=p.id and pu.userId=:userId "),
     @NamedQuery (name = Project.FIND_BY_TEXT, query = "SELECT p FROM Project p where p.name like :text")})
 @JsonIdentityInfo (generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Project.class)
 public class Project implements Serializable
 {
     public static final String FIND_ALL = "Project.findAll";
+    public static final String USER_PROJECTS = "Project.userProjects";
     public static final String FIND_BY_TEXT = "Project.findByText";
 
     private Integer id;

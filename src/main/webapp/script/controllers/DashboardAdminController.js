@@ -148,6 +148,17 @@
         $scope.unblocked_class='success';
 
         $scope.loadUsers();
+
+        $scope.newUser={userPrincipal:{}};
+        $scope.createUser=function()
+        {
+            console.log($scope.newUser);
+            pmsService.createUser($scope.newUser).success(function(data){
+                $rootScope.setInfoMessage("USER_CREATED");
+                $('#addNewUserModal').modal('hide');
+                $scope.loadUsers();
+            });
+        }
     };
 
     app.controller('DashboardAdminController',DashboardAdminController );

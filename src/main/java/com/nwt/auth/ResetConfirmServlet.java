@@ -50,8 +50,10 @@ public class ResetConfirmServlet extends HttpServlet {
 
         String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
         String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
-        Mailer mailer=new Mailer(mail,password);
-        boolean sent = mailer.sendNewPassword("jasmin.kaldzija@gmail.com", newPass);
+        String appURL=entityFacade.getConfigProperty(ConfigConstants.APP_URL).getValue();
+
+        Mailer mailer=new Mailer(mail,password,appURL);
+        boolean sent = mailer.sendNewPassword(user.getEmail(), newPass);
 
         if (sent) {
             token.setTokenStatus(TokenStatusEnum.USED);

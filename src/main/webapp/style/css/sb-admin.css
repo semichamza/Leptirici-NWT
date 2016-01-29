@@ -5,7 +5,15 @@
  */
 
 /* Global Styles */
-
+.custom-navigation-container .container
+{
+    width: 100%;
+    padding-right: 15px;
+}
+.custom-navigation-container .navbar-form .input-group
+{
+    float: right;
+}
 #custom-bootstrap-menu.navbar-default .navbar-brand {
     color: rgba(119, 119, 119, 1);
 }
@@ -154,9 +162,10 @@ body {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    max-height:150px;
-    max-width:150px;
+    max-height:200px;
+    max-width:200px;
     margin: auto;
+    padding: 5px;
 }
 .mytopmenuheader{
     background-color: #367fa9;

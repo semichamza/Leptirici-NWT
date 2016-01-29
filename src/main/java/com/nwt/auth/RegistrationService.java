@@ -59,7 +59,7 @@ public class RegistrationService {
             user.setEmail(aUser.getEmail());
             user.setFirstName(aUser.getFirstName());
             user.setLastName(aUser.getLastName());
-
+            user.setDeleted(false);
             user = entityFacade.createUser(user);
             logger.debug("Created user - " + user.toString());
 
@@ -72,7 +72,9 @@ public class RegistrationService {
 
             String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
             String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
-            Mailer mailer=new Mailer(mail,password);
+            String appURL=entityFacade.getConfigProperty(ConfigConstants.APP_URL).getValue();
+
+            Mailer mailer=new Mailer(mail,password,appURL);
             boolean sent = mailer.sendActivationMail(user.getEmail(), token.getId());
             if (!sent)
                 throw new WebApplicationException();
@@ -127,8 +129,10 @@ public class RegistrationService {
 
             String password=entityFacade.getConfigProperty(ConfigConstants.MAIL_PASSWORD).getValue();
             String mail=entityFacade.getConfigProperty(ConfigConstants.REGISTRATION_MAIL).getValue();
-            Mailer mailer=new Mailer(mail,password);
-            boolean sent = mailer.sendRecoveryMail("jasmin.kaldzija@gmail.com", token.getId());
+            String appURL=entityFacade.getConfigProperty(ConfigConstants.APP_URL).getValue();
+
+            Mailer mailer=new Mailer(mail,password,appURL);
+            boolean sent = mailer.sendRecoveryMail(user.getEmail(), token.getId());
             if (!sent)
                 throw new WebApplicationException();
 
