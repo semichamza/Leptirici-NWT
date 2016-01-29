@@ -57,6 +57,13 @@ app.controller('MainController', function ($translate, $scope,$rootScope,$cookie
         $rootScope.hideTimer();
     };
 
+    $rootScope.setWarningMessage=function(message_label)
+    {
+        $("#message_panel").show();
+        $rootScope.setMessage(message_label,'warning');
+        $rootScope.hideTimer();
+    };
+
     $rootScope.hideTimer=function(){
         $("#message_panel").fadeTo(3000, 500).slideUp(500, function(){
             $("#message_panel").hide();

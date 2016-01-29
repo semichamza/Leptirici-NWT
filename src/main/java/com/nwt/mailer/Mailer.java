@@ -33,8 +33,9 @@ public class Mailer
 
     public boolean sendActivationMail(String email, String token)
     {
-        MessageBody messageBody = new MessageBody("NSI - Registration", "Activation mail");
+        MessageBody messageBody = new MessageBody("PMS - Registration", "Activation mail");
         messageBody.addParagraph(" ");
+        messageBody.addParagraph("This is activation message form Project Managemens System. To activate your account click \"Activate\".");
         messageBody.addParagraph("<a href=\"" + APP_URL + "/auth/user/activate/" + token + "\">Activate</a>");
         return sendEmail(email, messageBody);
     }

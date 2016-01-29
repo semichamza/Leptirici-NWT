@@ -5,7 +5,7 @@
 
     var ConfigAdminController=function ($translate, $scope,$rootScope,$location,pmsService) {
         $rootScope.setHeader('DASHBOADR_LABEL');
-        $rootScope.setSubHeader('DASHBOADR_LABEL');
+        $rootScope.setSubHeader('EMPTY_LABEL');
         $rootScope.navigation.current='configAdmin';
         $scope.searchParameter='';
         $scope.configs=[];

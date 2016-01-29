@@ -5,7 +5,7 @@
 
     var DeletedUsersController=function ($translate, $scope,$rootScope,$location,pmsService) {
         $rootScope.setHeader('DELETED_USERS_LABEL');
-        $rootScope.setSubHeader('DELETED_USERS_LABEL');
+        $rootScope.setSubHeader('EMPTY_LABEL');
         $rootScope.navigation.current='deletedUsers';
         $scope.searchParameter='';
 

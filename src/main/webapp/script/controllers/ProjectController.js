@@ -4,7 +4,7 @@
 
 app.controller('ProjectController', function ($translate, $scope,$rootScope,$cookieStore,pmsService,$location) {
     $rootScope.setHeader('PROJECT_LABEL');
-    $rootScope.setSubHeader('PROJECT_LABEL');
+    $rootScope.setSubHeader('EMPTY_LABEL');
     $rootScope.navigation.current='projects';
     $scope.test="awdawdawd";
     $scope.currentProject={};

@@ -2,14 +2,15 @@ package com.nwt.rest;
 
 import com.nwt.entities.*;
 import com.nwt.enums.ProjectRoleEnum;
-import com.nwt.enums.TaskStatusEnum;
 import com.nwt.facade.EntityFacade;
+import com.nwt.util.CollectionUtil;
 import com.nwt.util.Log;
 import org.apache.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.hibernate.mapping.Collection;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,8 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 
 /**
  * Created by glasshark on 23-Mar-15.
@@ -249,6 +249,42 @@ public class ProjectRestService
         return Response.ok(tasks).build();
     }
 
+    @GET
+    @Path ("/{id}/tasks/{order}")
+    public Response getAllProjectTasksOrdered(@PathParam ("id") Integer id,@PathParam("order") String order)
+    {
+        Tasks tasks = entityFacade.getProjectTasks(id);
+        Object[] taskArray=tasks.toArray();
+        for(int i=0;i<taskArray.length;i++)
+        {
+            for(int j=0;j<taskArray.length;j++)
+            {
+                Task task=null;
+                if(order.equals("PRIORITY"))
+                {
+                    if(((Task)taskArray[i]).priorityLevel()>((Task)taskArray[j]).priorityLevel())
+                    {
+                        task=(Task) taskArray[i];
+                        taskArray[i]=taskArray[j];
+                        taskArray[j]=task;
+                    }
+                }
+                else if(order.equals("DUE_DATE"))
+                {
+                    if(((Task)taskArray[i]).dueDateObject().before(((Task)taskArray[j]).dueDateObject()))
+                    {
+                        task=(Task)taskArray[i];
+                        taskArray[i]=taskArray[j];
+                        taskArray[j]=task;
+                    }
+                }
+            }
+        }
+        tasks=new Tasks();
+        Collections.addAll((java.util.Collection)tasks,taskArray);
+        logger.debug("getAllTasks() returned " + tasks.size() + " object(s).");
+        return Response.ok(tasks).build();
+    }
     @PUT
     @Path( "/{id}/users/{userId}/delete")
     public Response deleteUserFromProfjec(@PathParam("id") Integer projectId,@PathParam("userId") Integer userId )

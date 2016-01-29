@@ -4,7 +4,7 @@
 
 app.controller('TaskController', function ($translate, $scope,$rootScope,pmsService,$cookieStore) {
     $rootScope.setHeader('TASK_LABEL');
-    $rootScope.setSubHeader('TASK_LABEL');
+    $rootScope.setSubHeader('EMPTY_LABEL');
     $rootScope.navigation.current='tasks';
     $scope.userTasks=null;
     $scope.userProjects=null;

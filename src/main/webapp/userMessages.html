@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <!--BODY-->
-                <div ng-controller="UserMessageController">
+                <div class="custom-navigation-container" ng-controller="UserMessageController">
                     <nav class="navbar navbar-default" role="navigation">
                         <div class="container">
                             <div class="navbar-header">
@@ -48,7 +48,6 @@
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </button>
-                                <a href="" class="navbar-brand">Tools:</a>
                             </div>
                             <div class="navbar-collapse collapse">
                                 <ul class="nav navbar-nav">
@@ -91,7 +90,7 @@
                                 <h4 ng-show="sentMessages.length==0">{{'NO_MESSAGES'|translate}}</h4>
                                 <div ng-repeat="message in sentMessages" class="panel {{message.seen==1?'panel-success':'panel-danger'}}">
                                     <div class="panel-heading">
-                                        <h1 class="panel-title">{{message.receiver.firstName}} {{message.receiver.lastName}} <span class="text-right pull-right">{{message.date}}</span></h1>
+                                        <h1 class="panel-title">{{message.receiver.firstName}} {{message.receiver.lastName}} <span class="text-right pull-right">Status: {{message.seen==1?'Seen':'Delivered'}} | {{message.date}}</span></h1>
                                     </div>
                                     <div class="panel-body">{{message.text}}</div>
                                 </div>

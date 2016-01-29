@@ -104,6 +104,10 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
         return _getData(ProjectApiURL+"/"+id+"/tasks");
     };
 
+    var _getProjectTasksOrdered=function(id,order){
+        return _getData(ProjectApiURL+"/"+id+"/tasks/"+order);
+    };
+
     var _getProjectUsers=function(id){
         return _getData(ProjectApiURL+"/"+id+"/users");
     };
@@ -221,6 +225,7 @@ app.service('pmsService', function ($http, $rootScope, $cookieStore,$location) {
     pmsService.createUser=_createUser;
     pmsService.getTask=_getTask;
     pmsService.getProjectTasks=_getProjectTasks;
+    pmsService.getProjectTasksOrdered=_getProjectTasksOrdered;
     pmsService.getProjectUsers=_getProjectUsers;
     pmsService.getFreeUsers=_getFreeUsers;
     pmsService.addUserToProject=_addUserToProject;

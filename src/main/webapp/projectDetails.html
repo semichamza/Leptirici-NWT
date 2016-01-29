@@ -29,13 +29,13 @@
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </button>
-                                <a class="navbar-brand">Tools:</a>
                             </div>
                             <div class="navbar-collapse collapse">
                                 <ul class="nav navbar-nav">
                                     <li><a href="" data-toggle="modal" data-target="#newTaskModal">New task</a></li>
-                                    <li><a href="" data-toggle="modal" data-target="#userPreviewModal">View project users</a></li>
-                                    <li ng-show="isUserOwner"><a ng-show="isUserOwner" href="" data-toggle="modal" data-target="#addUserOnProjectModal">Add user</a></li>
+                                    <li><a href="" data-toggle="modal" data-target="#usersModal">Users</a></li>
+                                    <!--<li><a href="" data-toggle="modal" data-target="#userPreviewModal">View project users</a></li>-->
+                                    <!--<li ng-show="isUserOwner"><a ng-show="isUserOwner" href="" data-toggle="modal" data-target="#addUserOnProjectModal">Add user</a></li>-->
                                     <!--<li><a href="/PMS-NSI/rest/projects/{{project.id}}/report" ng-click="getReport()">Export statistics</a></li>-->
                                     <li><a href="" data-toggle="modal" data-target="#editProjectModal">Edit project</a></li>
                                 </ul>
@@ -45,10 +45,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-7">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                   <h3 class="panel-title"> <i class="fa fa-tasks fa-fw"></i> Tasks Panel</h3>
+                                   <div class="panel-title" style="font-weight: bold;"> <i class="fa fa-tasks fa-fw"></i> Tasks Panel
+                                                   <span style="float: right;">
+                                                       Order by:
+                                                       <select  id="sortType"
+                                                                ng-model="currentSortOrderId"
+                                                                ng-init="currentSortOrderId='NO_ORDER';"
+                                                                style="font-weight: normal;
+                                                                       font-size: 14px;"
+                                                                ng-change="loadTasks()">
+                                                           <option value="NO_ORDER">Not ordered</option>
+                                                           <option value="PRIORITY">Priority</option>
+                                                           <option value="DUE_DATE">Due date</option>
+                                                       </select>
+                                                   </span>
+                                   </div>
+
                                 </div>
                                 <!--<div class="panel-body">-->
                                     <!--<div class="list-group" ng-repeat="task in tasks">-->
@@ -61,50 +76,76 @@
 
                                 <table class="table table-bordered table-hover table-striped">
                                     <tbody>
+                                    <tr>
+                                        <th>Task name</th>
+                                        <th>User</th>
+                                        <th>Due date</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                    </tr>
                                     <tr ng-repeat="task in tasks" class="{{task.style}}" ng-click="setSelectedTask(task)">
                                         <!--<td style="background-color:#f0c74e">{{task.name}}</td>-->
                                         <td>{{task.name}}</td>
                                         <td>{{task.user.userPrincipal.username}}</td>
+                                        <td>{{task.dueDate.substr(0, 10)}}</td>
+                                        <td>{{capitalizedValue(task.taskPriority)}}</td>
                                         <td>{{task.taskStatusString}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-5">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-tasks fa-fw"></i> Task details
+                                    <h3 class="panel-title"><i class="fa fa-tasks fa-fw"></i><span style="font-weight: bold;">Task details</span>
                                         <!--<span class="badge pull-right"><a href="" style="color: yellow" data-toggle="modal" data-target="#editTaskModal">Edit</a></span></h3>-->
-                                        <span class="badge pull-right"><a href="" data-toggle="modal" data-target="#assigneeTaskModal">Change assignment</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="" data-toggle="modal" data-target="#editTaskModal">Edit</a></span></h3>
+                                        <!--<span class="badge pull-right"><a href="" ng-click="validateTaskSelection()" data-toggle="modal" data-target="{{selectedTask.id!=null?'#assigneeTaskModal':''}}">Change assignment</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="" data-toggle="modal"  ng-click="validateTaskSelection()" data-target="{{selectedTask.id!=null?'#editTaskModal':''}}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="" ng-click="updateTask()">Save</a></span></h3>-->
+                                        <span class="badge pull-right"><a href="" ng-click="updateTask()">Save</a></span></h3>
 
                                 </div>
                                 <div class="panel-body">
                                     <div class="modal-body">
+
                                         <div class="form-group">
                                             <label for="previewTaskName">Task name</label>
-                                            <input type="text" readonly ng-required="true" ng-min="1" class="form-control" id="previewtaskName" ng-model="selectedTask.name" placeholder="Task name">
+                                            <input type="text" ng-required="true" ng-min="1" class="form-control" id="previewTaskName" ng-model="selectedTask.name" placeholder="Task name">
                                         </div>
                                         <div class="form-group">
-                                            <label for="previewDescription">Task description</label>
-                                            <textarea class="form-control" readonly id="previewDescription" ng-model="selectedTask.description" rows="2"></textarea>
+                                            <label for="previewTastDescription">Task description</label>
+                                            <textarea class="form-control" id="previewTastDescription" ng-model="selectedTask.description" rows="5"></textarea>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="previewtaskPriority">Priority</label>
-                                            <input type="text" ng-required="true" readonly ng-min="1" class="form-control" id="previewtaskPriority" ng-model="selectedTask.taskPriority" placeholder="Priority">
+                                            <label for="previewTaskPriority">Priority</label>
+                                            <select name="taskPriority" class="form-control" id="previewTaskPriority" ng-model="selectedTask.taskPriority"  required>
+                                                <option value="LOW" selected>Low</option>
+                                                <option value="NORMAL">Normal</option>
+                                                <option value="HIGH">High</option>
+                                            </select>
                                         </div>
+
+                                        <!--<div class="form-group">-->
+                                            <!--<label for="previewtaskPriority">Priority</label>-->
+                                            <!--<input type="text" ng-required="true" readonly ng-min="1" class="form-control" id="previewtaskPriority" ng-model="selectedTask.taskPriority" placeholder="Priority">-->
+                                        <!--</div>-->
 
                                         <div class="form-group">
-                                            <label for="prewievAssigneed">Assigned to</label>
-                                            <input type="text" name="prewievAssigneed" readonly class="form-control" id="prewievAssigneed"  ng-model="selectedTask.user.userPrincipal.username">
+                                            <label for="previewTaskUser">Assigned to</label>
+                                            <select name="aTaskUser" class="form-control" id="previewTaskUser" ng-init="assigneedTaskUserId=selectedTask.user.id" ng-model="assigneedTaskUserId"  ng-required="true">
+                                                <option ng-repeat="user in projectUsers" value="{{user.id}}">{{user.firstName +' '+user.lastName}}</option>
+                                            </select>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="previewtaskDueDate">Due date</label>
-                                            <input type="text" name="taskDueDate" readonly class="form-control" id="previewtaskDueDate"  ng-model="formatedDate"><br><br>
-                                        </div>
+                                        <!--<div class="form-group">-->
+                                            <!--<label for="prewievAssigneed">Assigned to</label>-->
+                                            <!--<input type="text" name="prewievAssigneed" readonly class="form-control" id="prewievAssigneed"  ng-model="selectedTask.user.userPrincipal.username">-->
+                                        <!--</div>-->
 
+                                        <!--<div class="form-group">-->
+                                            <!--<label for="previewtaskDueDate">Due date</label>-->
+                                            <!--<input type="text" name="taskDueDate" readonly class="form-control" id="previewtaskDueDate"  ng-model="formatedDate"><br><br>-->
+                                        <!--</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -354,6 +395,72 @@
                     <div class="modal-footer">
                         <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit"  class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="usersModal" tabindex="-1" role="dialog" aria-labelledby="usersModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="usersModalLabel">Users</h4>
+                </div>
+                <form>
+                    <tabset>
+                        <tab heading="Project users">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
+                                    <th>Login</th>
+                                    <th ng-show="isUserOwner"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="user in projectUsers">
+                                    <td>{{user.firstName}}</td>
+                                    <td>{{user.lastName}}</td>
+                                    <td>{{user.userPrincipal.username}}</td>
+                                    <td ng-show="isUserOwner">
+                                        <a href="" ng-show="user.id!=authData.user.id" ng-click="removeUserFromProject(user.id)"><i class="glyphicon glyphicon-trash"></i></a>
+                                        <div ng-show="user.id==authData.user.id">
+                                            Owner
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </tab>
+                        <tab ng-show="isUserOwner" heading="Add new user">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
+                                    <th>Login</th>
+                                    <th ng-show="isUserOwner"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="user in unlinkedUsers">
+                                    <td>{{user.firstName}}</td>
+                                    <td>{{user.lastName}}</td>
+                                    <td>{{user.userPrincipal.username}}</td>
+                                    <td ng-show="isUserOwner">
+                                        <a href=""ng-click="addUser(user.id)"><i class="glyphicon glyphicon-plus"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </tab>
+                    </tabset>
+
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>

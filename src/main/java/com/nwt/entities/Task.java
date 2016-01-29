@@ -8,6 +8,8 @@ import com.nwt.enums.TaskStatusEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -179,5 +181,35 @@ public class Task implements Serializable
 
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Date dueDateObject()
+    {
+        Date date=null;
+        try
+        {
+            date= new SimpleDateFormat("dd-DD-yyyy").parse(getDueDate().substring(0,10));
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+
+    public Integer priorityLevel()
+    {
+        if(getTaskPriority()==null)
+            return -1;
+        switch (getTaskPriority())
+        {
+            case HIGH:
+                return 10;
+            case NORMAL:
+                return 5;
+            case LOW:
+                return 0;
+        }
+        return -1;
     }
 }

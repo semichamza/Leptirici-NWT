@@ -11,49 +11,73 @@
         $scope.selectedTask={};
         $scope.formatedDate=null;
         $scope.assigneedTaskUserId=null;
+        $scope.currentSortOrderId=null;
 
         $scope.setSelectedTask=function(task){
             $scope.selectedTask=task;
             if( $scope.selectedTask.dueDate!=null) {
                 $scope.formatedDate = task.dueDate.substr(0, 10);
+                $scope.assigneedTaskUserId=$scope.selectedTask.user.id;
+                console.log($scope.assigneedTaskUserId);
                 //$scope.selectedTask.dueDate = task.dueDate.substr(0, 10);
             }
         };
         $scope.loadTasks=function()
         {
-            pmsService.getProjectTasks($routeParams.projectId).success(function(data){
-                $scope.tasks=JSOG.decode(data);
-                console.log($scope.tasks);
-                //$scope.setSelectedTask(data[0]);
-                for(var i=0;i<$scope.tasks.length;i++)
-                {
-                    if($scope.tasks[i].taskStatus=='OPEN')
-                    {
-                        $scope.tasks[i].style='warning';
-                        $scope.tasks[i].taskStatusString='Open';
-                    }
-                    if($scope.tasks[i].taskStatus=='RESOLVED')
-                    {
-                        $scope.tasks[i].style='success';
-                        $scope.tasks[i].taskStatusString='Resolved';
-                    }
-                    if($scope.tasks[i].taskStatus=='IN_PROGRESS')
-                    {
-                        $scope.tasks[i].style='info';
-                        $scope.tasks[i].taskStatusString='In progress';
-                    }
-                    if($scope.tasks[i].taskStatus=='CLOSED')
-                    {
-                        $scope.tasks[i].style='danger';
-                        $scope.tasks[i].taskStatusString='Closed';
-                    }
-
-
-                    console.log($scope.tasks[i].style);
-                }
-            });
+            if($scope.currentSortOrderId==null || $scope.currentSortOrderId=="NO_ORDER") {
+                pmsService.getProjectTasks($routeParams.projectId).success(function (data) {
+                    $scope.tasks = JSOG.decode(data);
+                    console.log($scope.tasks);
+                    $scope.tasksFormater();
+                });
+            }else
+            {
+                pmsService.getProjectTasksOrdered($routeParams.projectId,$scope.currentSortOrderId).success(function (data) {
+                    $scope.tasks = JSOG.decode(data);
+                    console.log($scope.tasks);
+                    $scope.tasksFormater();
+                });
+            }
         };
+        $scope.capitalizedValue=function(str) {
+            if(!str)
+                return'';
+            var strVal = '';
+            str = str.split(' ');
+            for (var chr = 0; chr < str.length; chr++) {
+                strVal += str[chr].substring(0, 1).toUpperCase() + str[chr].substring(1, str[chr].length).toLowerCase() + ' '
+            }
+            return strVal
+        };
+        $scope.tasksFormater=function()
+        {
+            for(var i=0;i<$scope.tasks.length;i++)
+            {
+                if($scope.tasks[i].taskStatus=='OPEN')
+                {
+                    $scope.tasks[i].style='warning';
+                    $scope.tasks[i].taskStatusString='Open';
+                }
+                if($scope.tasks[i].taskStatus=='RESOLVED')
+                {
+                    $scope.tasks[i].style='success';
+                    $scope.tasks[i].taskStatusString='Resolved';
+                }
+                if($scope.tasks[i].taskStatus=='IN_PROGRESS')
+                {
+                    $scope.tasks[i].style='info';
+                    $scope.tasks[i].taskStatusString='In progress';
+                }
+                if($scope.tasks[i].taskStatus=='CLOSED')
+                {
+                    $scope.tasks[i].style='danger';
+                    $scope.tasks[i].taskStatusString='Closed';
+                }
 
+
+                console.log($scope.tasks[i].style);
+            }
+        };
         $scope.getReport=function()
         {
             $window.open('http://localhost:18080/PMS-NSI/rest/projects/'+project.id+'/report','_blank');
@@ -140,18 +164,25 @@
 
         $scope.updateTask=function()
         {
+            if($scope.selectedTask.id==null || $scope.selectedTask.id=='') {
+                $rootScope.setWarningMessage("TASK_NOT_SELECTED");
+                return;
+            }
             console.log($scope.selectedTask);
             delete $scope.selectedTask.taskStatusString;
             delete $scope.selectedTask.style;
-            $scope.loadTasks();
+            //$scope.loadTasks();
             $scope.selectedTask.user={id:$scope.selectedTask.user.id};
             $scope.selectedTask.project={id:$scope.selectedTask.project.id};
             delete $scope.selectedTask.comments;
             pmsService.updateTask($scope.selectedTask).success(function(data){
+                $scope.selectedTask=data;
                 $rootScope.setInfoMessage("TASK_EDITED");
                 $('#editTaskModal').modal('hide');
                 console.log("End task update");
+                $scope.assigneTask($scope.selectedTask.id,$scope.assigneedTaskUserId);
             });
+
         };
 
         $scope.updateProject=function()
@@ -176,6 +207,20 @@
                $scope.loadTasks();
            })
         };
+
+        $scope.changeOrder=function()
+        {
+           pmsService.assigneeTask(taskId,userId).success(function(data){
+               $('#assigneeTaskModal').modal('hide');
+               $scope.loadTasks();
+           })
+        };
+
+        $scope.validateTaskSelection=function()
+        {
+            if($scope.selectedTask.id==null || $scope.selectedTask.id=='')
+                $rootScope.setWarningMessage("TASK_NOT_SELECTED");
+        }
     };
 
     app.controller('ProjectDetailsController',ProjectDetailsController );
